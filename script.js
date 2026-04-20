@@ -1,26 +1,31 @@
 function copyNumber(number) {
-  if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(number).then(() => {
-      showToast("Copied: " + number);
-    }).catch(() => {
-      fallbackCopy(number);
-    });
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(number)
+      .then(() => showToast("Copied: " + number))
+      .catch(() => fallbackCopy(number));
   } else {
     fallbackCopy(number);
   }
 }
 
 function fallbackCopy(number) {
-  const input = document.createElement("input");
-  input.value = number;
-  document.body.appendChild(input);
-  input.select();
-  input.setSelectionRange(0, 99999); // for mobile devices
+  const textarea = document.createElement("textarea");
+  textarea.value = number;
+  textarea.style.position = "fixed"; // prevent scrolling
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+
   try {
     document.execCommand("copy");
     showToast("Copied: " + number);
-  } catch (err) {
-    showToast("Failed to copy. Please copy manually.");
+  } catch {
+    showToast("Copy failed");
   }
-  document.body.removeChild(input);
+
+  document.body.removeChild(textarea);
+}
+
+function showToast(message) {
+  alert(message);
 }
