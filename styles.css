@@ -94,6 +94,14 @@ nav a {
     transform: translateY(-5px);
 }
 
+.contact img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
 /* Clickable phone numbers */
 .phone {
   color: #000;
