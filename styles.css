@@ -95,7 +95,7 @@ nav a {
 
 /* Clickable phone numbers */
 .phone {
-  color: #fff;
+  color: #000;
   font-weight: 600;
   cursor: pointer;
   margin-top: 0.5rem;
