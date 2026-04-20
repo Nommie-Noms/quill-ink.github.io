@@ -27,5 +27,12 @@ function fallbackCopy(number) {
 }
 
 function showToast(message) {
-  alert(message);
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2000); // disappears after 2 seconds
 }
