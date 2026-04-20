@@ -93,6 +93,47 @@ nav a {
     transform: translateY(-5px);
 }
 
+/* Clickable phone numbers */
+.phone {
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  display: inline-block;
+  transition: color 0.2s ease;
+}
+
+.phone:hover,
+.phone:focus {
+  color: #5e6f99;
+  text-decoration: underline;
+}
+
+/* ===== Toast Notification ===== */
+#toast {
+  visibility: hidden;
+  min-width: 200px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 12px;
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  font-size: 0.95rem;
+  opacity: 0;
+  transition: opacity 0.5s, bottom 0.5s;
+}
+
+#toast.show {
+  visibility: visible;
+  opacity: 1;
+  bottom: 50px;
+}
+
 /* Footer */
 footer {
     text-align: center;
