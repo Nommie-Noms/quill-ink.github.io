@@ -19,6 +19,13 @@ body {
 }
 
 /* Navbar */
+
+.header {
+    background: #f8f5f0;
+    text-align: center;
+    padding: 30px 20px;
+}
+
 .navbar {
     background: #fff;
     border-bottom: 1px solid #111;
@@ -64,6 +71,7 @@ nav a {
 /* Sections */
 .section {
     padding: 1px 1px;
+    scroll-margin-top: 80px;
 }
 
 .section.alt {
