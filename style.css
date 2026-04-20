@@ -1,0 +1,341 @@
+/* ===== Global Styles ===== */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: url("images/Background.png") no-repeat center center scroll;
+  background-size: cover;
+  color: #333;
+  line-height: 1.6;
+}
+
+h1, h2, h3 {
+  margin-bottom: 0.5em;
+  color: #222;
+}
+
+p {
+  margin-bottom: 1em;
+}
+
+/* ===== Navbar ===== */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #a0c2e8;
+  padding: 1rem 2rem;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar h1 {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.hamburger span {
+  height: 3px;
+  width: 25px;
+  background: white;
+  margin: 4px 0;
+  border-radius: 2px;
+}
+
+/* Mobile menu */
+.nav-links.mobile {
+  display: none;
+  flex-direction: column;
+  background: #7C94C4;
+  padding: 1rem;
+}
+
+.nav-links.mobile a {
+  padding: 0.5rem 0;
+}
+
+/* Service Status Banner - sticky */
+.service-status-banner {
+  position: sticky;
+  top: 72px; /* adjust to your navbar height */
+  z-index: 999; /* keep it above content */
+  
+  background-color: #7C94C4;   /* matches your theme */
+  color: white;
+  text-align: center;
+  padding: 0.25rem 0.5rem;     /* thinner height */
+  font-size: 0.85rem;
+  font-weight: 600;
+  
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15); /* subtle shadow */
+  border-bottom: 1px solid rgba(0,0,0,0.1); /* divider line */
+}
+
+.service-status-banner p {
+  margin: 0;         /* remove default p margins */
+  line-height: 1.4;  /* control text spacing */
+  padding: 0.25rem;  /* tiny breathing room */
+}
+
+/* Tracking Section */
+.tracking {
+  background: none;   /* ❌ no background */
+  box-shadow: none;   /* ❌ no shadow */
+  border: none;
+  padding: 2rem 0;    /* keep spacing */
+  text-align: center;
+}
+
+.tracking h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+/* Tracking Form: stack input + button */
+.tracking-form {
+  display: flex;
+  flex-direction: column;  /* stack vertically */
+  align-items: center;
+  gap: 0.75rem;  /* spacing between input + button */
+  margin-bottom: 1rem;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tracking-form input {
+  max-width: 260px;
+  width: 60%;
+  padding: 0.6rem;
+  border: 2px solid #7C94C4;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.tracking-form button {
+  max-width: 280px;
+  width: 100%; /* make button same width as input */
+  background-color: #7C94C4;
+  border: none;
+  color: white;
+  padding: 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+.tracking-form button:hover {
+  background-color: #5b73a6;
+}
+
+
+/* Result Box (directly below input) */
+.order-result {
+  max-width: 270px;
+  width: 100%;
+  min-height: 92px;
+  max-height: 100px;
+  overflow-y: auto;       /* enables vertical scrolling if content exceeds max-height */
+  margin-top: 1rem;
+  background-color: rgba(225, 225, 225, 0.7);
+  border: 2px solid #7C94C4;
+  border-radius: 6px;
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.hidden {
+  display: none;
+}
+
+.status-hero h2 {
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.status-message {
+  font-size: 1.1rem;
+  color: #333;
+  font-weight: 500;
+}
+
+/* ===== Sections ===== */
+section {
+  padding: 1rem 1.5rem;
+  max-width: 1000px;
+  margin: auto;
+}
+
+section h2 {
+  display: inline-block;
+  background: rgba(124, 148, 196, 0.7); /* #7C94C4 with 70% opacity */
+  color: white; /* for contrast */
+  padding: 0.3em 0.8em;
+  border-radius: 6px;
+}
+
+
+section {
+  text-align: center; /* ensures h2 inside stays centered */
+}
+
+/* Remove background box from Service Status title */
+.status-hero h2 {
+  background: none;
+  padding: 0;
+}
+
+/* ===== Steps (How It Works) ===== */
+.steps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.step {
+  flex: 1 1 250px;
+  max-width: 280px;
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  text-align: center;
+
+  background: rgba(124, 148, 196, 0.7); /* #7C94C4 with 70% opacity */
+  color: white; /* for contrast */
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* ===== Employees ===== */
+.employees {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.employee {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  text-align: center;
+
+  background: rgba(124, 148, 196, 0.7); /* #7C94C4 with 70% opacity */
+  color: white; /* for contrast */
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.employee img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+.employee h3 {
+  margin: 0.5rem 0 0.3rem;
+  color: #000;
+}
+
+.employee p {
+  margin: 0.3rem 0;
+  font-size: 0.95rem;
+  color: #fff;
+}
+
+/* Clickable phone numbers */
+.phone {
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  display: inline-block;
+  transition: color 0.2s ease;
+}
+
+.phone:hover,
+.phone:focus {
+  color: #5e6f99;
+  text-decoration: underline;
+}
+
+/* ===== Toast Notification ===== */
+#toast {
+  visibility: hidden;
+  min-width: 200px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 12px;
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  font-size: 0.95rem;
+  opacity: 0;
+  transition: opacity 0.5s, bottom 0.5s;
+}
+
+#toast.show {
+  visibility: visible;
+  opacity: 1;
+  bottom: 50px;
+}
+
+/* ===== Footer ===== */
+footer {
+  text-align: center;
+  padding: 1rem;
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+  .hamburger {
+    display: flex;
+  }
+  #contact iframe {
+  max-width: 100%;
+  border-radius: 8px;
+  }
+}
+

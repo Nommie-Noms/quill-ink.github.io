@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Pickup Point Courier Service – Send orders via text. Fast, reliable, and easy courier deliveries. For Use on GTA RP SERVER">
+  <meta name="format-detection" content="telephone=no"> <!-- 🚫 Prevent mobile browsers from auto-linking phone numbers -->
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <title>Pickup Point Courier Service</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header class="navbar">
+<img 
+    src="images/PICKUP_POINT_MINI.png" 
+    alt="Reload" 
+    onclick="location.reload()" 
+    style="cursor: pointer; height:40px;">
+  </header>
+
+<div class="service-status-banner">
+<!--  <p id="service-status">Now accepting applications</p>
+  <span class="phone" onclick="copyNumber('https://forms.gle/gdDWgFiRuMrYgAki8')">📄 Copy order form link</span><br> -->
+</div>
+
+
+<section class="tracking">
+  <h2>Track Your Order</h2>
+  <form id="tracking-form" class="tracking-form">
+    <input type="text" id="order" placeholder="Enter Order Number" required>
+    <button type="submit">Check Status</button>
+  <div id="order-result" class="order-result hidden">
+    <p id="order-status"></p>
+  </div>
+  </form>
+</section>
+
+  
+  <!-- How It Works -->
+  <section id="how-it-works">
+    <h2>How It Works</h2>
+    <div class="steps">
+      <div class="step">
+        <h3>1. Send a Text</h3>
+        <p>Text one of our employees.</p>
+        <p>Please include the product name, The business that sells it and the delivery location.</p>
+      </div>
+      <div class="step">
+        <h3>2. Confirm Order</h3>
+        <p>We’ll reply with your delivery confirmation and price once we have reached the business.</p>
+      </div>
+      <div class="step">
+        <h3>3. Personal Delivery</h3>
+        <p>Our courier picks up and delivers your package and delivers it to your chosen destination.</p>
+      </div>
+      <div class="step">
+        <h3>3a. Collections</h3>
+        <p>Our courier picks up your package and puts it in our storage ready to be collected or for a delivery to be rearranged.</p>
+      </div>
+      <div class="step">
+        <h3>3b. Home Delivery</h3>
+        <p>Our courier can also deliver your item to your home and leave your package in your mail box.</p>
+        <p>Please ensure there is enough storage in your mail box.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Terms of Use -->
+  <section id="terms">
+    <h2>Terms of Use</h2>
+    <div class="steps">
+      <div class="step">
+        <p>By using Pickup Point Courier Service, you agree to provide accurate delivery information. We are not responsible for incorrect details provided by the sender.</p>
+        <p>Food & Drinks need to be delivered on the day the order is placed.</p>
+        <p>We will advise on the cost of the item in a message with the additional 20% included that can be paid to an employee through the cash payment feature on our phones.</p>
+        <p>Items requiring a license are collection only as we are required to check your license.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Employees -->
+  <section id="employees">
+    <h2>Contacts</h2>
+    <div class="employees">
+      <!-- <div class="employee">
+        <img src="images/PICKUP_POINT_BLANK.png" alt="John Doe">
+        <h3>Vacant</h3>
+        <p>Vacant</p>
+        <p class="phone" onclick="copyNumber('')">Blank</p>
+      </div> -->
+      <div class="employee">
+        <img src="images/Screenshot 2025-09-22 133530.png" alt="Missing">
+        <h3>Christopher Henderson</h3>
+        <p>Owner</p>
+        <span class="phone" onclick="copyNumber('8356439887')">(835)643-9887</span>
+      </div>
+      <!-- <div class="employee">
+       <img src="images/PICKUP_POINT_BLANK.png" alt="Vacant">
+        <h3>Vacant</h3>
+        <p>Vacant</p>
+        <p class="phone" onclick="copyNumber(' ')">Blank</p>
+      </div> -->
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>2026 Pickup Point Courier Service. All rights reserved.</p>
+   <!-- <span class="phone" onclick="copyNumber('https://discord.gg/Sn5T3CymCF')">Employee Email Chain</span> */ -->
+    <p>Powered by GitHub.</p>
+  </footer>
+
+<script src="script.js"></script>
+
+  <!-- Toast Notification -->
+  <div id="toast"></div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
