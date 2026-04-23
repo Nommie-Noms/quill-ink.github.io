@@ -1,3 +1,8 @@
+function toggleMenu() {
+  const nav = document.getElementById("navLinks");
+  nav.classList.toggle("active");
+}
+
 function copyNumber(number) {
   if (navigator.clipboard) {
     navigator.clipboard.writeText(number)
