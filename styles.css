@@ -116,8 +116,8 @@ body {
     padding: 25px;
     transition: 0.3s;
     text-align: center;
-    min-width: 350px;
-    max-width: 350px;
+    min-width: 250px;
+    max-width: 250px;
     margin: 0 auto;
 }
 
