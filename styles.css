@@ -106,26 +106,8 @@ body {
 /* Grid */
 .grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 25px;
-}
-
-.grid.alt {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 25px;
-}
-
-.grid.alt > .card:last-child {
-    grid-column: 2 / 4; /* 👈 centers across middle columns */
-}
-
-.grid, .grid.alt {
-    outline: 2px solid red;
-}
-
-.card {
-    outline: 1px solid blue;
 }
 
 /* Cards */
