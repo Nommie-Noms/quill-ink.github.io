@@ -119,7 +119,7 @@ body {
 }
 
 /* Target the last card */
-.grid .card:last-child {
+.grid.alt .card:last-child {
     grid-column: 2 / 4; /* 👈 centers it across middle columns */
 }
 
