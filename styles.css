@@ -108,6 +108,19 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 25px;
+    text-align: center;
+}
+
+.grid.alt {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    justify-content: center;
+}
+
+/* Target the last card */
+.grid .card:last-child {
+    grid-column: 2 / 4; /* 👈 centers it across middle columns */
 }
 
 /* Cards */
