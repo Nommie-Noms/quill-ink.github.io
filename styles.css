@@ -120,6 +120,14 @@ body {
     grid-column: 2 / 4; /* 👈 centers across middle columns */
 }
 
+.grid, .grid.alt {
+    outline: 2px solid red;
+}
+
+.card {
+    outline: 1px solid blue;
+}
+
 /* Cards */
 .card {
     background: #fff;
