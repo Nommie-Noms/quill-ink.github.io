@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="images/favicon.png">
+<title>Quill & Ink Services</title>
+<link rel="stylesheet" href="styles.css">
+<script src="script.js" defer></script>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    
+<header class="header">
+    <div class="container">
+        <img 
+    src="images/QUILL_&_INK_LOGO_3.png" 
+    alt="Reload" 
+    onclick="location.reload()" 
+    style="cursor: pointer; width:300px; height:200px;">
+    </div>
+</header>
+
+<nav class="navbar">
+  <div class="container nav-inner">
+    <div class="menu-toggle" onclick="toggleMenu()">
+      ☰
+    </div>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="pricing.html">Services and Pricing</a>
+    </div>
+  </div>
+</nav>
+
+<section id="about" class="section alt">
+    <div class="container narrow">
+        <h2 class="section-title">Email Chain</h2>
+        <p>Join our email chain</p>
+        <span class="phone" onclick="copyNumber('https://discord.gg/DBB4BbdqPY')">Copy Link</span>
+    </div>
+</section>
+
+<section id="contact" class="section">
+    <div class="container narrow">
+        <h2 class="section-title">Contact Us</h2>
+        <img src="images/christopher_henderson.jpg" alt="Missing" class="profile-pic">
+        <h3>Christopher Henderson</h3>
+        <p>Owner</p>
+        <span class="phone" onclick="copyNumber('8356439887')">(835) 643-9887</span>
+        <!--<p>Email: contact@quillandink.com</p> -->
+    </div>
+</section>
+
+<script src="script.js"></script>
+
+<!-- Toast Notification -->
+<div id="toast" class="toast"></div>
+
+    
+<footer>
+    <p>© 2026 Quill & Ink Services</p>
+</footer>
+
+</body>
+</html>
