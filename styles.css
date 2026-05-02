@@ -97,6 +97,18 @@ body {
     border-bottom: 1px solid #111;
 }
 
+.terms-box {
+    max-width: 750px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.email-box {
+    max-width: 750px;
+    margin: 0 auto;
+    text-align: center;
+}
+
 .section-title {
     text-align: center;
     font-family: 'Playfair Display', serif;
