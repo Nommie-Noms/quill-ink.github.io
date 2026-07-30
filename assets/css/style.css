@@ -525,8 +525,8 @@ body {
 
 .testimonial-slider {
   position: relative;
-  max-width: 600px;
-  min-height: 220px;
+  max-width: 700px;
+  min-height: 280px; /* Increase if needed */
   margin: 0 auto;
 }
 
