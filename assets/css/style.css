@@ -523,52 +523,51 @@ body {
 
 /* ===== Testimonials ===== */
 
-.section-subtitle{
-    text-align:center;
-    max-width:750px;
-    margin:0 auto 50px;
-    color:#666;
+/* Testimonials */
+.testimonial-intro {
+    max-width: 700px;
+    margin: 0 auto 40px;
+    text-align: center;
+    color: var(--purple-navy);
 }
 
-.testimonial-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-    gap:30px;
+.testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
 }
 
-.testimonial-card{
-    background:#fff;
-    padding:35px;
-    border-radius:12px;
-    box-shadow:0 8px 30px rgba(0,0,0,.08);
-    transition:.3s;
+.testimonial-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    transition: transform .2s ease, box-shadow .2s ease;
 }
 
-.testimonial-card:hover{
-    transform:translateY(-8px);
+.testimonial-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 25px rgba(0,0,0,.15);
 }
 
-.testimonial-card p{
-    font-style:italic;
-    line-height:1.8;
-    margin:20px 0;
+.testimonial-card p {
+    font-style: italic;
+    line-height: 1.8;
+    margin: 20px 0;
 }
 
-.testimonial-card h4{
-    color:var(--st-patricks-blue);
-    margin-bottom:4px;
+.testimonial-card h4 {
+    color: var(--st-patricks-blue);
+    margin-top: 15px;
 }
 
-.testimonial-card span{
-    color:#888;
-    font-size:.9rem;
+.stars {
+    color: #f5b301;
+    font-size: 1.5rem;
+    letter-spacing: 3px;
 }
 
-.stars{
-    color:#f4b400;
-    font-size:1.4rem;
-    letter-spacing:2px;
-}
 
 /*-----------------------------------*\
   #CONTACT
