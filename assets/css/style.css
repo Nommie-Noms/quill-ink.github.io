@@ -523,38 +523,52 @@ body {
 
 /* ===== Testimonials ===== */
 
-.testimonial-slider {
-  position: relative;
-  max-width: 700px;
-  min-height: 320px; /* Increase if needed */
-  margin: 0 auto;
+.section-subtitle{
+    text-align:center;
+    max-width:750px;
+    margin:0 auto 50px;
+    color:#666;
 }
 
-.testimonial-card {
-  position: absolute;
-  width: 100%;
-  opacity: 0;
-  transition: opacity 1s ease;
-  pointer-events: none;
-
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: var(--shadow);
-  background: white;
-  text-align: center;
+.testimonial-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:30px;
 }
 
-.testimonial-card.active {
-  opacity: 1;
-  pointer-events: auto;
+.testimonial-card{
+    background:#fff;
+    padding:35px;
+    border-radius:12px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+    transition:.3s;
 }
 
-.stars {
-  color: gold;
-  font-size: 2rem;
-  margin-bottom: 15px;
+.testimonial-card:hover{
+    transform:translateY(-8px);
 }
 
+.testimonial-card p{
+    font-style:italic;
+    line-height:1.8;
+    margin:20px 0;
+}
+
+.testimonial-card h4{
+    color:var(--st-patricks-blue);
+    margin-bottom:4px;
+}
+
+.testimonial-card span{
+    color:#888;
+    font-size:.9rem;
+}
+
+.stars{
+    color:#f4b400;
+    font-size:1.4rem;
+    letter-spacing:2px;
+}
 
 /*-----------------------------------*\
   #CONTACT
