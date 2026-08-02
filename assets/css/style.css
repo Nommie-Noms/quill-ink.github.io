@@ -361,13 +361,18 @@ body {
 }
 
 .logo-img {
-  height: 50px;
-  width: auto;
-  display: block;
-  cursor: pointer;
+    height: 55px;
+    fill: #111941;
+    transition: fill 0.3s ease;
 }
 
+.header.active .logo-img {
+    fill: #111;
+}
 
+.logo-img:hover {
+    fill: #ffffff;
+}
 
 /*-----------------------------------*\
   #HERO
