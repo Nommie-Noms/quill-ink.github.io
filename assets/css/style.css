@@ -271,11 +271,11 @@ body {
 }
 
 .header.active {
-  --color: var(--st-patricks-blue);
+  --color: var(--white);
 
   position: fixed;
-  background-color: var(--white);
-  box-shadow: 0 2px 30px hsla(0, 0%, 0%, 0.1);
+  background-color: #111941;
+  box-shadow: 0 2px 30px rgba(0, 0, 0, 0.25);
 }
 
 .header .container {
@@ -360,41 +360,11 @@ body {
   pointer-events: all;
 }
 
-.logo-link {
-    display: flex;
-    align-items: center;
-}
-
 .logo-img {
-    height: 55px;
-    width: auto;
-}
-
-/* White logo shown initially */
-.logo-light {
-    display: block;
-}
-
-.logo-dark {
-    display: none;
-}
-
-/* When header becomes white after scrolling */
-.header.active .logo-light {
-    display: none;
-}
-
-.header.active .logo-dark {
-    display: block;
-}
-
-/* Sticky header after scrolling */
-.header.active .logo-white {
-    opacity: 0;
-}
-
-.header.active .logo-blue {
-    opacity: 1;
+  height: 50px;
+  width: auto;
+  display: block;
+  cursor: pointer;
 }
 
 /*-----------------------------------*\
