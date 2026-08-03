@@ -360,18 +360,38 @@ body {
   pointer-events: all;
 }
 
+.logo-link {
+    position: relative;
+    display: block;
+    width: 180px;      /* Adjust as needed */
+    height: 60px;
+}
+
 .logo-img {
-    height: 55px;
-    fill: #111941;
-    transition: fill 0.3s ease;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: opacity .35s ease;
 }
 
-.header.active .logo-img {
-    fill: #111;
+/* Default (hero section) */
+.logo-white {
+    opacity: 1;
 }
 
-.logo-img:hover {
-    fill: #ffffff;
+.logo-blue {
+    opacity: 0;
+}
+
+/* Sticky header after scrolling */
+.header.active .logo-white {
+    opacity: 0;
+}
+
+.header.active .logo-blue {
+    opacity: 1;
 }
 
 /*-----------------------------------*\
