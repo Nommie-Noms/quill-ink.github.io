@@ -361,28 +361,31 @@ body {
 }
 
 .logo-link {
-    position: relative;
-    display: block;
-    width: 180px;      /* Adjust as needed */
-    height: 60px;
+    display: flex;
+    align-items: center;
 }
 
 .logo-img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    transition: opacity .35s ease;
+    height: 55px;
+    width: auto;
 }
 
-/* Default (hero section) */
-.logo-white {
-    opacity: 1;
+/* White logo shown initially */
+.logo-light {
+    display: block;
 }
 
-.logo-blue {
-    opacity: 0;
+.logo-dark {
+    display: none;
+}
+
+/* When header becomes white after scrolling */
+.header.active .logo-light {
+    display: none;
+}
+
+.header.active .logo-dark {
+    display: block;
 }
 
 /* Sticky header after scrolling */
