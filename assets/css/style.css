@@ -575,8 +575,24 @@ body {
 
 .contact-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: 30px;
+}
+
+/* Make the Email Chain card span both columns */
+.contact-card:last-child {
+  grid-column: 1 / -1;
+}
+
+/* Mobile layout */
+@media (max-width: 768px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-card:last-child {
+    grid-column: auto;
+  }
 }
 
 .contact-card {
