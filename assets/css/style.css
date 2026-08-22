@@ -1043,10 +1043,9 @@ h2.section-title {
    */
 
   .service-list {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 30px;
-    align-items: stretch;
-  }
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  align-items: stretch;
 }
 
 .service-card {
