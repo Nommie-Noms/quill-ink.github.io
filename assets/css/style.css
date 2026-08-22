@@ -923,7 +923,13 @@ h2.section-title {
    * SERVICE
    */
 
-  .service-list { grid-template-columns: 1fr 1fr; }
+  @media (min-width: 992px) {
+
+  .service-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
 
 
 
