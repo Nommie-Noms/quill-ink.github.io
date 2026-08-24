@@ -114,31 +114,80 @@
 <section id="contact" class="contact section">
   <div class="container">
 
-        <h2 class="section-title underline">Contact Us</h2>
+    <h2 class="section-title underline">Contact Us</h2>
 
     <div class="contact-grid">
 
+      <!-- Charlee -->
       <div class="contact-card">
-        <img src="assets/images/Charlee_Henderson_Profile_Pic.png" alt="Missing" class="profile-pic">
+        <img src="assets/images/Charlee_Henderson_Profile_Pic.png"
+             alt="Charlee Henderson"
+             class="profile-pic">
+
         <h3 class="contact-name">Charlee Henderson</h3>
         <p class="contact-role">Owner</p>
-        <span class="phone" onclick="copyNumber('8356439887')">(835) 643-9887</span>
+
+        <span class="phone"
+              onclick="copyNumber('8356439887')">
+          (835) 643-9887
+        </span>
+
+        <button class="duties-btn" onclick="toggleDuties('charlee-duties', this)">
+          View Duties
+        </button>
+
+        <div id="charlee-duties" class="duties">
+          <ul>
+            <li>Ledger Retainers</li>
+            <li>Ledger Creation</li>
+            <li>Ledger Editing</li>
+            <li>Audit Preparation</li>
+            <li>Client Support</li>
+          </ul>
+        </div>
       </div>
 
+
+      <!-- Sofie -->
       <div class="contact-card">
-        <img src="assets/images/Employee_Profile_Pic.png" alt="Missing" class="profile-pic">
+        <img src="assets/images/Employee_Profile_Pic.png"
+             alt="Sofie Martinez"
+             class="profile-pic">
+
         <h3 class="contact-name">Sofie Martinez</h3>
         <p class="contact-role">Accountant</p>
-        <span class="phone" onclick="copyNumber('8321834309')">(832) 183-4309</span>
+
+        <span class="phone"
+              onclick="copyNumber('8321834309')">
+          (832) 183-4309
+        </span>
+
+        <button class="duties-btn" onclick="toggleDuties('sofie-duties', this)">
+          View Duties
+        </button>
+
+        <div id="sofie-duties" class="duties">
+          <ul>
+            <li>Ledger Creation</li>
+            <li>Ledger Editing</li>
+            <li>Client Support</li>
+          </ul>
+        </div>
       </div>
 
+
+      <!-- Email Chain -->
       <div class="contact-card">
         <h3 class="contact-name">Email Chain</h3>
         <p class="contact-role">Join our email chain</p>
-        <span class="phone" onclick="copyNumber('https://discord.gg/S4rkSg86hX')">Copy Link</span>
+
+        <span class="phone"
+              onclick="copyNumber('https://discord.gg/DBB4BbdqPY')">
+          Copy Link
+        </span>
       </div>
-      
-  </div>
+
+    </div>
   </div>
 </section>
 
