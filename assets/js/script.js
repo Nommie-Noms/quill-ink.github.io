@@ -72,14 +72,14 @@ function showToast(message) {
   }, 2000); // disappears after 2 seconds
 }
 
-function toggleDuties(id, button) {
-  const duties = document.getElementById(id);
+function toggleDuties(button) {
+  const duties = button.nextElementSibling;
 
-  duties.classList.toggle("show");
-
-  if (duties.classList.contains("show")) {
+  if (duties.hidden) {
+    duties.hidden = false;
     button.textContent = "Hide Duties";
   } else {
+    duties.hidden = true;
     button.textContent = "View Duties";
   }
 }
