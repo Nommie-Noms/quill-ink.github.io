@@ -72,7 +72,17 @@ function showToast(message) {
   }, 2000); // disappears after 2 seconds
 }
 
+function toggleDuties(id, button) {
+  const duties = document.getElementById(id);
 
+  duties.classList.toggle("show");
+
+  if (duties.classList.contains("show")) {
+    button.textContent = "Hide Duties";
+  } else {
+    button.textContent = "View Duties";
+  }
+}
 
 /**
  * header & go-top-btn active
