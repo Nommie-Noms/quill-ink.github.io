@@ -61,6 +61,23 @@ function fallbackCopy(number) {
   document.body.removeChild(textarea);
 }
 
+function toggleDuties(dutiesId, button) {
+  const duties = document.getElementById(dutiesId);
+
+  if (!duties) {
+    console.error("Duties section not found:", dutiesId);
+    return;
+  }
+
+  if (duties.hidden) {
+    duties.hidden = false;
+    button.textContent = "Hide Duties";
+  } else {
+    duties.hidden = true;
+    button.textContent = "View Duties";
+  }
+}
+
 function showToast(message) {
   const toast = document.getElementById("toast");
   toast.textContent = message;
@@ -70,18 +87,6 @@ function showToast(message) {
   setTimeout(() => {
     toast.classList.remove("show");
   }, 2000); // disappears after 2 seconds
-}
-
-function toggleDuties(button) {
-  const duties = button.nextElementSibling;
-
-  if (duties.hidden) {
-    duties.hidden = false;
-    button.textContent = "Hide Duties";
-  } else {
-    duties.hidden = true;
-    button.textContent = "View Duties";
-  }
 }
 
 /**
