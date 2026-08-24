@@ -624,7 +624,50 @@ body {
   text-decoration: underline;
 }
 
+/* Duties button */
+.duties-btn {
+  display: block;
+  margin: 20px auto 0;
+  padding: 10px 20px;
+  background-color: #111941;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1.4rem;
+  transition: background-color 0.2s ease;
+}
 
+.duties-btn:hover {
+  background-color: var(--winter-sky);
+}
+
+/* Hidden duties section */
+.duties {
+  display: none;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #ddd;
+  text-align: left;
+}
+
+/* Visible duties section */
+.duties.show {
+  display: block;
+}
+
+.duties ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.duties li {
+  list-style: disc;
+  margin-bottom: 8px;
+  font-size: var(--fs-8);
+  color: var(--purple-navy);
+}
 
 
 
