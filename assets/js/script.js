@@ -65,16 +65,16 @@ function toggleDuties(dutiesId, button) {
   const duties = document.getElementById(dutiesId);
 
   if (!duties) {
-    console.error("Duties section not found:", dutiesId);
+    console.error("Services section not found:", dutiesId);
     return;
   }
 
   if (duties.hidden) {
     duties.hidden = false;
-    button.textContent = "Hide Duties";
+    button.textContent = "Hide Services";
   } else {
     duties.hidden = true;
-    button.textContent = "View Duties";
+    button.textContent = "Services";
   }
 }
 
