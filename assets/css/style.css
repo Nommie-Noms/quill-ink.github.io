@@ -648,7 +648,7 @@ body {
   margin-top: 20px;
   padding-top: 20px;
   border-top: 1px solid #ddd;
-  text-align: left;
+  text-align: center;
 }
 
 .duties h4 {
@@ -658,12 +658,17 @@ body {
 }
 
 .duties ul {
-  padding-left: 20px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
 }
 
 .duties li {
-  list-style: disc;
+  list-style: none;
+  text-align: center;
   margin-bottom: 8px;
+  font-size: var(--fs-8);
+  color: var(--purple-navy);
 }
 
 
