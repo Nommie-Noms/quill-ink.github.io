@@ -89,25 +89,48 @@ function showToast(message) {
   }, 2000); // disappears after 2 seconds
 }
 
-const alertBtn = document.getElementById("alertBtn");
-const alertPopup = document.getElementById("alertPopup");
-const alertClose = document.getElementById("alertClose");
+const siteAlerts = [
+  {
+    title: "Applications Open",
+    message: "Applications are currently being accepted."
+  },
+  {
+    title: "Welcome",
+    message: "Welcome to Quill & Ink Services."
+  }
+];
 
-if (alertBtn && alertPopup) {
+function loadAlerts() {
+  const alertList = document.getElementById("alertList");
+  const alertBadge = document.getElementById("alertBadge");
 
-  alertBtn.addEventListener("click", () => {
-    alertPopup.classList.toggle("active");
+  if (!alertList) return;
+
+  alertList.innerHTML = "";
+
+  siteAlerts.forEach(alert => {
+    const item = document.createElement("div");
+    item.classList.add("alert-message");
+
+    item.innerHTML = `
+      <strong>${alert.title}</strong>
+      <p>${alert.message}</p>
+    `;
+
+    alertList.appendChild(item);
   });
 
+  if (alertBadge) {
+    if (siteAlerts.length > 0) {
+      alertBadge.textContent = siteAlerts.length;
+      alertBadge.style.display = "flex";
+    } else {
+      alertBadge.style.display = "none";
+    }
+  }
 }
 
-if (alertClose && alertPopup) {
-
-  alertClose.addEventListener("click", () => {
-    alertPopup.classList.remove("active");
-  });
-
-}
+document.addEventListener("DOMContentLoaded", loadAlerts);
 
 /**
  * header & go-top-btn active
