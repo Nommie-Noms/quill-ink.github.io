@@ -33,12 +33,16 @@ function loadAlerts() {
 
     item.innerHTML = `
   <strong>${alert.title}</strong>
+
   <p>${alert.message}</p>
 
-  ${alert.link ? `
-    <a href="${alert.link}" class="alert-link">
-      ${alert.linkText || "Click here"}
-    </a>
+  ${alert.copyLink ? `
+    <button
+      type="button"
+      class="alert-link"
+      onclick="copyNumber('${alert.copyLink}')">
+      ${alert.linkText || "Copy Link"}
+    </button>
   ` : ""}
 `;
 
