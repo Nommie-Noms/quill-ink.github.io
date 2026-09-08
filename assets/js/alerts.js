@@ -1,7 +1,9 @@
 const siteAlerts = [
   {
     title: "Applications Open",
-    message: "Applications are currently being accepted."
+    message: "Applications are currently being accepted.",
+    link: "contact-us.html",
+    linkText: "Click here to apply"
   },
   {
     title: "Welcome",
@@ -30,9 +32,15 @@ function loadAlerts() {
     item.className = "alert-message";
 
     item.innerHTML = `
-      <strong>${alert.title}</strong>
-      <p>${alert.message}</p>
-    `;
+  <strong>${alert.title}</strong>
+  <p>${alert.message}</p>
+
+  ${alert.link ? `
+    <a href="${alert.link}" class="alert-link">
+      ${alert.linkText || "Click here"}
+    </a>
+  ` : ""}
+`;
 
     alertList.appendChild(item);
   });
