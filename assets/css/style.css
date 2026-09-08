@@ -477,6 +477,22 @@ body {
   line-height: 1.6;
 }
 
+.alert-link {
+  display: inline-block;
+  margin-top: 8px;
+
+  color: var(--st-patricks-blue);
+  font-size: 1.4rem;
+  font-weight: 600;
+
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.alert-link:hover {
+  color: var(--winter-sky);
+}
+
 /*-----------------------------------*\
   #HERO
 \*-----------------------------------*/
