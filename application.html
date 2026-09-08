@@ -1,5 +1,4 @@
-<main>
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,69 +6,247 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quill & Ink Services</title>
 
-  <!-- 
-    - favicon
-  -->
+  <title>Apply | Quill & Ink Services</title>
+
+  <!-- favicon -->
   <link rel="shortcut icon" href="assets/images/Favicon-3.png" type="image/png">
 
-  <!-- 
-    - custom css link
-  -->
+  <!-- custom css -->
   <link rel="stylesheet" href="./assets/css/style.css">
 
-  <!-- 
-    - google font link
-  -->
+  <!-- google fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
   <link
     href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Source+Sans+Pro:wght@600;700&display=swap"
     rel="stylesheet">
 </head>
 
+<body id="top">
 
-  <!-- APPLICATION HERO -->
-  <section class="application-hero">
+  <!-- HEADER -->
+
+  <header class="header" data-header>
     <div class="container">
 
-      <div class="application-hero-content">
-        <h1 class="h1 application-title">Join Quill & Ink</h1>
+      <div class="overlay" data-overlay></div>
 
-        <p class="application-subtitle">
-          Interested in becoming part of our team?
-          Submit your application below and we'll review your information.
+      <a href="index.html" class="logo-link">
+        <img
+          src="assets/images/QUILL_INK_MINI_WHITE.png"
+          alt="Quill & Ink"
+          class="logo-img logo-light">
+      </a>
+
+      <nav class="navbar" data-navbar>
+
+        <div class="navbar-top">
+
+          <a href="index.html" class="logo">
+            Quill & Ink
+          </a>
+
+          <button
+            class="nav-close-btn"
+            aria-label="Close Menu"
+            data-nav-close-btn>
+
+            <ion-icon name="close-outline"></ion-icon>
+
+          </button>
+
+        </div>
+
+        <ul class="navbar-list">
+
+          <li class="navbar-item">
+            <a href="index.html" class="navbar-link" data-navbar-link>
+              Home
+            </a>
+          </li>
+
+          <li class="navbar-item">
+            <a href="testimonials.html" class="navbar-link">
+              Testimonials
+            </a>
+          </li>
+
+          <li class="navbar-item">
+            <a href="application.html" class="navbar-link">
+              Apply
+            </a>
+          </li>
+
+        </ul>
+
+      </nav>
+
+      <button
+        class="nav-open-btn"
+        aria-label="Open Menu"
+        data-nav-open-btn>
+
+        <ion-icon name="menu-outline"></ion-icon>
+
+      </button>
+
+    </div>
+  </header>
+
+
+  <main>
+    <article>
+
+      <!-- HERO -->
+
+      <section class="hero" id="home">
+
+        <div class="container">
+
+          <div class="hero-content">
+
+            <p class="hero-subtitle">
+              Join Our Team
+            </p>
+
+            <h1 class="hero-title">
+              Apply to Quill & Ink
+            </h1>
+
+            <p class="hero-text">
+              Interested in working with Quill & Ink Services?
+              Complete the application below and tell us about your
+              experience, availability, and how you could contribute
+              to our team.
+            </p>
+
+          </div>
+
+          <figure class="hero-banner">
+
+            <img
+              src="./assets/images/Customer_Service.svg"
+              class="w-100 banner-animation"
+              alt="Quill & Ink application">
+
+          </figure>
+
+        </div>
+
+      </section>
+
+
+      <!-- APPLICATION -->
+
+      <section id="application" class="application section">
+
+        <div class="container">
+
+          <h2 class="section-title underline">
+            Application Form
+          </h2>
+
+          <p class="application-intro">
+            Please complete the form below as accurately as possible.
+            We will review your application and contact you if we would
+            like to discuss the opportunity further.
+          </p>
+
+
+          <div class="application-card">
+
+            <iframe
+              src="YOUR_GOOGLE_FORM_EMBED_URL"
+              title="Quill & Ink Services Application"
+              loading="lazy">
+              Loading…
+            </iframe>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <br>
+
+    </article>
+  </main>
+
+
+  <!-- FOOTER -->
+
+  <footer class="footer">
+
+    <div class="footer-bottom">
+
+      <div class="container">
+
+        <div class="footer-brand">
+
+          <a href="index.html" class="logo">
+            Quill & Ink
+          </a>
+
+        </div>
+
+        <p class="copyright">
+
+          &copy; 2026
+
+          <a href="index.html" class="copyright-link">
+            Quill & Ink Services
+          </a>.
+
+          All Right Reserved
+
         </p>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- APPLICATION FORM -->
-  <section class="section application-section">
-    <div class="container">
-
-      <h2 class="section-title underline">Application Form</h2>
-
-      <p class="application-intro">
-        Please complete all applicable fields. Make sure the information
-        you provide is accurate before submitting your application.
-      </p>
-
-      <div class="application-card">
-
-        <iframe
-          src="YOUR_GOOGLE_FORM_EMBED_URL"
-          title="Quill & Ink Application Form"
-          loading="lazy">
-          Loading…
-        </iframe>
 
       </div>
 
     </div>
-  </section>
 
-</main>
+  </footer>
+
+
+  <!-- GO TO TOP -->
+
+  <a
+    href="#top"
+    class="go-top active"
+    aria-label="Go To Top"
+    data-go-top>
+
+    <ion-icon name="arrow-up-outline"></ion-icon>
+
+  </a>
+
+
+  <!-- custom js -->
+
+  <script src="./assets/js/script.js"></script>
+
+
+  <!-- ionicons -->
+
+  <script
+    type="module"
+    src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js">
+  </script>
+
+  <script
+    nomodule
+    src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js">
+  </script>
+
+
+  <!-- Toast Notification -->
+
+  <div id="toast" class="toast"></div>
+
+</body>
+
+</html>
+```
