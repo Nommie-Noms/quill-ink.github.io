@@ -2,7 +2,7 @@ const siteAlerts = [
   {
     title: "Applications Open",
     message: "Applications are currently being accepted.",
-    link: "contact-us.html",
+    copylink: "https://forms.gle/pDzFazoo2Xqp1jNM8",
     linkText: "Click here to apply"
   },
   {
