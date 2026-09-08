@@ -104,13 +104,21 @@ function loadAlerts() {
   const alertList = document.getElementById("alertList");
   const alertBadge = document.getElementById("alertBadge");
 
-  if (!alertList) return;
+  console.log("Loading alerts...");
+  console.log("alertList:", alertList);
+  console.log("Alerts:", siteAlerts);
+
+  if (!alertList) {
+    console.error("Could not find #alertList");
+    return;
+  }
 
   alertList.innerHTML = "";
 
-  siteAlerts.forEach(alert => {
+  siteAlerts.forEach(function(alert) {
     const item = document.createElement("div");
-    item.classList.add("alert-message");
+
+    item.className = "alert-message";
 
     item.innerHTML = `
       <strong>${alert.title}</strong>
