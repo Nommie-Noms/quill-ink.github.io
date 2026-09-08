@@ -105,6 +105,15 @@ if (alertClose && alertPopup) {
   });
 }
 
+function forceReload() {
+  const url = new URL(window.location.href);
+
+  // Add a unique timestamp to bypass page cache
+  url.searchParams.set("_refresh", Date.now());
+
+  window.location.href = url.toString();
+}
+
 /**
  * header & go-top-btn active
  * when window scroll down to 400px
