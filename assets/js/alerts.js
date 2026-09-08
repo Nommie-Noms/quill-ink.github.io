@@ -1,7 +1,7 @@
 const siteAlerts = [
   {
     title: "Applications Open",
-    message: "Applications are currently being accepted.",
+    message: "Applications are open for \naccountants and advertisers",
     copyLink: "https://forms.gle/pDzFazoo2Xqp1jNM8",
     linkText: "Click here to copy application link"
   },
