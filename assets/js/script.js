@@ -94,15 +94,23 @@ const alertPopup = document.getElementById("alertPopup");
 const alertClose = document.getElementById("alertClose");
 
 if (alertBtn && alertPopup) {
-  alertBtn.addEventListener("click", () => {
+
+  // Open / close when clicking the bell
+  alertBtn.addEventListener("click", (event) => {
+    event.stopPropagation();
     alertPopup.classList.toggle("active");
   });
-}
 
-if (alertClose && alertPopup) {
-  alertClose.addEventListener("click", () => {
+  // Prevent clicks inside the popup from closing it
+  alertPopup.addEventListener("click", (event) => {
+    event.stopPropagation();
+  });
+
+  // Close when clicking anywhere outside
+  document.addEventListener("click", () => {
     alertPopup.classList.remove("active");
   });
+
 }
 
 function forceReload() {
