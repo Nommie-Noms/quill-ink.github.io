@@ -72,6 +72,11 @@
 
       </nav>
 
+      <button class="alert-btn" id="alertBtn" aria-label="Open alerts">
+        <ion-icon name="notifications-outline"></ion-icon>
+        <span class="alert-badge" id="alertBadge"></span>
+      </button>
+      
       <button class="nav-open-btn" aria-label="Open Menu" data-nav-open-btn>
         <ion-icon name="menu-outline"></ion-icon>
       </button>
@@ -199,12 +204,26 @@
 
 
 
+  <div class="alert-popup" id="alertPopup">
+
+  <div class="alert-popup-header">
+    <h3>Alerts</h3>
+
+    <button class="alert-close" id="alertClose" aria-label="Close alerts">
+      <ion-icon name="close-outline"></ion-icon>
+    </button>
+  </div>
+
+  <div class="alert-list" id="alertList"></div>
+
+</div>
 
 
   <!-- 
     - custom js link
   -->
   <script src="./assets/js/script.js"></script>
+  <script src="./assets/js/alerts.js"></script>
 
   <!-- 
     - ionicon link
