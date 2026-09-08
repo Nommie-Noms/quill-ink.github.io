@@ -5,10 +5,6 @@ const siteAlerts = [
     copylink: "https://forms.gle/pDzFazoo2Xqp1jNM8",
     linkText: "Click here to apply"
   },
-  {
-    title: "Welcome",
-    message: "Welcome to Quill & Ink Services."
-  }
 ];
 
 function loadAlerts() {
