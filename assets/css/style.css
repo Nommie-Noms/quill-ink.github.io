@@ -477,6 +477,10 @@ body {
   line-height: 1.6;
 }
 
+.alert-message p {
+  white-space: pre-line;
+}
+
 .alert-link {
   display: inline-block;
   margin-top: 10px;
