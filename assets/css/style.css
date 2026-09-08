@@ -1241,7 +1241,32 @@ h2.section-title {
     justify-content: space-between;
   }
 
+/* Application page hero only */
 
+.application-hero .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.application-hero .hero-content {
+  max-width: 750px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.application-hero .hero-subtitle,
+.application-hero .hero-title,
+.application-hero .hero-text {
+  text-align: center;
+  margin-inline: auto;
+}
+
+.application-hero .hero-banner {
+  margin-inline: auto;
+}
 
   /**
    * FOOTER
