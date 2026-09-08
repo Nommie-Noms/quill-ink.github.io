@@ -672,51 +672,11 @@ body {
 }
 
 /*-----------------------------------*\
-  #APPLICATION PAGE
+  #APPLICATION
 \*-----------------------------------*/
 
-/* Application Hero */
-
-.application-hero {
-  background-image:
-    url("../images/hero-bg-bottom.png"),
-    url("../images/hero-bg.png"),
-    var(--gradient-1);
-
-  background-repeat: no-repeat, no-repeat, no-repeat;
-  background-position: -10px bottom, center, center;
-  background-size: auto, cover, auto;
-
-  padding-top: 150px;
-  padding-bottom: 100px;
-
-  text-align: center;
-}
-
-.application-hero-content {
-  max-width: 750px;
-  margin-inline: auto;
-}
-
-.application-title {
-  color: var(--white);
-  margin-bottom: 20px;
-}
-
-.application-subtitle {
-  color: var(--white);
-  font-size: var(--fs-7);
-  line-height: 1.8;
-  max-width: 650px;
-  margin-inline: auto;
-}
-
-
-/* Application Section */
-
-.application-section {
-  padding-top: 70px;
-  padding-bottom: 80px;
+.application {
+  padding-block: 70px;
 }
 
 .application-intro {
@@ -727,15 +687,12 @@ body {
   line-height: 1.8;
 }
 
-
-/* Form Card */
-
 .application-card {
   max-width: 950px;
   margin-inline: auto;
+  padding: 25px;
 
   background: var(--white);
-  padding: 25px;
 
   border-radius: var(--radius-12);
   box-shadow: var(--shadow);
@@ -745,8 +702,10 @@ body {
 
 .application-card iframe {
   display: block;
+
   width: 100%;
   height: 1300px;
+
   border: none;
 }
 
@@ -755,23 +714,17 @@ body {
 
 @media (max-width: 768px) {
 
-  .application-hero {
-    padding-top: 130px;
-    padding-bottom: 70px;
+  .application {
+    padding-block: 50px;
   }
 
-  .application-hero-content {
-    padding-inline: 15px;
-  }
-
-  .application-section {
-    padding-top: 50px;
-    padding-bottom: 50px;
+  .application-intro {
+    margin-top: -20px;
+    padding-inline: 10px;
   }
 
   .application-card {
     padding: 10px;
-    border-radius: 10px;
   }
 
   .application-card iframe {
