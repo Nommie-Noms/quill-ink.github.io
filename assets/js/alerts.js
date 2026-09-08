@@ -2,45 +2,50 @@ const siteAlerts = [
   {
     title: "Applications Open",
     message: "Applications are currently being accepted.",
-    copylink: "https://forms.gle/pDzFazoo2Xqp1jNM8",
-    linkText: "Click here to apply"
+    copyLink: "https://forms.gle/pDzFazoo2Xqp1jNM8",
+    linkText: "Click here to copy application link"
   },
+
+  {
+    title: "Welcome",
+    message: "Welcome to Quill & Ink Services."
+  }
 ];
 
 function loadAlerts() {
   const alertList = document.getElementById("alertList");
   const alertBadge = document.getElementById("alertBadge");
 
-  console.log("Loading alerts...");
-  console.log("alertList:", alertList);
-  console.log("Alerts:", siteAlerts);
-
-  if (!alertList) {
-    console.error("Could not find #alertList");
-    return;
-  }
+  if (!alertList) return;
 
   alertList.innerHTML = "";
 
   siteAlerts.forEach(function(alert) {
     const item = document.createElement("div");
-
     item.className = "alert-message";
 
-    item.innerHTML = `
-  <strong>${alert.title}</strong>
+    const title = document.createElement("strong");
+    title.textContent = alert.title;
 
-  <p>${alert.message}</p>
+    const message = document.createElement("p");
+    message.textContent = alert.message;
 
-  ${alert.copyLink ? `
-    <button
-      type="button"
-      class="alert-link"
-      onclick="copyNumber('${alert.copyLink}')">
-      ${alert.linkText || "Copy Link"}
-    </button>
-  ` : ""}
-`;
+    item.appendChild(title);
+    item.appendChild(message);
+
+    if (alert.copyLink) {
+      const button = document.createElement("button");
+
+      button.type = "button";
+      button.className = "alert-link";
+      button.textContent = alert.linkText || "Copy Link";
+
+      button.addEventListener("click", function() {
+        copyNumber(alert.copyLink);
+      });
+
+      item.appendChild(button);
+    }
 
     alertList.appendChild(item);
   });
