@@ -671,67 +671,6 @@ body {
   color: var(--purple-navy);
 }
 
-/*-----------------------------------*\
-  #APPLICATION
-\*-----------------------------------*/
-
-.application {
-  padding-block: 70px;
-}
-
-.application-intro {
-  max-width: 700px;
-  margin: -25px auto 40px;
-  text-align: center;
-  color: var(--purple-navy);
-  line-height: 1.8;
-}
-
-.application-card {
-  max-width: 950px;
-  margin-inline: auto;
-  padding: 25px;
-
-  background: var(--white);
-
-  border-radius: var(--radius-12);
-  box-shadow: var(--shadow);
-
-  overflow: hidden;
-}
-
-.application-card iframe {
-  display: block;
-
-  width: 100%;
-  height: 1700px;
-
-  border: none;
-}
-
-
-/* Mobile */
-
-@media (max-width: 768px) {
-
-  .application {
-    padding-block: 50px;
-  }
-
-  .application-intro {
-    margin-top: -20px;
-    padding-inline: 10px;
-  }
-
-  .application-card {
-    padding: 10px;
-  }
-
-  .application-card iframe {
-    height: 1900px;
-  }
-
-}
 
 /*-----------------------------------*\
   #FOOTER
@@ -1241,32 +1180,6 @@ h2.section-title {
     justify-content: space-between;
   }
 
-/* Application page hero only */
-
-.application-hero .container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.application-hero .hero-content {
-  max-width: 750px;
-  margin-inline: auto;
-  text-align: center;
-}
-
-.application-hero .hero-subtitle,
-.application-hero .hero-title,
-.application-hero .hero-text {
-  text-align: center;
-  margin-inline: auto;
-}
-
-.application-hero .hero-banner {
-  margin-inline: auto;
-}
 
   /**
    * FOOTER
