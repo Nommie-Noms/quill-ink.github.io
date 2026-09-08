@@ -675,42 +675,109 @@ body {
   #APPLICATION PAGE
 \*-----------------------------------*/
 
-.application-page {
-  min-height: 100vh;
-  padding-top: 130px;
-  padding-bottom: 60px;
-  background: var(--white);
-}
+/* Application Hero */
 
-.application-header {
+.application-hero {
+  background-image:
+    url("../images/hero-bg-bottom.png"),
+    url("../images/hero-bg.png"),
+    var(--gradient-1);
+
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: -10px bottom, center, center;
+  background-size: auto, cover, auto;
+
+  padding-top: 150px;
+  padding-bottom: 100px;
+
   text-align: center;
-  margin-bottom: 40px;
 }
 
-.application-header h1 {
-  color: #111941;
-  font-size: var(--fs-2);
-  margin-bottom: 15px;
+.application-hero-content {
+  max-width: 750px;
+  margin-inline: auto;
 }
 
-.application-header p {
+.application-title {
+  color: var(--white);
+  margin-bottom: 20px;
+}
+
+.application-subtitle {
+  color: var(--white);
+  font-size: var(--fs-7);
+  line-height: 1.8;
   max-width: 650px;
-  margin: 0 auto;
+  margin-inline: auto;
+}
+
+
+/* Application Section */
+
+.application-section {
+  padding-top: 70px;
+  padding-bottom: 80px;
+}
+
+.application-intro {
+  max-width: 700px;
+  margin: -25px auto 40px;
+  text-align: center;
   color: var(--purple-navy);
+  line-height: 1.8;
 }
 
-.application-form {
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
+
+/* Form Card */
+
+.application-card {
+  max-width: 950px;
+  margin-inline: auto;
+
+  background: var(--white);
+  padding: 25px;
+
+  border-radius: var(--radius-12);
+  box-shadow: var(--shadow);
+
+  overflow: hidden;
 }
 
-.application-form iframe {
+.application-card iframe {
   display: block;
   width: 100%;
-  height: 1100px;
+  height: 1300px;
   border: none;
-  border-radius: 12px;
+}
+
+
+/* Mobile */
+
+@media (max-width: 768px) {
+
+  .application-hero {
+    padding-top: 130px;
+    padding-bottom: 70px;
+  }
+
+  .application-hero-content {
+    padding-inline: 15px;
+  }
+
+  .application-section {
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+
+  .application-card {
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  .application-card iframe {
+    height: 1400px;
+  }
+
 }
 
 /*-----------------------------------*\
