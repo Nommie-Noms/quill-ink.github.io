@@ -89,6 +89,26 @@ function showToast(message) {
   }, 2000); // disappears after 2 seconds
 }
 
+const alertBtn = document.getElementById("alertBtn");
+const alertPopup = document.getElementById("alertPopup");
+const alertClose = document.getElementById("alertClose");
+
+if (alertBtn && alertPopup) {
+
+  alertBtn.addEventListener("click", () => {
+    alertPopup.classList.toggle("active");
+  });
+
+}
+
+if (alertClose && alertPopup) {
+
+  alertClose.addEventListener("click", () => {
+    alertPopup.classList.remove("active");
+  });
+
+}
+
 /**
  * header & go-top-btn active
  * when window scroll down to 400px
