@@ -587,19 +587,10 @@ body {
   gap: 30px;
 }
 
-/* Make the Email Chain card span both columns */
-.contact-card:last-child {
-  grid-column: 1 / -1;
-}
-
 /* Mobile layout */
 @media (max-width: 768px) {
   .contact-grid {
     grid-template-columns: 1fr;
-  }
-
-  .contact-card:last-child {
-    grid-column: auto;
   }
 }
 
