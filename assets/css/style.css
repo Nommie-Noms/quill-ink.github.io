@@ -405,8 +405,11 @@ body {
   text-align:right;
 }
 
-
-
+.hero-title,
+.hero-text {
+  text-align: center;
+  margin-inline: auto;
+}
 
 
 /*-----------------------------------*\
