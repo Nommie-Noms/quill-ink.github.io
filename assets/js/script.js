@@ -78,6 +78,34 @@ function toggleDuties(dutiesId, button) {
   }
 }
 
+function openMap() {
+  const overlay = document.getElementById("mapOverlay");
+
+  if (!overlay) return;
+
+  overlay.classList.add("active");
+  document.body.style.overflow = "hidden";
+}
+
+function closeMap() {
+  const overlay = document.getElementById("mapOverlay");
+
+  if (!overlay) return;
+
+  overlay.classList.remove("active");
+  document.body.style.overflow = "";
+}
+
+const mapOverlay = document.getElementById("mapOverlay");
+
+if (mapOverlay) {
+  mapOverlay.addEventListener("click", function(event) {
+    if (event.target === mapOverlay) {
+      closeMap();
+    }
+  });
+}
+
 function showToast(message) {
   const toast = document.getElementById("toast");
   toast.textContent = message;
