@@ -79,31 +79,34 @@ function toggleDuties(dutiesId, button) {
 }
 
 function openMap() {
-  const mapOverlay = document.getElementById("mapOverlay");
+  const mapViewer = document.getElementById("mapViewer");
+  const expandButton = document.getElementById("mapExpandBtn");
 
-  if (!mapOverlay) return;
+  if (!mapViewer) return;
 
-  mapOverlay.classList.add("active");
+  mapViewer.classList.add("fullscreen");
+
   document.body.style.overflow = "hidden";
+
+  if (expandButton) {
+    expandButton.style.display = "none";
+  }
 }
+
 
 function closeMap() {
-  const mapOverlay = document.getElementById("mapOverlay");
+  const mapViewer = document.getElementById("mapViewer");
+  const expandButton = document.getElementById("mapExpandBtn");
 
-  if (!mapOverlay) return;
+  if (!mapViewer) return;
 
-  mapOverlay.classList.remove("active");
+  mapViewer.classList.remove("fullscreen");
+
   document.body.style.overflow = "";
-}
 
-const mapOverlay = document.getElementById("mapOverlay");
-
-if (mapOverlay) {
-  mapOverlay.addEventListener("click", function(event) {
-    if (event.target === mapOverlay) {
-      closeMap();
-    }
-  });
+  if (expandButton) {
+    expandButton.style.display = "block";
+  }
 }
 
 function showToast(message) {
