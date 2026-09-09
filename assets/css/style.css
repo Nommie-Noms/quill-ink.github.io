@@ -809,6 +809,8 @@ body {
   color: var(--purple-navy);
 }
 
+/* Normal map */
+
 .map-card {
   max-width: 900px;
   margin: 30px auto;
@@ -844,34 +846,35 @@ body {
   background: #5e6f99;
 }
 
-.map-overlay {
-  position: fixed;
-  inset: 0;
 
-  display: flex;
+/* Fullscreen map */
+
+.map-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+
+  display: none !important;
+
   align-items: center;
   justify-content: center;
+
+  width: 100%;
+  height: 100%;
 
   padding: 30px;
 
   background: rgba(0, 0, 0, 0.9);
 
-  z-index: 10000;
-
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-
-  transition: opacity 0.25s ease;
+  z-index: 99999;
 }
 
 .map-overlay.active {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
+  display: flex !important;
 }
 
 .map-expanded-image {
+  display: block;
+
   max-width: 95%;
   max-height: 90vh;
 
@@ -883,17 +886,20 @@ body {
 
 .map-close-btn {
   position: absolute;
+
   top: 20px;
   right: 20px;
 
   color: #fff;
-  background: none;
+  background: transparent;
+
   border: none;
 
   font-size: 36px;
   cursor: pointer;
-}
 
+  z-index: 100000;
+}
 /*-----------------------------------*\
   #FOOTER
 \*-----------------------------------*/
