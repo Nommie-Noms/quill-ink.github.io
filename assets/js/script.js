@@ -79,34 +79,36 @@ function toggleDuties(dutiesId, button) {
 }
 
 function openMap() {
-  const mapViewer = document.getElementById("mapViewer");
-  const expandButton = document.getElementById("mapExpandBtn");
+  const mapOverlay = document.getElementById("mapOverlay");
 
-  if (!mapViewer) return;
+  if (!mapOverlay) return;
 
-  mapViewer.classList.add("fullscreen");
+  mapOverlay.classList.add("active");
 
   document.body.style.overflow = "hidden";
-
-  if (expandButton) {
-    expandButton.style.display = "none";
-  }
 }
 
 
 function closeMap() {
-  const mapViewer = document.getElementById("mapViewer");
-  const expandButton = document.getElementById("mapExpandBtn");
+  const mapOverlay = document.getElementById("mapOverlay");
 
-  if (!mapViewer) return;
+  if (!mapOverlay) return;
 
-  mapViewer.classList.remove("fullscreen");
+  mapOverlay.classList.remove("active");
 
   document.body.style.overflow = "";
+}
 
-  if (expandButton) {
-    expandButton.style.display = "block";
-  }
+const mapOverlay = document.getElementById("mapOverlay");
+
+if (mapOverlay) {
+  mapOverlay.addEventListener("click", function(event) {
+
+    if (event.target === mapOverlay) {
+      closeMap();
+    }
+
+  });
 }
 
 function showToast(message) {
