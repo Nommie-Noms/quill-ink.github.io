@@ -809,6 +809,88 @@ body {
   color: var(--purple-navy);
 }
 
+.map-card {
+  max-width: 900px;
+  margin: 30px auto;
+  text-align: center;
+}
+
+.map-image {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+.map-expand-btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 20px;
+
+  background: #111941;
+  color: #fff;
+
+  border: none;
+  border-radius: 6px;
+
+  font-family: inherit;
+  font-size: 1.4rem;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.map-expand-btn:hover {
+  background: #5e6f99;
+}
+
+.map-overlay {
+  position: fixed;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+
+  background: rgba(0, 0, 0, 0.9);
+
+  z-index: 10000;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition: 0.25s ease;
+}
+
+.map-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.map-expanded-image {
+  max-width: 95%;
+  max-height: 90vh;
+
+  width: auto;
+  height: auto;
+
+  object-fit: contain;
+}
+
+.map-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  color: #fff;
+  background: none;
+  border: none;
+
+  font-size: 36px;
+  cursor: pointer;
+}
 
 /*-----------------------------------*\
   #FOOTER
