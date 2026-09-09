@@ -216,21 +216,35 @@
   </div>
 </section> 
 
-<div class="map-card">
+<div class="map-viewer" id="mapViewer">
+
+  <button
+    type="button"
+    class="map-close-btn"
+    id="mapCloseBtn"
+    onclick="closeMap()"
+    aria-label="Close map">
+
+    <ion-icon name="close-outline"></ion-icon>
+
+  </button>
 
   <img
     src="assets/images/Map_Location.png"
     alt="Map"
     class="map-image">
 
-  <button
-    type="button"
-    class="map-expand-btn"
-    onclick="openMap()">
-    Expand Map
-  </button>
-
 </div>
+
+<button
+  type="button"
+  class="map-expand-btn"
+  id="mapExpandBtn"
+  onclick="openMap()">
+
+  Expand Map
+
+</button>
       
 <br>
       
@@ -296,22 +310,6 @@
 
 <!-- Toast Notification -->
 <div id="toast" class="toast"></div>
-
-<div class="map-overlay" id="mapOverlay">
-
-  <button
-    type="button"
-    class="map-close-btn"
-    onclick="closeMap()">
-    <ion-icon name="close-outline"></ion-icon>
-  </button>
-
-  <img
-    src="assets/images/Map_Location.png"
-    alt="Expanded map"
-    class="map-expanded-image">
-
-</div>
 
 </body>
 
