@@ -79,20 +79,20 @@ function toggleDuties(dutiesId, button) {
 }
 
 function openMap() {
-  const overlay = document.getElementById("mapOverlay");
+  const mapOverlay = document.getElementById("mapOverlay");
 
-  if (!overlay) return;
+  if (!mapOverlay) return;
 
-  overlay.classList.add("active");
+  mapOverlay.classList.add("active");
   document.body.style.overflow = "hidden";
 }
 
 function closeMap() {
-  const overlay = document.getElementById("mapOverlay");
+  const mapOverlay = document.getElementById("mapOverlay");
 
-  if (!overlay) return;
+  if (!mapOverlay) return;
 
-  overlay.classList.remove("active");
+  mapOverlay.classList.remove("active");
   document.body.style.overflow = "";
 }
 
