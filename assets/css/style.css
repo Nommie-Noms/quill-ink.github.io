@@ -860,13 +860,15 @@ body {
 
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
 
-  transition: 0.25s ease;
+  transition: opacity 0.25s ease;
 }
 
 .map-overlay.active {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 
 .map-expanded-image {
