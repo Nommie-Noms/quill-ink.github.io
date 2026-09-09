@@ -216,34 +216,11 @@
   </div>
 </section> 
 
-<div class="map-viewer" id="mapViewer">
-
-  <button
-    type="button"
-    class="map-close-btn"
-    id="mapCloseBtn"
-    onclick="closeMap()"
-    aria-label="Close map">
-
-    <ion-icon name="close-outline"></ion-icon>
-
-  </button>
-
-  <img
-    src="assets/images/Map_Location.png"
-    alt="Map"
-    class="map-image">
-
-</div>
-
 <button
   type="button"
   class="map-expand-btn"
-  id="mapExpandBtn"
   onclick="openMap()">
-
-  Expand Map
-
+  Show Map
 </button>
       
 <br>
@@ -293,7 +270,22 @@
   </a>
 
 
+<div class="map-overlay" id="mapOverlay">
 
+  <button
+    type="button"
+    class="map-close-btn"
+    onclick="closeMap()"
+    aria-label="Close map">
+    <ion-icon name="close-outline"></ion-icon>
+  </button>
+
+  <img
+    src="assets/images/YOUR_MAP_IMAGE.png"
+    alt="Map"
+    class="map-overlay-image">
+
+</div>
 
 
   <!-- 
