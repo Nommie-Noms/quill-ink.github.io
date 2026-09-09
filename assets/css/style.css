@@ -813,33 +813,9 @@ body {
   #MAP
 \*-----------------------------------*/
 
-.map-viewer {
-  width: 100%;
-  max-width: 900px;
-
-  margin: 30px auto 0;
-
-  text-align: center;
-}
-
-.map-image {
-  display: block;
-
-  width: 100%;
-  height: auto;
-
-  border-radius: 12px;
-
-  box-shadow: var(--shadow);
-}
-
-
-/* Expand button */
-
 .map-expand-btn {
   display: block;
-
-  margin: 15px auto 30px;
+  margin: 20px auto;
 
   padding: 10px 20px;
 
@@ -861,61 +837,55 @@ body {
 }
 
 
-/* Close button hidden normally */
+/* Hidden by default */
 
-.map-close-btn {
+.map-overlay {
   display: none;
-}
 
-
-/* Fullscreen mode */
-
-.map-viewer.fullscreen {
   position: fixed;
-
   inset: 0;
 
   width: 100vw;
   height: 100vh;
 
-  max-width: none;
-
-  margin: 0;
   padding: 30px;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
 
   background: rgba(0, 0, 0, 0.92);
 
   z-index: 99999;
+
+  align-items: center;
+  justify-content: center;
 }
 
 
-/* Expanded image */
+/* Show when opened */
 
-.map-viewer.fullscreen .map-image {
+.map-overlay.active {
+  display: flex;
+}
+
+
+/* Map image */
+
+.map-overlay-image {
+  display: block;
+
   width: auto;
   height: auto;
 
   max-width: 95vw;
   max-height: 90vh;
 
-  border-radius: 0;
-
-  box-shadow: none;
-
   object-fit: contain;
+
+  border-radius: 8px;
 }
 
 
-/* Close button when expanded */
+/* Close button */
 
-.map-viewer.fullscreen .map-close-btn {
-  display: block;
-
+.map-close-btn {
   position: absolute;
 
   top: 20px;
