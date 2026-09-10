@@ -501,6 +501,27 @@ body {
   color: var(--winter-sky);
 }
 
+.alert-countdown {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+
+  margin-top: 12px;
+
+  color: #111941;
+
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.alert-countdown span {
+  padding: 6px 8px;
+
+  background: #f1f2f7;
+
+  border-radius: 5px;
+}
+
 /*-----------------------------------*\
   #HERO
 \*-----------------------------------*/
