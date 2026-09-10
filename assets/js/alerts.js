@@ -21,19 +21,49 @@ function loadAlerts() {
   alertList.innerHTML = "";
 
   siteAlerts.forEach(function(alert) {
+
     const item = document.createElement("div");
     item.className = "alert-message";
 
+
+    // Alert title
     const title = document.createElement("strong");
     title.textContent = alert.title;
 
-    const message = document.createElement("p");
-    message.textContent = alert.message;
-
     item.appendChild(title);
-    item.appendChild(message);
 
+
+    // Alert message
+    if (alert.message) {
+      const message = document.createElement("p");
+      message.textContent = alert.message;
+
+      item.appendChild(message);
+    }
+
+
+    // Countdown
+    if (alert.countdown) {
+
+      const countdown = document.createElement("div");
+
+      countdown.className = "alert-countdown";
+      countdown.setAttribute("data-target", alert.countdown);
+
+      countdown.innerHTML = `
+        <span class="countdown-days">00d</span>
+        <span class="countdown-hours">00h</span>
+        <span class="countdown-minutes">00m</span>
+        <span class="countdown-seconds">00s</span>
+      `;
+
+      item.appendChild(countdown);
+    }
+
+
+    // Copy link button
     if (alert.copyLink) {
+
       const button = document.createElement("button");
 
       button.type = "button";
@@ -44,91 +74,145 @@ function loadAlerts() {
         copyNumber(alert.copyLink);
       });
 
-      if (alert.countdown) {
-
-        const countdown = document.createElement("div");
-        countdown.className = "alert-countdown";
-        countdown.dataset.target = alert.countdown;
-
-        countdown.innerHTML = `
-          <span class="countdown-days">00d</span>
-          <span class="countdown-hours">00h</span>
-          <span class="countdown-minutes">00m</span>
-          <span class="countdown-seconds">00s</span>
-      `;
-
-        item.appendChild(countdown);
-      }
-
       item.appendChild(button);
     }
+
 
     alertList.appendChild(item);
   });
 
+
+  // Badge
   if (alertBadge) {
+
     if (siteAlerts.length > 0) {
+
       alertBadge.textContent = siteAlerts.length;
       alertBadge.style.display = "flex";
+
     } else {
+
       alertBadge.style.display = "none";
     }
   }
 }
 
+
+
 function updateAlertCountdowns() {
 
-  const countdowns = document.querySelectorAll(".alert-countdown");
+  const countdowns =
+    document.querySelectorAll(".alert-countdown");
+
 
   countdowns.forEach(function(countdown) {
 
-    const target = new Date(countdown.dataset.target).getTime();
-    const now = Date.now();
-    const distance = target - now;
+    const targetString =
+      countdown.getAttribute("data-target");
 
-    if (distance <= 0) {
-      countdown.innerHTML = "<span>Event Started</span>";
+    const target =
+      new Date(targetString).getTime();
+
+    const now =
+      new Date().getTime();
+
+    const distance =
+      target - now;
+
+
+    // Invalid date
+    if (isNaN(target)) {
+
+      countdown.innerHTML =
+        "<span>Invalid countdown date</span>";
+
       return;
     }
+
+
+    // Countdown finished
+    if (distance <= 0) {
+
+      countdown.innerHTML =
+        "<span>Event Started</span>";
+
+      return;
+    }
+
 
     const days = Math.floor(
       distance / (1000 * 60 * 60 * 24)
     );
+
 
     const hours = Math.floor(
       (distance % (1000 * 60 * 60 * 24)) /
       (1000 * 60 * 60)
     );
 
+
     const minutes = Math.floor(
       (distance % (1000 * 60 * 60)) /
       (1000 * 60)
     );
 
+
     const seconds = Math.floor(
-      (distance % (1000 * 60)) / 1000
+      (distance % (1000 * 60)) /
+      1000
     );
 
-    countdown.querySelector(".countdown-days").textContent =
-      `${days}d`;
 
-    countdown.querySelector(".countdown-hours").textContent =
-      `${String(hours).padStart(2, "0")}h`;
+    const daysElement =
+      countdown.querySelector(".countdown-days");
 
-    countdown.querySelector(".countdown-minutes").textContent =
-      `${String(minutes).padStart(2, "0")}m`;
+    const hoursElement =
+      countdown.querySelector(".countdown-hours");
 
-    countdown.querySelector(".countdown-seconds").textContent =
-      `${String(seconds).padStart(2, "0")}s`;
+    const minutesElement =
+      countdown.querySelector(".countdown-minutes");
+
+    const secondsElement =
+      countdown.querySelector(".countdown-seconds");
+
+
+    if (daysElement) {
+      daysElement.textContent = days + "d";
+    }
+
+    if (hoursElement) {
+      hoursElement.textContent =
+        String(hours).padStart(2, "0") + "h";
+    }
+
+    if (minutesElement) {
+      minutesElement.textContent =
+        String(minutes).padStart(2, "0") + "m";
+    }
+
+    if (secondsElement) {
+      secondsElement.textContent =
+        String(seconds).padStart(2, "0") + "s";
+    }
+
   });
+
 }
 
-document.addEventListener("DOMContentLoaded", function() {
 
-  loadAlerts();
 
-  updateAlertCountdowns();
+document.addEventListener(
+  "DOMContentLoaded",
+  function() {
 
-  setInterval(updateAlertCountdowns, 1000);
+    loadAlerts();
 
-});
+    updateAlertCountdowns();
+
+    setInterval(
+      updateAlertCountdowns,
+      1000
+    );
+
+  }
+);
