@@ -10,6 +10,11 @@ const siteAlerts = [
   message: "Time remaining:",
   countdown: "2026-09-13T23:59:00"
 },
+  {
+  title: "DoCL Cab Company",
+  message: "Time remaining:",
+  countdown: "2026-09-11T23:59:00"
+},
 ];
 
 function loadAlerts() {
