@@ -135,11 +135,37 @@ function updateAlertCountdowns() {
     }
 
 
+    function updateAlertBadge() {
+
+      const alertBadge = document.getElementById("alertBadge");
+
+      if (!alertBadge) return;
+
+      const visibleAlerts =
+        document.querySelectorAll(".alert-message").length;
+
+      if (visibleAlerts > 0) {
+
+        alertBadge.textContent = visibleAlerts;
+        alertBadge.style.display = "flex";
+
+      } else {
+
+        alertBadge.style.display = "none";
+
+      }
+    }
+    
     // Countdown finished
     if (distance <= 0) {
 
-      countdown.innerHTML =
-        "<span>Event Started</span>";
+      const alertMessage = countdown.closest(".alert-message");
+
+      if (alertMessage) {
+        alertMessage.remove();
+      }
+
+      updateAlertBadge();
 
       return;
     }
