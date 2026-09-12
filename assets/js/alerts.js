@@ -6,9 +6,6 @@ const siteAlerts = [
     linkText: "Click here to apply"
   },
   {
-  title: "Deadlines",
-  },
-  {
   title: "DoCL Wear & Tear",
   message: "Time remaining:",
   countdown: "2026-09-13T23:59:00"
