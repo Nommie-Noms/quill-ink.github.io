@@ -6,15 +6,15 @@ const siteAlerts = [
     linkText: "Click here to apply"
   },
   {
-  title: "DoCL Wear & Tear",
-  message: "Time remaining:",
-  countdown: "2026-09-13T23:59:00"
-},
-  {
   title: "DoCL Cab Company",
   message: "Time remaining:",
   countdown: "2026-09-11T23:59:00"
-},
+  },
+  {
+  title: "DoCL Revolution Nightclub",
+  message: "Time remaining:",
+  countdown: "2026-09-22T23:59:00"
+  },
 ];
 
 function loadAlerts() {
