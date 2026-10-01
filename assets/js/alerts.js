@@ -11,9 +11,9 @@ const siteAlerts = [
   countdown: "2026-09-22T23:59:00"
   },
   {
-  title: "DoCL: Revolution Nightclub",
+  title: "DoCL: Nightclub",
   message: "Time remaining:",
-  countdown: "2026-09-22T23:59:00"
+  countdown: "2026-10-08T23:59:00"
   },
 ];
 
