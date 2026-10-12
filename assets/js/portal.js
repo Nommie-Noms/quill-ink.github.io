@@ -5,7 +5,7 @@
  var page=document.body.getAttribute('data-portal-page') || 'dashboard';
  var mode = 'login', user = null, profile = null, staff = false, administrator = false, selected = null, version = 0;
  var names = {}, usernames = {}, staffIds = [], busy = false, links = {contract:'',documentation:''};
- var client, toastTimer;
+ var client,toastTimer,notificationTimer=null,notificationRun=0,notificationBusy=false,notificationKnown=null,notificationSignature='',requestedMessage=null;
  function toast(text,info) {
   clearTimeout(toastTimer);
   $('copy-toast').textContent=text;
@@ -40,6 +40,7 @@
   finally {busy=false; buttons.forEach(function(button){button.disabled=false;});syncCopyButtons();}
  }
  function clearDashboard() {
+  stopNotifications();hide('notification-panel',true);hide('notifications-button',true);if($('notifications-button'))$('notifications-button').setAttribute('aria-expanded','false');text('notification-list','');text('notification-count','0');text('notification-state','');
   clearOwnRecovery();
   hide('restricted',true);hide('account-deletion',true);hide('management-link',true);
   ['settings-username','settings-business','settings-password','delete-confirm','delete-password','issued-password','issued-code','current-temporary','permanent-password','verification-note'].forEach(function(id){value(id,'');});
@@ -53,6 +54,7 @@
  }
  async function loadDashboard(session) {
   var preferred=selected;clearDashboard();
+  if(page==='dashboard'){var parameters=new URLSearchParams(window.location.search);if(!preferred)preferred=parameters.get('client');requestedMessage=parameters.get('message');}
   if(!session) return;
   user=session.user;
   var accountId=user.id;
@@ -73,8 +75,8 @@
   names[accountId]=profile.display_name;usernames[accountId]=profile.username;
   $('account-name').textContent=profile.display_name;
   $('role-label').textContent=staff?'STAFF ACCOUNT':'CLIENT ACCOUNT';
-  hide('management-link',!staff);hide('client-label',!staff);hide('service-editor',!staff);
-  if(page==='settings'){hide('account',true);hide('dashboard',false);return;}
+  hide('notifications-button',!staff);hide('management-link',!staff);hide('client-label',!staff);hide('service-editor',!staff);
+  if(page==='settings'){hide('account',true);hide('dashboard',false);if(staff)startNotifications();return;}
   if(page==='management' && !staff){hide('account',true);hide('restricted',false);status('Staff access is required for account management.');return;}
   if(staff) {
    // Paginate profiles so staff can reach every client, beyond the API's default row limit.
@@ -85,7 +87,7 @@
    selected=clients.some(function(item){return item.id===preferred && (page!=='management' || item.id!==accountId);})?preferred:(page==='management'?null:(clients.length?clients[0].id:accountId));$('client-select').value=selected || '';
   } else selected=accountId;
   hide('account',true);hide('dashboard',false);
-  await refresh();
+  await refresh();if(staff)startNotifications();
  }
  async function refresh() {
   if(!user)return;
@@ -102,7 +104,7 @@
   clearPackage();$('package-name').textContent='Loading…';$('messages').textContent='';
   var results=await Promise.all([
    client.from('client_services').select('package_name,monthly_cost,contract_url,documentation_url').eq('client_id',target).maybeSingle(),
-   client.from('messages').select('sender_id,body,created_at').eq('client_id',target).order('created_at',{ascending:false}).limit(100)
+   client.from('messages').select('id,sender_id,body,created_at').eq('client_id',target).order('created_at',{ascending:false}).limit(100)
   ]);
   if(requestVersion!==version || selected!==target || !user) return;
   var service=check(results[0]),messages=check(results[1]);
@@ -115,10 +117,108 @@
   }
   $('links-note').textContent=(!links.contract || !links.documentation)?'Your team will add any missing document links.':'';
   syncCopyButtons();
-  messages.reverse().forEach(function(message){var box=document.createElement('div');box.className='message'+(message.sender_id!==target?' staff':'');var author=document.createElement('small');author.textContent=(names[message.sender_id] || (message.sender_id===target?'Client':'Quill & Ink staff'))+' · '+new Date(message.created_at).toLocaleString();var body=document.createElement('p');body.textContent=message.body;box.appendChild(author);box.appendChild(body);$('messages').appendChild(box);});
-  if(!messages.length)$('messages').textContent='Start your private discussion below.';
-  $('messages').scrollTop=$('messages').scrollHeight;
+  await addRequestedMessage(messages,target);
+  if(requestVersion!==version || selected!==target || !user)return;
+  renderMessages(messages,target,true);
+  await acknowledgeMessages(messages);
+ } 
+ async function addRequestedMessage(messages,target) {
+  if(!requestedMessage || !/^[a-f0-9-]{36}$/i.test(requestedMessage) || messages.some(function(item){return item.id===requestedMessage;}))return;
+  var extra=check(await client.from('messages').select('id,sender_id,body,created_at').eq('client_id',target).eq('id',requestedMessage).maybeSingle());
+  if(extra)messages.push(extra);
  }
+ function renderMessages(messages,target,forceBottom) {
+  var container=$('messages'),scroll=container.scrollTop,atBottom=container.scrollHeight-scroll-container.clientHeight<40;
+  container.textContent='';
+  messages.slice().sort(function(a,b){return new Date(a.created_at)-new Date(b.created_at);}).forEach(function(message){
+   var box=document.createElement('div');box.className='message'+(message.sender_id!==target?' staff':'');box.id='message-'+message.id;
+   var author=document.createElement('small');author.textContent=(names[message.sender_id] || (message.sender_id===target?'Client':'Quill & Ink staff'))+' · '+new Date(message.created_at).toLocaleString();
+   var body=document.createElement('p');body.textContent=message.body;box.appendChild(author);box.appendChild(body);
+   if(user && message.sender_id===user.id){
+    var tools=document.createElement('div');tools.className='message-actions';
+    var ask=document.createElement('button');ask.type='button';ask.textContent='Delete message';
+    var confirm=document.createElement('span');confirm.className='message-actions';confirm.hidden=true;
+    var prompt=document.createElement('span');prompt.textContent='Delete this message for both sides?';
+    var remove=document.createElement('button');remove.type='button';remove.className='message-delete';remove.textContent='Delete';
+    var cancel=document.createElement('button');cancel.type='button';cancel.textContent='Cancel';
+    ask.onclick=function(){ask.hidden=true;confirm.hidden=false;};cancel.onclick=function(){confirm.hidden=true;ask.hidden=false;};
+    remove.onclick=function(){run(async function(){
+     if(!user || selected!==target)return;
+     var deleted=check(await client.from('messages').delete().eq('id',message.id).eq('sender_id',user.id).select('id'));
+     await loadConversation(target,version);
+     if(staff)await pollNotifications(true);
+     status(deleted.length?'Message deleted.':'The message is already deleted or is no longer accessible.');
+     toast(deleted.length?'Message deleted.':'Message no longer available.',!deleted.length);
+    });};
+    confirm.appendChild(prompt);confirm.appendChild(remove);confirm.appendChild(cancel);tools.appendChild(ask);tools.appendChild(confirm);box.appendChild(tools);
+   }
+   container.appendChild(box);
+  });
+  if(!messages.length)container.textContent='Start your private discussion below.';
+  container.scrollTop=forceBottom || atBottom?container.scrollHeight:scroll;
+ }
+ async function acknowledgeMessages(messages) {
+  if(!staff || document.hidden || !messages.length)return;
+  check(await client.rpc('mark_message_notifications',{message_ids:messages.map(function(item){return item.id;})}));
+ }
+ async function loadConversation(target,expectedVersion) {
+  if(page!=='dashboard' || !user)return;
+  var messages=check(await client.from('messages').select('id,sender_id,body,created_at').eq('client_id',target).order('created_at',{ascending:false}).limit(100));
+  await addRequestedMessage(messages,target);
+  if(!user || selected!==target || version!==expectedVersion)return;
+  renderMessages(messages,target,false);await acknowledgeMessages(messages);
+ }
+ function stopNotifications() {
+  if(notificationTimer)clearInterval(notificationTimer);notificationTimer=null;notificationRun++;notificationKnown=null;notificationSignature='';notificationBusy=false;
+ }
+ function startNotifications() {
+  stopNotifications();
+  pollNotifications(true);
+  notificationTimer=setInterval(function(){if(!document.hidden && !busy)pollNotifications(false);},15000);
+ }
+ async function pollNotifications(silent,skipConversation) {
+  if(!user || !staff || notificationBusy)return;
+  notificationBusy=true;var cycle=notificationRun;
+  try {
+   var results=await Promise.all([client.rpc('staff_message_notifications'),client.rpc('staff_unread_message_count')]);
+   if(cycle!==notificationRun || !user || !staff)return;
+   var notifications=check(results[0]),count=Number(check(results[1])),known={};
+   notifications.forEach(function(item){known[item.notification_id]=true;});
+   var fresh=notificationKnown===null?[]:notifications.filter(function(item){return !notificationKnown[item.notification_id];});
+   notificationKnown=known;
+   if($('notification-count').textContent!==String(count))text('notification-count',String(count));
+   $('notifications-button').setAttribute('aria-label','Notifications: '+count+' unread client messages');
+   var state=count+' unread client message'+(count===1?'':'s')+(count>20?' · showing latest 20':'');
+   if($('notification-state').textContent!==state)text('notification-state',state);
+   var signature=JSON.stringify(notifications);
+   if(signature!==notificationSignature){notificationSignature=signature;renderNotifications(notifications);}
+   if(!silent && fresh.length)toast(fresh.length===1?'New message from '+fresh[0].client_name: fresh.length+' new client messages.');
+   if(page==='dashboard' && !busy && !document.hidden && selected && !skipConversation){
+    await loadConversation(selected,version);
+    notificationBusy=false;
+    if(!silent && notifications.some(function(item){return item.client_id===selected;}))await pollNotifications(true,true);
+   }
+  } catch(error) {if(cycle===notificationRun)text('notification-state','Notifications could not update. Retrying shortly.');}
+  finally {if(cycle===notificationRun)notificationBusy=false;}
+ }
+ function renderNotifications(notifications) {
+  var container=$('notification-list');container.textContent='';
+  if(!notifications.length){container.textContent='No unread client messages.';return;}
+  notifications.forEach(function(item){
+   var row=document.createElement('div');row.className='notification-item';
+   var heading=document.createElement('strong');heading.textContent=item.client_name+' (@'+item.username+')';
+   var when=document.createElement('small');when.textContent=new Date(item.created_at).toLocaleString();
+   var preview=document.createElement('p');preview.textContent=item.preview;
+   var open=document.createElement('a');open.className='button-link';open.textContent='Open conversation';
+   open.href='portal.html?client='+encodeURIComponent(item.client_id)+'&message='+encodeURIComponent(item.message_id);
+   if(page==='dashboard')open.onclick=function(event){event.preventDefault();if(busy)return;run(async function(){selected=item.client_id;requestedMessage=item.message_id;$('client-select').value=selected;hide('notification-panel',true);$('notifications-button').setAttribute('aria-expanded','false');await refresh();await pollNotifications(true);if($('messages').scrollIntoView)$('messages').scrollIntoView({block:'nearest'});});};
+   row.appendChild(heading);row.appendChild(when);row.appendChild(preview);row.appendChild(open);container.appendChild(row);
+  });
+ }
+ bind('notifications-button','onclick',function(){var visible=$('notification-panel').hidden;hide('notification-panel',!visible);$('notifications-button').setAttribute('aria-expanded',String(visible));if(visible)pollNotifications(true);});
+ window.addEventListener('pagehide',stopNotifications);
+ window.addEventListener('pageshow',function(){if(user && staff && !notificationTimer)startNotifications();});
+
  async function accountAction(data) {
   var controller=typeof AbortController!=='undefined'?new AbortController():null;
   var timer=controller?setTimeout(function(){controller.abort();},20000):null;
@@ -158,7 +258,7 @@
   }
  });};
  $('recovery-saved').onclick=function(){$('recovery-output').value='';hide('recovery-result',true);hide('account',false);setMode('login');};
- bind('client-select','onchange',function(){hide('staff-reset-result',true);['issued-password','issued-code','verification-note','delete-password','delete-confirm'].forEach(function(id){value(id,'');});if($('identity-confirmed'))$('identity-confirmed').checked=false;if($('delete-acknowledged'))$('delete-acknowledged').checked=false;selected=this.value || null;status('');run(refresh);});
+ bind('client-select','onchange',function(){hide('staff-reset-result',true);['issued-password','issued-code','verification-note','delete-password','delete-confirm'].forEach(function(id){value(id,'');});if($('identity-confirmed'))$('identity-confirmed').checked=false;if($('delete-acknowledged'))$('delete-acknowledged').checked=false;selected=this.value || null;requestedMessage=null;status('');run(refresh);});
  bind('logo-refresh','onclick',function(event){event.preventDefault();if(!busy)window.location.reload();});
  bind('logout','onclick',function(){run(async function(){check(await client.auth.signOut({scope:'local'}));clearDashboard();status('Signed out.');});});
  bind('restricted-logout','onclick',function(){$('logout').click();});
