@@ -40,6 +40,7 @@
   finally {busy=false; buttons.forEach(function(button){button.disabled=false;});syncCopyButtons();}
  }
  function clearDashboard() {
+  clearOwnRecovery();
   hide('restricted',true);hide('account-deletion',true);hide('management-link',true);
   ['settings-username','settings-business','settings-password','delete-confirm','delete-password','issued-password','issued-code','current-temporary','permanent-password','verification-note'].forEach(function(id){value(id,'');});
   if($('delete-acknowledged'))$('delete-acknowledged').checked=false;
@@ -123,7 +124,7 @@
   var timer=controller?setTimeout(function(){controller.abort();},20000):null;
   try {
    var requestHeaders={'Content-Type':'application/json',apikey:config.supabasePublishableKey};
-   if(['staff-reset','change-temporary','update-profile','delete-account'].includes(data.action)) {
+   if(['staff-reset','change-temporary','update-profile','delete-account','rotate-recovery'].includes(data.action)) {
     var currentSession=check(await client.auth.getSession()).session;
     if(!currentSession)throw new Error('Sign in again.');
     requestHeaders.Authorization='Bearer '+currentSession.access_token;
@@ -161,6 +162,27 @@
  bind('logo-refresh','onclick',function(event){event.preventDefault();if(!busy)window.location.reload();});
  bind('logout','onclick',function(){run(async function(){check(await client.auth.signOut({scope:'local'}));clearDashboard();status('Signed out.');});});
  bind('restricted-logout','onclick',function(){$('logout').click();});
+ function clearOwnRecovery() {
+  value('own-recovery-password','');value('own-recovery-code','');hide('own-recovery-result',true);
+ }
+ window.addEventListener('pagehide',clearOwnRecovery);
+ bind('recovery-code-form','onsubmit',function(event){event.preventDefault();run(async function(){
+  value('own-recovery-code','');hide('own-recovery-result',true);
+  try {
+   var result=await accountAction({action:'rotate-recovery',currentPassword:$('own-recovery-password').value});
+   $('own-recovery-code').value=result.recoveryCode;hide('own-recovery-result',false);
+   status('New recovery code generated. Your previous code is no longer valid. Save this code privately.');
+   toast('New recovery code generated.');
+  } finally {value('own-recovery-password','');}
+ });});
+ bind('copy-own-recovery','onclick',async function(){
+  var code=$('own-recovery-code');if(!code.value)return;
+  try {if(!navigator.clipboard || !navigator.clipboard.writeText)throw new Error('Clipboard unavailable');await navigator.clipboard.writeText(code.value);toast('Recovery code copied.');return;}catch(error){}
+  code.focus();code.select();
+  try {if(document.execCommand('copy')){toast('Recovery code copied.');return;}}catch(error){}
+  status('Copy the selected recovery code manually.');toast('Copy the selected code manually.',true);
+ });
+ bind('hide-own-recovery','onclick',clearOwnRecovery);
  bind('profile-form','onsubmit',function(event){event.preventDefault();run(async function(){
   var username=$('settings-username').value.trim().toLowerCase();
   var result=await accountAction({action:'update-profile',username:username,displayName:$('settings-business').value.trim(),currentPassword:$('settings-password').value});
