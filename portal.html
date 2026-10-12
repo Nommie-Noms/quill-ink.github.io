@@ -15,7 +15,7 @@
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="assets/css/portal.css?v=logo-refresh-2">
+  <link rel="stylesheet" href="assets/css/portal.css?v=messages-1">
 </head>
 
 <body data-portal-page="dashboard">
@@ -212,8 +212,26 @@
           Account management
         </a>
 
+        <button
+          id="notifications-button"
+          type="button"
+          hidden
+          aria-expanded="false"
+          aria-controls="notification-panel"
+        >
+          Notifications <span id="notification-count" class="notification-count">0</span>
+        </button>
+
         <button id="logout">Sign out</button>
       </nav>
+
+      <!-- Staff client-message notifications -->
+      <section class="card" id="notification-panel" hidden aria-labelledby="notification-title">
+        <h2 id="notification-title">Client messages</h2>
+        <p id="notification-state" class="note" role="status" aria-live="polite"></p>
+        <div id="notification-list" class="notification-list"></div>
+        <p class="note">Opening a conversation marks the messages you view as read for your account.</p>
+      </section>
 
       <label id="client-label" hidden>
         Client account
@@ -321,7 +339,7 @@
 
           <p class="note">
             Messages are shared with authorised Quill &amp; Ink staff.
-            Use Refresh to check for replies.
+            Click the Quill &amp; Ink logo to check for replies. You can delete your own messages.
           </p>
 
           <div id="messages" class="messages"></div>
@@ -361,6 +379,6 @@
   <script src="assets/js/portal-compat.js?v=phone-1"></script>
   <script src="assets/js/vendor/supabase-2.57.4-compat.js?v=phone-1"></script>
   <script src="assets/js/portal-config.js"></script>
-  <script src="assets/js/portal.js?v=phone-1"></script>
+  <script src="assets/js/portal.js?v=messages-1"></script>
 </body>
 </html>
