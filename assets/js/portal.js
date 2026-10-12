@@ -4,6 +4,7 @@
  var config = window.PORTAL_CONFIG;
  var page=document.body.getAttribute('data-portal-page') || 'dashboard';
  var mode = 'login', user = null, profile = null, staff = false, administrator = false, selected = null, version = 0;
+ var memberships=[],businesses=[],memberIds={},staffSenderIds={};
  var names = {}, usernames = {}, staffIds = [], busy = false, links = {contract:'',documentation:''};
  var client,toastTimer,notificationTimer=null,notificationRun=0,notificationBusy=false,notificationKnown=null,notificationSignature='',requestedMessage=null;
  function toast(text,info) {
@@ -56,8 +57,11 @@
   ['settings-username','settings-business','settings-password','delete-confirm','delete-password','issued-password','issued-code','current-temporary','permanent-password','verification-note'].forEach(function(id){value(id,'');});
   if($('delete-acknowledged'))$('delete-acknowledged').checked=false;
   if($('identity-confirmed'))$('identity-confirmed').checked=false;
+  ['own-current-password','own-new-password','own-confirm-password','member-username'].forEach(function(id){value(id,'');});
+  ['business-member-list','business-invitations','joined-business-list'].forEach(function(id){text(id,'');});
+  ['business-members-section','business-invitations-section','joined-business-section'].forEach(function(id){hide(id,true);});
   hide('password-change',true);hide('staff-recovery',true);hide('staff-reset-result',true);
-  version++;user=null;profile=null;selected=null;staff=false;administrator=false;names={};usernames={};staffIds=[];
+  version++;user=null;profile=null;selected=null;staff=false;administrator=false;names={};usernames={};staffIds=[];memberships=[];businesses=[];memberIds={};staffSenderIds={};
   clearPackage();hide('service-editor',true);text('messages','');text('client-select','');
   text('account-name','');value('message','');
   hide('dashboard',true);hide('account',false);
@@ -86,7 +90,7 @@
   $('account-name').textContent=profile.display_name;
   $('role-label').textContent=staff?'STAFF ACCOUNT':'CLIENT ACCOUNT';
   hide('notifications-button',!staff);hide('management-link',!staff);hide('client-label',!staff);hide('service-editor',true);
-  if(page==='settings'){hide('account',true);hide('dashboard',false);if(staff)startNotifications();return;}
+  if(page==='settings'){hide('account',true);hide('dashboard',false);await loadBusinessSettings();if(staff)startNotifications();return;}
   if(page==='management' && !staff){hide('account',true);hide('restricted',false);status('Staff access is required for account management.');return;}
   if(staff) {
    // Paginate profiles so staff can reach every client, beyond the API's default row limit.
@@ -95,7 +99,16 @@
    if(page==='management'){var placeholder=document.createElement('option');placeholder.value='';placeholder.textContent='Choose an account';$('client-select').appendChild(placeholder);}
    clients.forEach(function(item){if(page==='management' && item.id===accountId)return;names[item.id]=item.display_name;usernames[item.id]=item.username;var option=document.createElement('option');option.value=item.id;option.textContent=(administrator && item.id===accountId?'Your administrator account':item.display_name)+' (@'+item.username+')';$('client-select').appendChild(option);});
    selected=clients.some(function(item){return item.id===preferred && (page!=='management' || item.id!==accountId);})?preferred:(page==='management'?null:(administrator?accountId:(clients.length?clients[0].id:accountId)));$('client-select').value=selected || '';
-  } else selected=accountId;
+  } else {
+   memberships=check(await client.from('business_members').select('business_id,user_id,accepted_at'));
+   var ids=[accountId];memberships.forEach(function(m){if(m.user_id===accountId && m.accepted_at && !ids.includes(m.business_id))ids.push(m.business_id);});
+   var visible=check(await client.from('profiles').select('id,username,display_name').order('username'));
+   visible.forEach(function(item){names[item.id]=item.display_name;usernames[item.id]=item.username;});
+   businesses=ids.map(function(id){return {id:id,name:names[id] || 'Business'};});
+   businesses.forEach(function(item){var option=document.createElement('option');option.value=item.id;option.textContent=item.name+(item.id===accountId?' (owner)':' (member)');$('client-select').appendChild(option);});
+   selected=ids.includes(preferred)?preferred:((ids.length>1)?ids[1]:accountId);$('client-select').value=selected;
+   hide('client-label',businesses.length<2);
+  }
   hide('account',true);hide('dashboard',false);
   await refresh();if(staff)startNotifications();
  }
@@ -119,6 +132,7 @@
   }
   if(page==='settings' || !selected)return;
   var target=selected,requestVersion=++version;
+  text('business-view-role',staff?'STAFF VIEW':selected===user.id?'BUSINESS OWNER':'BUSINESS MEMBER');
   var ownAdministrator=administrator && selected===user.id;
   hide('client-content',ownAdministrator);hide('administrator-home-note',!ownAdministrator);
   clearPackage();$('messages').textContent='';
@@ -128,10 +142,14 @@
   $('package-name').textContent='Loading…';
   var results=await Promise.all([
    client.from('client_services').select('package_name,monthly_cost,contract_url,documentation_url').eq('client_id',target).maybeSingle(),
-   client.from('messages').select('id,sender_id,body,created_at').eq('client_id',target).order('created_at',{ascending:false}).limit(100)
+   client.from('messages').select('id,sender_id,body,created_at').eq('client_id',target).order('created_at',{ascending:false}).limit(100),
+   client.from('business_members').select('business_id,user_id,accepted_at').eq('business_id',target),
+   client.rpc('business_message_authors',{business:target})
   ]);
   if(requestVersion!==version || selected!==target || !user) return;
   var service=check(results[0]),messages=check(results[1]);
+  memberIds={};check(results[2]).forEach(function(m){if(m.accepted_at)memberIds[m.user_id]=true;});
+  staffSenderIds={};check(results[3]).forEach(function(p){names[p.id]=p.display_name;usernames[p.id]=p.username;staffSenderIds[p.id]=p.is_staff;});
   $('package-name').textContent=service && service.package_name ? service.package_name : 'Not assigned';
   $('monthly-cost').textContent=service && service.package_name ? money(service.monthly_cost) : '—';
   if(service) {
@@ -154,8 +172,8 @@
   var container=$('messages'),scroll=container.scrollTop,atBottom=container.scrollHeight-scroll-container.clientHeight<40;
   container.textContent='';
   messages.slice().sort(function(a,b){return new Date(a.created_at)-new Date(b.created_at);}).forEach(function(message){
-   var box=document.createElement('div');box.className='message'+(message.sender_id!==target?' staff':'');box.id='message-'+message.id;
-   var author=document.createElement('small');author.textContent=(names[message.sender_id] || (message.sender_id===target?'Client':'Quill & Ink staff'))+' · '+new Date(message.created_at).toLocaleString();
+   var box=document.createElement('div');box.className='message'+((staffIds.includes(message.sender_id) || staffSenderIds[message.sender_id])?' staff':'');box.id='message-'+message.id;
+   var author=document.createElement('small');author.textContent=(names[message.sender_id] || (message.sender_id===null?'Deleted user':(staffIds.includes(message.sender_id) || staffSenderIds[message.sender_id])?'Quill & Ink staff':'Business member'))+' · '+new Date(message.created_at).toLocaleString();
    var body=document.createElement('p');body.textContent=message.body;box.appendChild(author);box.appendChild(body);
    if(user && message.sender_id===user.id){
     var tools=document.createElement('div');tools.className='message-actions';
@@ -247,7 +265,7 @@
   var timer=controller?setTimeout(function(){controller.abort();},20000):null;
   try {
    var requestHeaders={'Content-Type':'application/json',apikey:config.supabasePublishableKey};
-   if(['staff-reset','change-temporary','update-profile','delete-account','rotate-recovery'].includes(data.action)) {
+   if(['staff-reset','change-temporary','update-profile','delete-account','rotate-recovery','change-password'].includes(data.action)) {
     var currentSession=check(await client.auth.getSession()).session;
     if(!currentSession)throw new Error('Sign in again.');
     requestHeaders.Authorization='Bearer '+currentSession.access_token;
@@ -306,6 +324,58 @@
   status('Copy the selected recovery code manually.');toast('Copy the selected code manually.',true);
  });
  bind('hide-own-recovery','onclick',clearOwnRecovery);
+ async function loadBusinessSettings() {
+  if(page!=='settings' || !user)return;
+  var current=user.id,ticket=++version;
+  var results=await Promise.all([client.from('business_members').select('business_id,user_id,accepted_at'),client.from('profiles').select('id,username,display_name').order('username'),client.rpc('my_business_invitations')]);
+  if(!user || user.id!==current || ticket!==version)return;
+  var rows=check(results[0]),people=check(results[1]),invitations=check(results[2]);
+  people.forEach(function(p){names[p.id]=p.display_name;usernames[p.id]=p.username;});
+  hide('business-members-section',staff);hide('business-invitations-section',!invitations.length);
+  text('business-member-list','');text('business-invitations','');text('joined-business-list','');
+  function actionButton(label,action) {
+   var b=document.createElement('button');b.type='button';b.textContent=label;
+   b.onclick=function(){run(async function(){await action();await loadBusinessSettings();status('Business membership updated.');});};return b;
+  }
+  function removeControl(row,business,member,label) {
+   var confirmation=document.createElement('span');confirmation.hidden=true;
+   var ask=document.createElement('button');ask.type='button';ask.textContent=label;
+   ask.onclick=function(){ask.hidden=true;confirmation.hidden=false;};
+   confirmation.appendChild(actionButton('Confirm',async function(){check(await client.rpc('remove_business_member',{business:business,member:member}));}));
+   var cancel=document.createElement('button');cancel.type='button';cancel.textContent='Cancel';cancel.onclick=function(){confirmation.hidden=true;ask.hidden=false;};
+   confirmation.appendChild(cancel);row.appendChild(ask);row.appendChild(confirmation);
+  }
+  var own=rows.filter(function(m){return m.business_id===current;});
+  if(!own.length)text('business-member-list','No members invited yet.');
+  own.forEach(function(m){
+   var row=document.createElement('div');row.className='membership-row';
+   var label=document.createElement('span');label.textContent='@'+(usernames[m.user_id] || 'customer')+' · '+(m.accepted_at?'Member':'Invitation pending');row.appendChild(label);
+   removeControl(row,current,m.user_id,m.accepted_at?'Remove member':'Cancel invitation');$('business-member-list').appendChild(row);
+  });
+  invitations.forEach(function(i){
+   var row=document.createElement('div');row.className='membership-row';
+   var label=document.createElement('span');label.textContent=i.business_name+' · owner @'+i.owner_username;row.appendChild(label);
+   [true,false].forEach(function(accept){row.appendChild(actionButton(accept?'Accept':'Decline',async function(){check(await client.rpc('respond_business_invite',{business:i.business_id,accept_invite:accept}));}));});
+   $('business-invitations').appendChild(row);
+  });
+  var joined=rows.filter(function(m){return m.user_id===current && m.accepted_at;});
+  hide('joined-business-section',!joined.length);
+  joined.forEach(function(m){
+   var row=document.createElement('div');row.className='membership-row';
+   var label=document.createElement('span');label.textContent=names[m.business_id] || 'Business';row.appendChild(label);
+   removeControl(row,m.business_id,current,'Leave business');$('joined-business-list').appendChild(row);
+  });
+ }
+ bind('member-invite-form','onsubmit',function(event){event.preventDefault();run(async function(){
+  check(await client.rpc('invite_business_member',{account_name:$('member-username').value.trim().toLowerCase()}));
+  value('member-username','');await loadBusinessSettings();status('Invitation sent. The person can accept it in Account Settings.');toast('Business invitation sent.');
+ });});
+ bind('own-password-form','onsubmit',function(event){event.preventDefault();run(async function(){
+  if($('own-new-password').value!==$('own-confirm-password').value)throw new Error('New passwords do not match.');
+  var result=await accountAction({action:'change-password',currentPassword:$('own-current-password').value,password:$('own-new-password').value});
+  check(await client.auth.signOut({scope:'local'}));clearDashboard();hide('account',true);
+  value('recovery-output',result.recoveryCode);hide('recovery-result',false);status('Your password changed. Save your replacement recovery code, then sign in again.');
+ });});
  bind('profile-form','onsubmit',function(event){event.preventDefault();run(async function(){
   var username=$('settings-username').value.trim().toLowerCase();
   var result=await accountAction({action:'update-profile',username:username,displayName:$('settings-business').value.trim(),currentPassword:$('settings-password').value});
@@ -314,7 +384,7 @@
    await client.auth.signOut({scope:'local'});clearDashboard();$('username').value=result.username;
    $('recovery-output').value=result.recoveryCode;hide('account',true);hide('recovery-result',false);
    status('Username updated. Save your new recovery code, then sign in with your new username and existing password.');
-  }else{var session=check(await client.auth.getSession()).session;await loadDashboard(session);status('Business name updated.');toast('Business name updated.');}
+  }else{var session=check(await client.auth.getSession()).session;await loadDashboard(session);status('Your own business or character name updated.');toast('Account name updated.');}
  });});
  bind('delete-form','onsubmit',function(event){event.preventDefault();run(async function(){
   if(!administrator || !selected || selected===user.id || staffIds.includes(selected))throw new Error('Select a customer account. Staff accounts are protected.');
