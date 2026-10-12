@@ -135,7 +135,10 @@
   } finally {if(timer)clearTimeout(timer);}
  }
  try {
-  if(!window.supabase || !config) throw new Error('Portal files could not load. Check the vendor and configuration files.');
+  if(!config) throw new Error('The configuration script did not load. Check assets/js/portal-config.js.');
+  if(!window.supabase) throw new Error('The authentication library did not load or could not run. '+((window.PORTAL_LOAD_ERRORS || []).join(' | ') || 'Check assets/vendor/supabase-2.57.4-compat.js.'));
+  if(typeof window.fetch!=='function') throw new Error('This browser does not support fetch requests.');
+  if(typeof window.URL!=='function') throw new Error('This browser does not support the URL API.');
   // Refuse a silent in-memory session: the phone must support durable storage.
   localStorage.setItem('quill-portal-storage-check','ok');localStorage.removeItem('quill-portal-storage-check');
   client=window.supabase.createClient(config.supabaseUrl,config.supabasePublishableKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:'quill-test-auth-v1'}});
@@ -155,7 +158,7 @@
  });};
  $('recovery-saved').onclick=function(){$('recovery-output').value='';hide('recovery-result',true);hide('account',false);setMode('login');};
  bind('client-select','onchange',function(){hide('staff-reset-result',true);['issued-password','issued-code','verification-note','delete-password','delete-confirm'].forEach(function(id){value(id,'');});if($('identity-confirmed'))$('identity-confirmed').checked=false;if($('delete-acknowledged'))$('delete-acknowledged').checked=false;selected=this.value || null;status('');run(refresh);});
- bind('refresh','onclick',function(){status('');run(async function(){if(page==='management'){var session=check(await client.auth.getSession()).session;await loadDashboard(session);}else await refresh();});});
+ bind('logo-refresh','onclick',function(event){event.preventDefault();if(!busy)window.location.reload();});
  bind('logout','onclick',function(){run(async function(){check(await client.auth.signOut({scope:'local'}));clearDashboard();status('Signed out.');});});
  bind('restricted-logout','onclick',function(){$('logout').click();});
  bind('profile-form','onsubmit',function(event){event.preventDefault();run(async function(){
