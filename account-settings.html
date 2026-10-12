@@ -15,7 +15,7 @@
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="assets/css/portal.css?v=package-management-1">
+  <link rel="stylesheet" href="assets/css/portal.css?v=business-members-1">
 </head>
 
 <body data-portal-page="settings">
@@ -41,7 +41,7 @@
     <div class="hero-inner">
       <p class="eyebrow">PRECISION IN EVERY DETAIL</p>
       <h1>Account settings</h1>
-      <p>Manage your username and business name.</p>
+      <p>Manage your login and business membership.</p>
     </div>
   </section>
 
@@ -249,7 +249,7 @@
           </label>
 
           <label>
-            Your business name
+            Your own business or character name
             <input
               id="settings-business"
               maxlength="80"
@@ -270,9 +270,42 @@
         </form>
 
         <p class="note">
+          These settings apply to your own account, not a business you joined.
           Changing your username signs you out and replaces your recovery
           code. Your package and messages stay with your account.
         </p>
+      </section>
+
+      <section class="card account-settings">
+        <h2>Change your password</h2>
+        <p>This changes only your own login. Other business members keep their passwords.</p>
+        <form id="own-password-form">
+          <label>Current password<input id="own-current-password" type="password" autocomplete="current-password" maxlength="128" required></label>
+          <label>New password<input id="own-new-password" type="password" autocomplete="new-password" minlength="12" maxlength="128" required></label>
+          <label>Confirm new password<input id="own-confirm-password" type="password" autocomplete="new-password" minlength="12" maxlength="128" required></label>
+          <button>Change my password</button>
+        </form>
+      </section>
+
+      <section class="card" id="business-members-section" hidden>
+        <h2>Members of your business</h2>
+        <p>You own this business. Invite an existing customer username; they must accept in their Account Settings. Members share your package, documents and discussion, but cannot change your business name or login.</p>
+        <form id="member-invite-form">
+          <label>Registered username<input id="member-username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]{3,24}" autocomplete="off" required></label>
+          <button>Invite member</button>
+        </form>
+        <div id="business-member-list"></div>
+      </section>
+
+      <section class="card" id="business-invitations-section" hidden>
+        <h2>Business invitations</h2>
+        <div id="business-invitations"></div>
+      </section>
+
+      <section class="card" id="joined-business-section" hidden>
+        <h2>Businesses you have joined</h2>
+        <p>Use the business selector in Client Portal to view a shared business. Its owner manages membership and business settings.</p>
+        <div id="joined-business-list"></div>
       </section>
 
       <!-- Generate a replacement recovery code -->
@@ -324,6 +357,6 @@
   <script src="assets/js/portal-compat.js?v=phone-1"></script>
   <script src="assets/js/vendor/supabase-2.57.4-compat.js?v=phone-1"></script>
   <script src="assets/js/portal-config.js"></script>
-  <script src="assets/js/portal.js?v=package-management-1"></script>
+  <script src="assets/js/portal.js?v=business-members-1"></script>
 </body>
 </html>
