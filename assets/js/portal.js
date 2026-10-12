@@ -19,7 +19,17 @@
  function bind(id,event,handler){if($(id))$(id)[event]=handler;}
  function money(value) { return '$' + Number(value).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
  function syncCopyButtons() {if(page!=='dashboard')return; $('copy-contract').disabled=busy || !links.contract; $('copy-documentation').disabled=busy || !links.documentation; }
- function clearPackage() {if(page!=='dashboard')return; links={contract:'',documentation:''};$('package-name').textContent='Not assigned';$('monthly-cost').textContent='—';$('package-input').value='';$('cost-input').value='0';$('contract-input').value='';$('documentation-input').value='';$('manual-copy').value='';hide('manual-copy-label',true);$('links-note').textContent='';syncCopyButtons(); }
+ function clearPackage() {
+  links={contract:'',documentation:''};text('package-name','Not assigned');text('monthly-cost','—');
+  value('package-input','');value('cost-input','0');value('contract-input','');value('documentation-input','');value('manual-copy','');
+  hide('manual-copy-label',true);text('links-note','');syncCopyButtons();
+ }
+ function fillPackageEditor(service) {
+  if(!service)return;
+  value('package-input',service.package_name);value('cost-input',service.monthly_cost);
+  value('contract-input',service.contract_url);value('documentation-input',service.documentation_url);
+ }
+
  function check(result) { if(result.error) throw new Error(result.error.message); return result.data; }
  function setMode(next) {
   mode = next;
@@ -75,7 +85,7 @@
   names[accountId]=profile.display_name;usernames[accountId]=profile.username;
   $('account-name').textContent=profile.display_name;
   $('role-label').textContent=staff?'STAFF ACCOUNT':'CLIENT ACCOUNT';
-  hide('notifications-button',!staff);hide('management-link',!staff);hide('client-label',!staff);hide('service-editor',!staff);
+  hide('notifications-button',!staff);hide('management-link',!staff);hide('client-label',!staff);hide('service-editor',true);
   if(page==='settings'){hide('account',true);hide('dashboard',false);if(staff)startNotifications();return;}
   if(page==='management' && !staff){hide('account',true);hide('restricted',false);status('Staff access is required for account management.');return;}
   if(staff) {
@@ -83,8 +93,8 @@
    var clients=[],offset=0,batch;
    do {batch=check(await client.from('profiles').select('id,username,display_name').order('username').range(offset,offset+499));clients=clients.concat(batch);offset+=500;} while(batch.length===500);
    if(page==='management'){var placeholder=document.createElement('option');placeholder.value='';placeholder.textContent='Choose an account';$('client-select').appendChild(placeholder);}
-   clients.forEach(function(item){if(page==='management' && item.id===accountId)return;names[item.id]=item.display_name;usernames[item.id]=item.username;var option=document.createElement('option');option.value=item.id;option.textContent=item.display_name+' (@'+item.username+')';$('client-select').appendChild(option);});
-   selected=clients.some(function(item){return item.id===preferred && (page!=='management' || item.id!==accountId);})?preferred:(page==='management'?null:(clients.length?clients[0].id:accountId));$('client-select').value=selected || '';
+   clients.forEach(function(item){if(page==='management' && item.id===accountId)return;names[item.id]=item.display_name;usernames[item.id]=item.username;var option=document.createElement('option');option.value=item.id;option.textContent=(administrator && item.id===accountId?'Your administrator account':item.display_name)+' (@'+item.username+')';$('client-select').appendChild(option);});
+   selected=clients.some(function(item){return item.id===preferred && (page!=='management' || item.id!==accountId);})?preferred:(page==='management'?null:(administrator?accountId:(clients.length?clients[0].id:accountId)));$('client-select').value=selected || '';
   } else selected=accountId;
   hide('account',true);hide('dashboard',false);
   await refresh();if(staff)startNotifications();
@@ -92,16 +102,30 @@
  async function refresh() {
   if(!user)return;
   if(page==='management'){
+   var requested=selected,requestTicket=++version;
    var permitted=!!selected && selected!==user.id;
+   var packageAllowed=permitted && !staffIds.includes(selected);
+   clearPackage();hide('service-editor',!packageAllowed);
    hide('staff-recovery',!(permitted && (administrator || !staffIds.includes(selected))));
    hide('account-deletion',!(permitted && administrator && !staffIds.includes(selected)));
    text('delete-target','Selected account: @'+(usernames[selected] || ''));
-   text('management-note',!selected?'Select an account to manage recovery or deletion.':staffIds.includes(selected)?(administrator?'This is a staff account. Recovery is available; deletion is protected.':'Only an administrator can recover this staff account.'):'Recovery is available for this customer.'+(administrator?' Deletion is also available.':''));
+   text('management-note',!selected?'Select an account to manage its package, recovery, or deletion.':staffIds.includes(selected)?(administrator?'This is a staff account. Recovery is available; deletion is protected.':'Only an administrator can recover this staff account.'):'Package management and recovery are available for this customer.'+(administrator?' Deletion is also available.':''));
+   if(packageAllowed){
+    var service=check(await client.from('client_services').select('package_name,monthly_cost,contract_url,documentation_url').eq('client_id',requested).maybeSingle());
+    if(requestTicket!==version || selected!==requested || !user)return;
+    fillPackageEditor(service);
+   }
    return;
   }
   if(page==='settings' || !selected)return;
   var target=selected,requestVersion=++version;
-  clearPackage();$('package-name').textContent='Loading…';$('messages').textContent='';
+  var ownAdministrator=administrator && selected===user.id;
+  hide('client-content',ownAdministrator);hide('administrator-home-note',!ownAdministrator);
+  clearPackage();$('messages').textContent='';
+  if(ownAdministrator)return;
+  text('package-eyebrow',selected===user.id?'YOUR CURRENT PACKAGE':'CURRENT CLIENT PACKAGE');
+  text('conversation-title',selected===user.id?'Private discussion':'Discussion with '+(names[selected] || 'client'));
+  $('package-name').textContent='Loading…';
   var results=await Promise.all([
    client.from('client_services').select('package_name,monthly_cost,contract_url,documentation_url').eq('client_id',target).maybeSingle(),
    client.from('messages').select('id,sender_id,body,created_at').eq('client_id',target).order('created_at',{ascending:false}).limit(100)
@@ -111,8 +135,7 @@
   $('package-name').textContent=service && service.package_name ? service.package_name : 'Not assigned';
   $('monthly-cost').textContent=service && service.package_name ? money(service.monthly_cost) : '—';
   if(service) {
-   $('package-input').value=service.package_name;$('cost-input').value=service.monthly_cost;
-   $('contract-input').value=service.contract_url;$('documentation-input').value=service.documentation_url;
+   fillPackageEditor(service);
    links.contract=validLink(service.contract_url);links.documentation=validLink(service.documentation_url);
   }
   $('links-note').textContent=(!links.contract || !links.documentation)?'Your team will add any missing document links.':'';
@@ -162,7 +185,7 @@
   check(await client.rpc('mark_message_notifications',{message_ids:messages.map(function(item){return item.id;})}));
  }
  async function loadConversation(target,expectedVersion) {
-  if(page!=='dashboard' || !user)return;
+  if(page!=='dashboard' || !user || (administrator && target===user.id))return;
   var messages=check(await client.from('messages').select('id,sender_id,body,created_at').eq('client_id',target).order('created_at',{ascending:false}).limit(100));
   await addRequestedMessage(messages,target);
   if(!user || selected!==target || version!==expectedVersion)return;
@@ -211,7 +234,7 @@
    var preview=document.createElement('p');preview.textContent=item.preview;
    var open=document.createElement('a');open.className='button-link';open.textContent='Open conversation';
    open.href='portal.html?client='+encodeURIComponent(item.client_id)+'&message='+encodeURIComponent(item.message_id);
-   if(page==='dashboard')open.onclick=function(event){event.preventDefault();if(busy)return;run(async function(){selected=item.client_id;requestedMessage=item.message_id;$('client-select').value=selected;hide('notification-panel',true);$('notifications-button').setAttribute('aria-expanded','false');await refresh();await pollNotifications(true);if($('messages').scrollIntoView)$('messages').scrollIntoView({block:'nearest'});});};
+   if(page==='dashboard')open.onclick=function(event){event.preventDefault();if(busy)return;run(async function(){if(selected!==item.client_id)value('message','');selected=item.client_id;requestedMessage=item.message_id;$('client-select').value=selected;hide('notification-panel',true);$('notifications-button').setAttribute('aria-expanded','false');await refresh();await pollNotifications(true);if($('messages').scrollIntoView)$('messages').scrollIntoView({block:'nearest'});});};
    row.appendChild(heading);row.appendChild(when);row.appendChild(preview);row.appendChild(open);container.appendChild(row);
   });
  }
@@ -258,7 +281,7 @@
   }
  });};
  $('recovery-saved').onclick=function(){$('recovery-output').value='';hide('recovery-result',true);hide('account',false);setMode('login');};
- bind('client-select','onchange',function(){hide('staff-reset-result',true);['issued-password','issued-code','verification-note','delete-password','delete-confirm'].forEach(function(id){value(id,'');});if($('identity-confirmed'))$('identity-confirmed').checked=false;if($('delete-acknowledged'))$('delete-acknowledged').checked=false;selected=this.value || null;requestedMessage=null;status('');run(refresh);});
+ bind('client-select','onchange',function(){hide('staff-reset-result',true);['issued-password','issued-code','verification-note','delete-password','delete-confirm'].forEach(function(id){value(id,'');});if($('identity-confirmed'))$('identity-confirmed').checked=false;if($('delete-acknowledged'))$('delete-acknowledged').checked=false;if(selected!==(this.value || null))value('message','');selected=this.value || null;requestedMessage=null;status('');run(refresh);});
  bind('logo-refresh','onclick',function(event){event.preventDefault();if(!busy)window.location.reload();});
  bind('logout','onclick',function(){run(async function(){check(await client.auth.signOut({scope:'local'}));clearDashboard();status('Signed out.');});});
  bind('restricted-logout','onclick',function(){$('logout').click();});
@@ -328,7 +351,7 @@
  bind('copy-contract','onclick',function(){copyLink('contract');});
  bind('copy-documentation','onclick',function(){copyLink('documentation');});
  bind('service-form','onsubmit',function(event){event.preventDefault();run(async function(){
-  if(!staff || !selected)throw new Error('Staff access required.');
+  if(page!=='management' || !staff || !selected || staffIds.includes(selected))throw new Error('Select a customer in Account Management.');
   var contract=$('contract-input').value.trim(),documentation=$('documentation-input').value.trim();
   if((contract && !validLink(contract)) || (documentation && !validLink(documentation)))throw new Error('Use full HTTPS document links without embedded usernames or passwords.');
   var packageName=$('package-input').value.trim(),cost=Number($('cost-input').value);
