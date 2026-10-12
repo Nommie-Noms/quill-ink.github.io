@@ -15,7 +15,7 @@
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="assets/css/portal.css?v=messages-1">
+  <link rel="stylesheet" href="assets/css/portal.css?v=package-management-1">
 </head>
 
 <body data-portal-page="management">
@@ -41,7 +41,7 @@
     <div class="hero-inner">
       <p class="eyebrow">PRECISION IN EVERY DETAIL</p>
       <h1>Account management</h1>
-      <p>Manage account recovery and customer deletion.</p>
+      <p>Manage client packages, account recovery, and customer deletion.</p>
     </div>
   </section>
 
@@ -236,6 +236,60 @@
       <p id="management-note" class="note"></p>
 
       <!-- Staff-assisted recovery -->
+          <!-- Staff package editor -->
+          <section class="card" id="service-editor" hidden>
+            <h2>Manage client package</h2>
+
+            <form id="service-form">
+              <label>
+                Package name
+                <input
+                  id="package-input"
+                  maxlength="100"
+                  placeholder="e.g. Ledger Management"
+                >
+              </label>
+
+              <label>
+                Monthly cost
+                <input
+                  id="cost-input"
+                  type="number"
+                  min="0"
+                  max="9999999999"
+                  step="0.01"
+                  required
+                >
+              </label>
+
+              <label>
+                Contract link
+                <input
+                  id="contract-input"
+                  type="url"
+                  maxlength="2048"
+                  placeholder="https://…"
+                >
+              </label>
+
+              <label>
+                Documentation link
+                <input
+                  id="documentation-input"
+                  type="url"
+                  maxlength="2048"
+                  placeholder="https://…"
+                >
+              </label>
+
+              <button>Save package details</button>
+            </form>
+
+            <p class="note">
+              Leave a link blank if it is not available yet.
+            </p>
+          </section>
+
       <section class="card" id="staff-recovery" hidden>
         <h2>Recover selected account</h2>
 
@@ -364,6 +418,6 @@
   <script src="assets/js/portal-compat.js?v=phone-1"></script>
   <script src="assets/js/vendor/supabase-2.57.4-compat.js?v=phone-1"></script>
   <script src="assets/js/portal-config.js"></script>
-  <script src="assets/js/portal.js?v=messages-1"></script>
+  <script src="assets/js/portal.js?v=package-management-1"></script>
 </body>
 </html>

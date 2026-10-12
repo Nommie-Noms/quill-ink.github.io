@@ -15,7 +15,7 @@
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="assets/css/portal.css?v=messages-1">
+  <link rel="stylesheet" href="assets/css/portal.css?v=package-management-1">
 </head>
 
 <body data-portal-page="dashboard">
@@ -238,11 +238,15 @@
         <select id="client-select"></select>
       </label>
 
-      <div class="columns">
+      <p id="administrator-home-note" class="note" hidden>
+        Use Account Management to edit client packages, or select a client to view their package and messages.
+      </p>
+
+      <div class="columns" id="client-content">
         <!-- Package and documentation -->
         <div>
           <section class="card package-card">
-            <p class="eyebrow">YOUR CURRENT PACKAGE</p>
+            <p class="eyebrow" id="package-eyebrow">YOUR CURRENT PACKAGE</p>
             <h2 id="package-name">Not assigned</h2>
 
             <div class="package-price">
@@ -278,64 +282,12 @@
             </label>
           </section>
 
-          <!-- Staff package editor -->
-          <section class="card" id="service-editor" hidden>
-            <h2>Manage client package</h2>
 
-            <form id="service-form">
-              <label>
-                Package name
-                <input
-                  id="package-input"
-                  maxlength="100"
-                  placeholder="e.g. Ledger Management"
-                >
-              </label>
-
-              <label>
-                Monthly cost
-                <input
-                  id="cost-input"
-                  type="number"
-                  min="0"
-                  max="9999999999"
-                  step="0.01"
-                  required
-                >
-              </label>
-
-              <label>
-                Contract link
-                <input
-                  id="contract-input"
-                  type="url"
-                  maxlength="2048"
-                  placeholder="https://…"
-                >
-              </label>
-
-              <label>
-                Documentation link
-                <input
-                  id="documentation-input"
-                  type="url"
-                  maxlength="2048"
-                  placeholder="https://…"
-                >
-              </label>
-
-              <button>Save package details</button>
-            </form>
-
-            <p class="note">
-              Leave a link blank if it is not available yet.
-            </p>
-          </section>
         </div>
 
         <!-- Private discussion -->
         <section class="card">
-          <h2>Private discussion</h2>
+          <h2 id="conversation-title">Private discussion</h2>
 
           <p class="note">
             Messages are shared with authorised Quill &amp; Ink staff.
@@ -379,6 +331,6 @@
   <script src="assets/js/portal-compat.js?v=phone-1"></script>
   <script src="assets/js/vendor/supabase-2.57.4-compat.js?v=phone-1"></script>
   <script src="assets/js/portal-config.js"></script>
-  <script src="assets/js/portal.js?v=messages-1"></script>
+  <script src="assets/js/portal.js?v=package-management-1"></script>
 </body>
 </html>
