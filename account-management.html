@@ -310,7 +310,12 @@
         <form id="owner-downgrade-form">
           <label>Character name<input id="employee-character-name" maxlength="80" required></label>
           <label>Type the selected account's exact username<input id="owner-downgrade-username" autocomplete="off" required></label>
-          <label><input id="owner-downgrade-confirmed" type="checkbox" required> I intend to downgrade the selected business owner to an employee.</label>
+          <label style="display: flex; align-items: center; gap: 12px;">
+            <input id="owner-downgrade-confirmed" type="checkbox" required="" style="width: auto; margin: 0; flex-shrink: 0;">
+            <span>
+              I intend to downgrade the selected business owner to an employee.
+            </span>
+          </label>
           <button type="submit">Downgrade to employee</button>
         </form>
       </section>
