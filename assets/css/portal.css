@@ -38,3 +38,5 @@ header .notification-item .button-link{color:#23103b}
 @media(max-width:400px){.portal-header-actions{gap:10px}header{gap:12px}.notification-panel-heading h2{font-size:23px}}
 
 #employee-admin-chat{max-width:900px;margin:24px auto}
+
+#owner-upgrade-panel{max-width:800px}#owner-upgrade-confirmed{display:inline-block;width:auto;margin-right:8px}
