@@ -586,7 +586,7 @@
   localStorage.setItem('quill-portal-storage-check','ok');localStorage.removeItem('quill-portal-storage-check');
   client=window.supabase.createClient(config.supabaseUrl,config.supabasePublishableKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:'quill-test-auth-v1'}});
  } catch(error) {status('This browser cannot initialise the portal: '+error.message);$('auth-submit').disabled=true;return;}
- bind('registration-type','onchange',function(){text('registration-name-label',this.value==='employee'?'Character name':'Business name');});
+ bind('registration-type','onchange',function(){text('registration-name-label',this.value==='employee'?'Your name':'Business name');});
  bind('copy-registration-recovery','onclick',async function(){
   var code=$('recovery-output');if(!code.value)return;
   try {if(!navigator.clipboard || !navigator.clipboard.writeText)throw new Error('Clipboard unavailable');await navigator.clipboard.writeText(code.value);toast('Recovery code copied.');return;}catch(error){}
