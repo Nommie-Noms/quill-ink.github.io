@@ -123,7 +123,7 @@
   var results=await Promise.all([client.from('profiles').select('id,username,display_name,account_type').eq('id',accountId).single(),client.from('staff').select('user_id'),client.from('administrators').select('user_id').eq('user_id',accountId)]);
   profile=check(results[0]);staffIds=check(results[1]).map(function(item){return item.user_id;});staff=staffIds.includes(accountId);administrator=check(results[2]).some(function(item){return item.user_id===accountId;});
   accountTypes[accountId]=profile.account_type || 'business_owner';
-  text('settings-name-label',accountTypes[accountId]==='employee'?'Your character name':'Your business name');
+  text('settings-name-label',accountTypes[accountId]==='employee'?'Your name':'Your business name');
   value('settings-username',profile.username);value('settings-business',profile.display_name);
   names[accountId]=profile.display_name;usernames[accountId]=profile.username;
   $('account-name').textContent=profile.display_name;
