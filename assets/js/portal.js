@@ -53,6 +53,7 @@
   finally {busy=false; buttons.forEach(function(button){button.disabled=false;});syncCopyButtons();}
  }
  function clearDashboard() {
+  if(sessionTimer)clearInterval(sessionTimer);sessionTimer=null;sessionCheckBusy=false;
   stopNotifications();ownAdminChat=false;hide('owner-upgrade-panel',true);value('owner-business-name','');if($('owner-upgrade-confirmed'))$('owner-upgrade-confirmed').checked=false;if(employeeChatTimer)clearInterval(employeeChatTimer);employeeChatTimer=null;employeeChatSignature='';employeeChatLoadedTarget=null;employeeRequestedMessage=null;employeeChatBusy=false;hide('employee-admin-chat',true);text('employee-chat-messages','');value('employee-chat-message','');hide('notification-panel',true);hide('notifications-button',true);if($('notifications-button'))$('notifications-button').setAttribute('aria-expanded','false');text('notification-list','');text('notification-count','0');hide('notification-count',true);text('notification-state','');
   clearOwnRecovery();
   hide('restricted',true);hide('account-deletion',true);hide('management-link',true);hide('staff-chat-link',true);hide('staff-assignment-panel',true);text('staff-assignment-list','');text('assignment-staff','');text('staff-chat-messages','');value('staff-chat-message','');staffDirectory=[];scopeClients=[];scopeSignature='';staffChatSignature='';
@@ -68,13 +69,47 @@
   text('account-name','');value('message','');
   hide('dashboard',true);hide('account',false);
  }
+ var sessionTimer=null,sessionCheckBusy=false;
+ function sessionId(session) {
+  try {return JSON.parse(atob(session.access_token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'))).session_id || null;}catch(error){return null;}
+ }
+ async function displacedSession() {
+  clearDashboard();value('recovery-output','');hide('recovery-result',true);
+  try {check(await client.auth.signOut({scope:'local'}));}catch(error){/* Keep private UI cleared even if the logout request fails. */}
+  status('You were signed out because this account signed in elsewhere. Sign in again.');
+ }
+ async function checkPortalSession() {
+  if(!user || busy || sessionCheckBusy)return;
+  sessionCheckBusy=true;var expectedVersion=version,accountId=user.id;
+  try {
+   var current=check(await client.auth.getSession()).session;
+   if(!current || current.user.id!==accountId)return;
+   var expectedId=sessionId(current);
+   var security=check(await client.from('account_security').select('active_session_id').eq('user_id',accountId).maybeSingle());
+   if(version!==expectedVersion || !user || user.id!==accountId)return;
+   var latest=check(await client.auth.getSession()).session;
+   // Ignore a late response when another tab has already installed a new session.
+   if(sessionId(latest)!==expectedId)return;
+   if(!expectedId || !security || security.active_session_id!==expectedId)await displacedSession();
+  }catch(error){/* Offline checks retry; the database still enforces the active session. */}
+  finally {if(version===expectedVersion)sessionCheckBusy=false;}
+ }
+ function watchPortalSession() {
+  if(sessionTimer)clearInterval(sessionTimer);
+  sessionTimer=setInterval(checkPortalSession,5000);
+ }
+ document.addEventListener('visibilitychange',function(){if(!document.hidden)checkPortalSession();});
+ window.addEventListener('focus',checkPortalSession);
+ window.addEventListener('pageshow',checkPortalSession);
  async function loadDashboard(session) {
   var preferred=selected;clearDashboard();
   if(page==='dashboard'){var parameters=new URLSearchParams(window.location.search);if(!preferred)preferred=parameters.get('employee') || parameters.get('client');requestedMessage=parameters.get('message');employeeRequestedMessage=parameters.get('employee_message');}
   if(!session) return;
   user=session.user;
   var accountId=user.id;
-  var security=check(await client.from('account_security').select('password_required,revoked_before,phase').eq('user_id',accountId).maybeSingle());
+  var security=check(await client.from('account_security').select('password_required,revoked_before,phase,active_session_id').eq('user_id',accountId).maybeSingle());
+  if(!sessionId(session) || !security || security.active_session_id!==sessionId(session)){await displacedSession();return;}
+  watchPortalSession();
   if(security && ['editing_profile','deleting'].includes(security.phase)) {hide('account',true);status('An account change is in progress. Contact an administrator if it does not finish.');return;}
   if(security && security.password_required) {
    hide('account',true);hide('password-change',false);
@@ -546,7 +581,8 @@
  $('auth-form').onsubmit=function(event){event.preventDefault();run(async function(){
   status('');var username=$('username').value.trim().toLowerCase(),password=$('password').value;
   if(mode==='login') {
-   var result=await client.auth.signInWithPassword({email:username+'@accounts.quill-ink.invalid',password:password});
+   var credentials=await accountAction({action:'login',username:username,password:password});
+   var result=await client.auth.setSession({access_token:credentials.access_token,refresh_token:credentials.refresh_token});
    if(result.error)throw new Error('Could not sign in. Check your username and password.');
    $('password').value='';await loadDashboard(result.data.session);
   } else {
