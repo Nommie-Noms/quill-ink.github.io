@@ -54,3 +54,21 @@ body[data-portal-page="management"] #client-label {
   margin-left: auto;
   margin-right: auto;
 }
+
+.portal-hero {
+  padding: 24px 24px 36px;
+}
+
+.portal-hero h1 {
+  margin: 8px 0;
+}
+
+.portal-hero p {
+  margin: 6px 0;
+}
+
+@media (max-width: 800px) {
+  .portal-hero {
+    padding: 20px 16px 28px;
+  }
+}
