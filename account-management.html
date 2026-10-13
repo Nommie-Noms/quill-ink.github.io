@@ -15,7 +15,7 @@
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="assets/css/portal.css?v=header-bell-1">
+  <link rel="stylesheet" href="assets/css/portal.css?v=employee-accounts-1">
 </head>
 
 <body data-portal-page="management">
@@ -87,8 +87,17 @@
           </span>
         </label>
 
+        <label id="registration-type-label" hidden>
+          Account type
+          <select id="registration-type">
+            <option value="business_owner">Business owner</option>
+            <option value="employee">Employee</option>
+          </select>
+          <span class="note">Employees have no business until an administrator adds them or they accept a business invitation.</span>
+        </label>
+
         <label id="display-label" hidden>
-          Character or business name
+          <span id="registration-name-label">Business name</span>
           <input id="display-name" maxlength="80">
         </label>
 
@@ -136,6 +145,8 @@
         Recovery code
         <input id="recovery-output" readonly>
       </label>
+
+      <button id="copy-registration-recovery" type="button">Copy recovery code</button>
 
       <button id="recovery-saved">
         I have saved it — continue
@@ -291,6 +302,16 @@
             </p>
           </section>
 
+      <section class="card" id="employee-members-panel" hidden>
+        <h2>Business employees and members</h2>
+        <p>Add an existing employee login to this business. Access is active immediately; their password and recovery code stay unchanged.</p>
+        <form id="employee-add-form">
+          <label>Employee<select id="employee-select" required></select></label>
+          <button>Add employee to selected business</button>
+        </form>
+        <div id="employee-member-list"></div>
+      </section>
+
       <section class="card" id="staff-assignment-panel" hidden>
         <h2>Assigned staff</h2>
         <p>Assigned staff can manage this business's package and customer discussion. Administrators retain access to all accounts.</p>
@@ -430,6 +451,6 @@
   <script src="assets/js/portal-compat.js?v=phone-1"></script>
   <script src="assets/js/vendor/supabase-2.57.4-compat.js?v=phone-1"></script>
   <script src="assets/js/portal-config.js"></script>
-  <script src="assets/js/portal.js?v=header-bell-1"></script>
+  <script src="assets/js/portal.js?v=employee-accounts-1"></script>
 </body>
 </html>
