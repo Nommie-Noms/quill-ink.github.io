@@ -302,7 +302,7 @@
             </p>
           </section>
 
-      <section class="card" id="owner--panel" hidden>
+      <section class="card" id="owner-downgrade-panel" hidden>
         <h2>Downgrade business owner to employee</h2>
         <p id="owner-downgrade-target"></p>
         <p>Their login and memberships in other businesses stay with this account. Their former business package, documents, discussions, members and staff assignments are retained but unavailable while this account is an employee. Upgrading it again restores that business access.</p>
@@ -310,16 +310,7 @@
         <form id="owner-downgrade-form">
           <label>Character name<input id="employee-character-name" maxlength="80" required></label>
           <label>Type the selected account's exact username<input id="owner-downgrade-username" autocomplete="off" required></label>
-           <label style="display: flex; align-items: center; gap: 12px;">
-            <input
-            id="owner-downgrade-confirmed"
-            type="checkbox"
-            required
-            style="width: auto; margin: 0; flex-shrink: 0;">
-            <span>
-            I intend to downgrade the selected business owner to an employee.
-            </span>
-          </label>
+          <label><input id="owner-downgrade-confirmed" type="checkbox" required> I intend to downgrade the selected business owner to an employee.</label>
           <button type="submit">Downgrade to employee</button>
         </form>
       </section>
