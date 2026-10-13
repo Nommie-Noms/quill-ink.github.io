@@ -36,3 +36,5 @@ header #close-notifications{flex-shrink:0;background:none;color:var(--blue);padd
 header .notification-list{max-height:min(420px,55vh)}
 header .notification-item .button-link{color:#23103b}
 @media(max-width:400px){.portal-header-actions{gap:10px}header{gap:12px}.notification-panel-heading h2{font-size:23px}}
+
+#employee-admin-chat{max-width:900px;margin:24px auto}
