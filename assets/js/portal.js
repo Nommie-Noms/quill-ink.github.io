@@ -54,7 +54,7 @@
  }
  function clearDashboard() {
   if(sessionTimer)clearInterval(sessionTimer);sessionTimer=null;sessionCheckBusy=false;
-  stopNotifications();ownAdminChat=false;hide('owner-upgrade-panel',true);value('owner-business-name','');if($('owner-upgrade-confirmed'))$('owner-upgrade-confirmed').checked=false;if(employeeChatTimer)clearInterval(employeeChatTimer);employeeChatTimer=null;employeeChatSignature='';employeeChatLoadedTarget=null;employeeRequestedMessage=null;employeeChatBusy=false;hide('employee-admin-chat',true);text('employee-chat-messages','');value('employee-chat-message','');hide('notification-panel',true);hide('notifications-button',true);if($('notifications-button'))$('notifications-button').setAttribute('aria-expanded','false');text('notification-list','');text('notification-count','0');hide('notification-count',true);text('notification-state','');
+  clearDowngrade();stopNotifications();ownAdminChat=false;hide('owner-upgrade-panel',true);value('owner-business-name','');if($('owner-upgrade-confirmed'))$('owner-upgrade-confirmed').checked=false;if(employeeChatTimer)clearInterval(employeeChatTimer);employeeChatTimer=null;employeeChatSignature='';employeeChatLoadedTarget=null;employeeRequestedMessage=null;employeeChatBusy=false;hide('employee-admin-chat',true);text('employee-chat-messages','');value('employee-chat-message','');hide('notification-panel',true);hide('notifications-button',true);if($('notifications-button'))$('notifications-button').setAttribute('aria-expanded','false');text('notification-list','');text('notification-count','0');hide('notification-count',true);text('notification-state','');
   clearOwnRecovery();
   hide('restricted',true);hide('account-deletion',true);hide('management-link',true);hide('staff-chat-link',true);hide('staff-assignment-panel',true);text('staff-assignment-list','');text('assignment-staff','');text('staff-chat-messages','');value('staff-chat-message','');staffDirectory=[];scopeClients=[];scopeSignature='';staffChatSignature='';
   ['settings-username','settings-business','settings-password','delete-confirm','delete-password','issued-password','issued-code','current-temporary','permanent-password','verification-note'].forEach(function(id){value(id,'');});
@@ -76,7 +76,7 @@
  async function displacedSession() {
   clearDashboard();value('recovery-output','');hide('recovery-result',true);
   try {check(await client.auth.signOut({scope:'local'}));}catch(error){/* Keep private UI cleared even if the logout request fails. */}
-  status('You were signed out because this account signed in elsewhere. Sign in again.');
+  status('You were signed out because this account signed in elsewhere or its access changed. Sign in again.');
  }
  async function checkPortalSession() {
   if(!user || busy || sessionCheckBusy)return;
@@ -160,6 +160,8 @@
    var requested=selected,requestTicket=++version;
    var permitted=!!selected && selected!==user.id;
    hide('owner-upgrade-panel',!(permitted && administrator && accountTypes[selected]==='employee' && !staffIds.includes(selected)));
+   hide('owner-downgrade-panel',!(permitted && administrator && accountTypes[selected]==='business_owner' && !staffIds.includes(selected)));
+   text('owner-downgrade-target','Selected business owner: @'+(usernames[selected] || ''));
    text('owner-upgrade-target','Selected employee: @'+(usernames[selected] || ''));
    var packageAllowed=permitted && !staffIds.includes(selected) && accountTypes[selected]!=='employee';
    clearPackage();hide('service-editor',!packageAllowed);hide('staff-assignment-panel',!(administrator && packageAllowed));text('staff-assignment-list','');
@@ -456,6 +458,21 @@
    confirm.appendChild(remove);confirm.appendChild(cancel);row.appendChild(ask);row.appendChild(confirm);$('employee-member-list').appendChild(row);
   });
  }
+ function clearDowngrade() {
+  hide('owner-downgrade-panel',true);value('employee-character-name','');value('owner-downgrade-username','');
+  if($('owner-downgrade-confirmed'))$('owner-downgrade-confirmed').checked=false;
+ }
+ bind('owner-downgrade-form','onsubmit',function(event){event.preventDefault();run(async function(){
+  var target=selected;
+  if(!administrator || !target || target===user.id || accountTypes[target]!=='business_owner' || staffIds.includes(target))throw new Error('Select a customer business owner account.');
+  if(!$('owner-downgrade-confirmed').checked)throw new Error('Confirm the selected business owner downgrade.');
+  var characterName=$('employee-character-name').value.trim(),confirmation=$('owner-downgrade-username').value;
+  if(!characterName || characterName.length>80)throw new Error('Enter a character name of 1–80 characters.');
+  if(confirmation!==usernames[target])throw new Error('Type the selected account’s exact username.');
+  check(await client.rpc('downgrade_owner_to_employee',{target:target,character_name:characterName,confirmation:confirmation}));
+  clearDowngrade();var session=check(await client.auth.getSession()).session;await loadDashboard(session);
+  status('Business owner downgraded to employee. Their former business records are retained. They must sign in again.');toast('Employee downgrade saved.');
+ });});
  bind('owner-upgrade-form','onsubmit',function(event){event.preventDefault();run(async function(){
   var target=selected;
   if(!administrator || !target || accountTypes[target]!=='employee' || staffIds.includes(target))throw new Error('Select a customer employee account.');
@@ -592,7 +609,7 @@
   }
  });};
  $('recovery-saved').onclick=function(){$('recovery-output').value='';hide('recovery-result',true);hide('account',false);setMode('login');};
- bind('client-select','onchange',function(){hide('staff-reset-result',true);['issued-password','issued-code','verification-note','delete-password','delete-confirm'].forEach(function(id){value(id,'');});if($('identity-confirmed'))$('identity-confirmed').checked=false;if($('delete-acknowledged'))$('delete-acknowledged').checked=false;if(selected!==(this.value || null))value('message','');selected=this.value || null;value('owner-business-name','');if($('owner-upgrade-confirmed'))$('owner-upgrade-confirmed').checked=false;requestedMessage=null;employeeRequestedMessage=null;status('');run(refresh);});
+ bind('client-select','onchange',function(){clearDowngrade();hide('staff-reset-result',true);['issued-password','issued-code','verification-note','delete-password','delete-confirm'].forEach(function(id){value(id,'');});if($('identity-confirmed'))$('identity-confirmed').checked=false;if($('delete-acknowledged'))$('delete-acknowledged').checked=false;if(selected!==(this.value || null))value('message','');selected=this.value || null;value('owner-business-name','');if($('owner-upgrade-confirmed'))$('owner-upgrade-confirmed').checked=false;requestedMessage=null;employeeRequestedMessage=null;status('');run(refresh);});
  bind('logo-refresh','onclick',function(event){event.preventDefault();if(!busy)window.location.reload();});
  bind('logout','onclick',function(){run(async function(){check(await client.auth.signOut({scope:'local'}));clearDashboard();status('Signed out.');});});
  bind('restricted-logout','onclick',function(){$('logout').click();});
