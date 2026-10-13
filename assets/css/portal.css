@@ -40,3 +40,17 @@ header .notification-item .button-link{color:#23103b}
 #employee-admin-chat{max-width:900px;margin:24px auto}
 
 #owner-upgrade-panel{max-width:800px}#owner-upgrade-confirmed{display:inline-block;width:auto;margin-right:8px}
+
+body[data-portal-page="management"] #dashboard > .card {
+  width: 100%;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+body[data-portal-page="management"] #client-label {
+  width: 100%;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
