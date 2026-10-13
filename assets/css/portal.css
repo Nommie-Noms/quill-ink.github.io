@@ -20,3 +20,19 @@
 body[data-portal-page=management] #service-editor{max-width:800px}#administrator-home-note{margin:24px 0}
 
 .membership-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.12)}.membership-row>span:first-child{flex:1;min-width:150px}
+
+
+/* Header bell: the main site's Ionicons outline and pink unread badge. */
+header{position:relative}
+.portal-header-actions{display:flex;align-items:center;gap:16px;margin-left:auto;min-width:0}
+.portal-header-actions>a{min-width:0}
+header .portal-notification-bell{display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;min-width:44px;min-height:44px;padding:4px;margin:0;background:none;color:white;border:0;border-radius:0}
+.portal-bell-icon{display:block;width:28px;height:28px}
+.portal-notification-badge{position:absolute;top:0;right:0;display:flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;background:hsl(335,87%,53%);color:white;font-size:10px;font-weight:700;line-height:1;border-radius:20px}
+header #notification-panel{position:absolute;top:calc(100% - 8px);right:max(5vw,20px);width:420px;max-width:calc(100vw - 32px);margin:0;padding:22px;z-index:500;color:hsl(236,26%,43%);font-size:15px;font-weight:400;line-height:1.7}
+.notification-panel-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.notification-panel-heading h2{margin:0;font-size:26px}
+header #close-notifications{flex-shrink:0;background:none;color:var(--blue);padding:4px;min-width:44px;min-height:44px;border-radius:0;font-size:26px;line-height:1}
+header .notification-list{max-height:min(420px,55vh)}
+header .notification-item .button-link{color:#23103b}
+@media(max-width:400px){.portal-header-actions{gap:10px}header{gap:12px}.notification-panel-heading h2{font-size:23px}}
