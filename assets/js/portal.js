@@ -123,7 +123,7 @@
   var results=await Promise.all([client.from('profiles').select('id,username,display_name,account_type').eq('id',accountId).single(),client.from('staff').select('user_id'),client.from('administrators').select('user_id').eq('user_id',accountId)]);
   profile=check(results[0]);staffIds=check(results[1]).map(function(item){return item.user_id;});staff=staffIds.includes(accountId);administrator=check(results[2]).some(function(item){return item.user_id===accountId;});
   accountTypes[accountId]=profile.account_type || 'business_owner';
-  text('settings-name-label',accountTypes[accountId]==='employee'?'Your name':'Your business name');
+  text('settings-name-label',accountTypes[accountId]==='employee'?'Full name':'Your business name');
   value('settings-username',profile.username);value('settings-business',profile.display_name);
   names[accountId]=profile.display_name;usernames[accountId]=profile.username;
   $('account-name').textContent=profile.display_name;
@@ -586,7 +586,7 @@
   localStorage.setItem('quill-portal-storage-check','ok');localStorage.removeItem('quill-portal-storage-check');
   client=window.supabase.createClient(config.supabaseUrl,config.supabasePublishableKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:'quill-test-auth-v1'}});
  } catch(error) {status('This browser cannot initialise the portal: '+error.message);$('auth-submit').disabled=true;return;}
- bind('registration-type','onchange',function(){text('registration-name-label',this.value==='employee'?'Your name':'Business name');});
+ bind('registration-type','onchange',function(){text('registration-name-label',this.value==='employee'?'Full name':'Business name');});
  bind('copy-registration-recovery','onclick',async function(){
   var code=$('recovery-output');if(!code.value)return;
   try {if(!navigator.clipboard || !navigator.clipboard.writeText)throw new Error('Clipboard unavailable');await navigator.clipboard.writeText(code.value);toast('Recovery code copied.');return;}catch(error){}
