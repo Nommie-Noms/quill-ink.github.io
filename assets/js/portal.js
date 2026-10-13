@@ -4,6 +4,7 @@
  var config = window.PORTAL_CONFIG;
  var page=document.body.getAttribute('data-portal-page') || 'dashboard';
  var mode = 'login', user = null, profile = null, staff = false, administrator = false, selected = null, version = 0;
+ var staffDirectory=[],scopeClients=[],scopeSignature="",staffChatSignature="";
  var memberships=[],businesses=[],memberIds={},staffSenderIds={};
  var names = {}, usernames = {}, staffIds = [], busy = false, links = {contract:'',documentation:''};
  var client,toastTimer,notificationTimer=null,notificationRun=0,notificationBusy=false,notificationKnown=null,notificationSignature='',requestedMessage=null;
@@ -53,7 +54,7 @@
  function clearDashboard() {
   stopNotifications();hide('notification-panel',true);hide('notifications-button',true);if($('notifications-button'))$('notifications-button').setAttribute('aria-expanded','false');text('notification-list','');text('notification-count','0');text('notification-state','');
   clearOwnRecovery();
-  hide('restricted',true);hide('account-deletion',true);hide('management-link',true);
+  hide('restricted',true);hide('account-deletion',true);hide('management-link',true);hide('staff-chat-link',true);hide('staff-assignment-panel',true);text('staff-assignment-list','');text('assignment-staff','');text('staff-chat-messages','');value('staff-chat-message','');staffDirectory=[];scopeClients=[];scopeSignature='';staffChatSignature='';
   ['settings-username','settings-business','settings-password','delete-confirm','delete-password','issued-password','issued-code','current-temporary','permanent-password','verification-note'].forEach(function(id){value(id,'');});
   if($('delete-acknowledged'))$('delete-acknowledged').checked=false;
   if($('identity-confirmed'))$('identity-confirmed').checked=false;
@@ -89,16 +90,19 @@
   names[accountId]=profile.display_name;usernames[accountId]=profile.username;
   $('account-name').textContent=profile.display_name;
   $('role-label').textContent=staff?'STAFF ACCOUNT':'CLIENT ACCOUNT';
-  hide('notifications-button',!staff);hide('management-link',!staff);hide('client-label',!staff);hide('service-editor',true);
+  hide('notifications-button',!staff);hide('management-link',!staff);hide('staff-chat-link',!staff);hide('client-label',!staff);hide('service-editor',true);
   if(page==='settings'){hide('account',true);hide('dashboard',false);await loadBusinessSettings();if(staff)startNotifications();return;}
-  if(page==='management' && !staff){hide('account',true);hide('restricted',false);status('Staff access is required for account management.');return;}
+  if((page==='management' || page==='staff-chat') && !staff){hide('account',true);hide('restricted',false);status('Staff access is required for this page.');return;}
+  if(page==='staff-chat'){
+   hide('account',true);hide('dashboard',false);await loadStaffChat(true);if(staff)startNotifications();return;
+  }
   if(staff) {
-   // Paginate profiles so staff can reach every client, beyond the API's default row limit.
-   var clients=[],offset=0,batch;
-   do {batch=check(await client.from('profiles').select('id,username,display_name').order('username').range(offset,offset+499));clients=clients.concat(batch);offset+=500;} while(batch.length===500);
-   if(page==='management'){var placeholder=document.createElement('option');placeholder.value='';placeholder.textContent='Choose an account';$('client-select').appendChild(placeholder);}
-   clients.forEach(function(item){if(page==='management' && item.id===accountId)return;names[item.id]=item.display_name;usernames[item.id]=item.username;var option=document.createElement('option');option.value=item.id;option.textContent=(administrator && item.id===accountId?'Your administrator account':item.display_name)+' (@'+item.username+')';$('client-select').appendChild(option);});
-   selected=clients.some(function(item){return item.id===preferred && (page!=='management' || item.id!==accountId);})?preferred:(page==='management'?null:(administrator?accountId:(clients.length?clients[0].id:accountId)));$('client-select').value=selected || '';
+   staffDirectory=check(await client.rpc('staff_directory'));
+   staffDirectory.forEach(function(p){names[p.id]=p.display_name;usernames[p.id]=p.username;});
+   // Paginate accessible accounts, excluding unassigned customers from the selector.
+   var clients=await accessibleStaffAccounts();
+   scopeClients=clients;scopeSignature=JSON.stringify(clients);
+   rebuildStaffSelector(clients,preferred,true);
   } else {
    memberships=check(await client.from('business_members').select('business_id,user_id,accepted_at'));
    var ids=[accountId];memberships.forEach(function(m){if(m.user_id===accountId && m.accepted_at && !ids.includes(m.business_id))ids.push(m.business_id);});
@@ -118,11 +122,12 @@
    var requested=selected,requestTicket=++version;
    var permitted=!!selected && selected!==user.id;
    var packageAllowed=permitted && !staffIds.includes(selected);
-   clearPackage();hide('service-editor',!packageAllowed);
-   hide('staff-recovery',!(permitted && (administrator || !staffIds.includes(selected))));
+   clearPackage();hide('service-editor',!packageAllowed);hide('staff-assignment-panel',!(administrator && packageAllowed));text('staff-assignment-list','');
+   if(administrator && packageAllowed)await loadAssignments(requested,requestTicket);
+   hide('staff-recovery',!(permitted && administrator));
    hide('account-deletion',!(permitted && administrator && !staffIds.includes(selected)));
    text('delete-target','Selected account: @'+(usernames[selected] || ''));
-   text('management-note',!selected?'Select an account to manage its package, recovery, or deletion.':staffIds.includes(selected)?(administrator?'This is a staff account. Recovery is available; deletion is protected.':'Only an administrator can recover this staff account.'):'Package management and recovery are available for this customer.'+(administrator?' Deletion is also available.':''));
+   text('management-note',!selected?(administrator?'Select an account to manage assignments, packages, recovery, or deletion.':'Select an assigned business to manage its package.'):staffIds.includes(selected)?(administrator?'This is a staff account. Recovery is available; deletion is protected.':'Only an administrator can recover this staff account.'):(administrator?'Assignments, package management, recovery and deletion are available for this customer.':'Package management is available for this assigned business. Account recovery and deletion require an administrator.'));
    if(packageAllowed){
     var service=check(await client.from('client_services').select('package_name,monthly_cost,contract_url,documentation_url').eq('client_id',requested).maybeSingle());
     if(requestTicket!==version || selected!==requested || !user)return;
@@ -130,11 +135,17 @@
    }
    return;
   }
-  if(page==='settings' || !selected)return;
+  if(page==='settings' || page==='staff-chat')return;
+  if(!selected){
+   clearPackage();text('messages','');hide('client-content',true);hide('administrator-home-note',false);
+   text('administrator-home-note','No customer business selected. Choose an assigned business, or ask an administrator to assign one. Staff chat is available from the navigation.');
+   return;
+  }
   var target=selected,requestVersion=++version;
   text('business-view-role',staff?'STAFF VIEW':selected===user.id?'BUSINESS OWNER':'BUSINESS MEMBER');
   var ownAdministrator=administrator && selected===user.id;
   hide('client-content',ownAdministrator);hide('administrator-home-note',!ownAdministrator);
+  if(ownAdministrator)text('administrator-home-note','Use Account Management to assign staff and edit client packages, or open Staff chat to talk with your team. Select a customer to view their package and discussion.');
   clearPackage();$('messages').textContent='';
   if(ownAdministrator)return;
   text('package-eyebrow',selected===user.id?'YOUR CURRENT PACKAGE':'CURRENT CLIENT PACKAGE');
@@ -221,6 +232,9 @@
   if(!user || !staff || notificationBusy)return;
   notificationBusy=true;var cycle=notificationRun;
   try {
+   if(page==='staff-chat')await loadStaffChat(false);
+   else if(!administrator && (page==='dashboard' || page==='management'))await syncStaffScope();
+   if(cycle!==notificationRun || !user || !staff)return;
    var results=await Promise.all([client.rpc('staff_message_notifications'),client.rpc('staff_unread_message_count')]);
    if(cycle!==notificationRun || !user || !staff)return;
    var notifications=check(results[0]),count=Number(check(results[1])),known={};
@@ -260,6 +274,110 @@
  window.addEventListener('pagehide',stopNotifications);
  window.addEventListener('pageshow',function(){if(user && staff && !notificationTimer)startNotifications();});
 
+ async function accessibleStaffAccounts() {
+  var rows=[],offset=0,batch;
+  do {batch=check(await client.rpc('staff_client_accounts').range(offset,offset+499));rows=rows.concat(batch);offset+=500;} while(batch.length===500);
+  return rows;
+ }
+ function rebuildStaffSelector(clients,preferred,initial) {
+  if(!$('client-select'))return;
+  text('client-select','');
+  if(page==='management' || !administrator){
+   var placeholder=document.createElement('option');placeholder.value='';placeholder.textContent=clients.length?'Choose an account':'No assigned customer accounts';$('client-select').appendChild(placeholder);
+  }
+  clients.forEach(function(item){
+   names[item.id]=item.display_name;usernames[item.id]=item.username;
+   if(page==='management' && item.id===user.id)return;
+   var option=document.createElement('option');option.value=item.id;
+   option.textContent=(administrator && item.id===user.id?'Your administrator account':item.display_name)+' (@'+item.username+')';$('client-select').appendChild(option);
+  });
+  selected=clients.some(function(item){return item.id===preferred && (page!=='management' || item.id!==user.id);})?preferred:
+   (page==='management' || !initial?null:administrator?user.id:clients.length?clients[0].id:null);
+  $('client-select').value=selected || '';
+ }
+ async function syncStaffScope() {
+  var current=user.id,scopeVersion=version,rows=await accessibleStaffAccounts(),signature=JSON.stringify(rows);
+  if(!user || user.id!==current || version!==scopeVersion)return;
+  if(signature===scopeSignature)return;
+  var previous=selected;scopeClients=rows;scopeSignature=signature;rebuildStaffSelector(rows,previous,false);
+  if(previous && selected!==previous){
+   version++;value('message','');clearPackage();text('messages','');hide('staff-reset-result',true);
+   ['issued-password','issued-code','verification-note','delete-password','delete-confirm'].forEach(function(id){value(id,'');});
+   await refresh();status('Your assignments changed. That customer account is no longer available.');
+  }else if(!selected && page==='dashboard')await refresh();
+ }
+ async function loadAssignments(target,ticket) {
+  var rows=check(await client.from('staff_assignments').select('business_id,staff_id').eq('business_id',target));
+  if(!user || !administrator || target!==selected || ticket!==version)return;
+  text('assignment-staff','');text('staff-assignment-list','');
+  var available=staffDirectory.filter(function(p){return !p.is_administrator && !rows.some(function(a){return a.staff_id===p.id;});});
+  var placeholder=document.createElement('option');placeholder.value='';placeholder.textContent=available.length?'Choose staff member':'No unassigned staff available';$('assignment-staff').appendChild(placeholder);
+  available.forEach(function(p){var option=document.createElement('option');option.value=p.id;option.textContent=p.display_name+' (@'+p.username+')';$('assignment-staff').appendChild(option);});
+  text('assignment-note','Administrators always have access. Multiple staff members can be assigned to this business.');
+  if(!rows.length)text('staff-assignment-list','No staff assigned. Only administrators can manage this business.');
+  rows.forEach(function(a){
+   var row=document.createElement('div');row.className='membership-row';
+   var label=document.createElement('span');label.textContent=(names[a.staff_id] || 'Staff member')+' (@'+(usernames[a.staff_id] || 'staff')+')';row.appendChild(label);
+   var ask=document.createElement('button');ask.type='button';ask.textContent='Remove assignment';
+   var confirmation=document.createElement('span');confirmation.hidden=true;
+   var remove=document.createElement('button');remove.type='button';remove.textContent='Confirm removal';
+   var cancel=document.createElement('button');cancel.type='button';cancel.textContent='Cancel';
+   ask.onclick=function(){ask.hidden=true;confirmation.hidden=false;};
+   cancel.onclick=function(){confirmation.hidden=true;ask.hidden=false;};
+   remove.onclick=function(){run(async function(){
+    if(!administrator || selected!==target)return;
+    check(await client.rpc('set_staff_assignment',{business:target,staff_user:a.staff_id,assign:false}));await refresh();status('Staff assignment removed.');
+   });};
+   confirmation.appendChild(remove);confirmation.appendChild(cancel);row.appendChild(ask);row.appendChild(confirmation);$('staff-assignment-list').appendChild(row);
+  });
+ }
+ bind('staff-assignment-form','onsubmit',function(event){event.preventDefault();run(async function(){
+  if(!administrator || !selected || staffIds.includes(selected))throw new Error('Select a customer business.');
+  var staffId=$('assignment-staff').value;if(!staffId)throw new Error('Choose a staff member.');
+  check(await client.rpc('set_staff_assignment',{business:selected,staff_user:staffId,assign:true}));await refresh();status('Staff member assigned to this business.');toast('Staff assignment saved.');
+ });});
+ async function loadStaffChat(forceBottom) {
+  if(page!=='staff-chat' || !user || !staff)return;
+  var current=user.id,ticket=version;
+  var active=check(await client.rpc('is_staff'));
+  if(!user || user.id!==current || ticket!==version)return;
+  if(!active){text('staff-chat-messages','');value('staff-chat-message','');hide('dashboard',true);hide('restricted',false);staff=false;stopNotifications();status('Staff access is no longer available.');return;}
+  var results=await Promise.all([client.from('staff_chat_messages').select('id,sender_id,body,created_at').order('created_at',{ascending:false}).order('id',{ascending:false}).limit(100),client.rpc('staff_directory')]);
+  if(!user || user.id!==current || ticket!==version)return;
+  var messages=check(results[0]),authors=check(results[1]);authors.forEach(function(p){names[p.id]=p.display_name;usernames[p.id]=p.username;});
+  var container=$('staff-chat-messages'),signature=JSON.stringify({messages:messages,authors:authors});
+  if(signature===staffChatSignature){if(forceBottom)container.scrollTop=container.scrollHeight;return;}
+  staffChatSignature=signature;
+  var scroll=container.scrollTop,atBottom=container.scrollHeight-scroll-container.clientHeight<40;
+  container.textContent='';
+  messages.slice().reverse().forEach(function(m){
+   var row=document.createElement('div');row.className='message'+(m.sender_id===current?' staff':'');
+   var author=document.createElement('small');author.textContent=(names[m.sender_id] || (m.sender_id?'Former staff member':'Deleted staff account'))+' · '+new Date(m.created_at).toLocaleString();
+   var body=document.createElement('p');body.textContent=m.body;row.appendChild(author);row.appendChild(body);
+   if(m.sender_id===current){
+    var actions=document.createElement('div');actions.className='message-actions';
+    var ask=document.createElement('button');ask.type='button';ask.textContent='Delete message';
+    var confirm=document.createElement('span');confirm.hidden=true;
+    var remove=document.createElement('button');remove.type='button';remove.textContent='Confirm deletion';remove.className='message-delete';
+    var cancel=document.createElement('button');cancel.type='button';cancel.textContent='Cancel';
+    ask.onclick=function(){ask.hidden=true;confirm.hidden=false;};cancel.onclick=function(){confirm.hidden=true;ask.hidden=false;};
+    remove.onclick=function(){run(async function(){
+     if(!user || user.id!==current)return;
+     check(await client.from('staff_chat_messages').delete().eq('id',m.id).eq('sender_id',current).select('id'));await loadStaffChat(false);status('Staff message deleted.');
+    });};
+    confirm.appendChild(remove);confirm.appendChild(cancel);actions.appendChild(ask);actions.appendChild(confirm);row.appendChild(actions);
+   }
+   container.appendChild(row);
+  });
+  if(!messages.length)container.textContent='Start a discussion with your team below.';
+  container.scrollTop=forceBottom || atBottom?container.scrollHeight:scroll;
+ }
+ bind('staff-chat-form','onsubmit',function(event){event.preventDefault();run(async function(){
+  if(!user || !staff)throw new Error('Staff access required.');
+  var body=$('staff-chat-message').value.trim();if(!body)throw new Error('Enter a message.');
+  check(await client.from('staff_chat_messages').insert({sender_id:user.id,body:body}));
+  value('staff-chat-message','');await loadStaffChat(true);status('Message sent to staff room.');
+ });});
  async function accountAction(data) {
   var controller=typeof AbortController!=='undefined'?new AbortController():null;
   var timer=controller?setTimeout(function(){controller.abort();},20000):null;
@@ -395,7 +513,7 @@
   status(result.auditWarning?'Customer deleted. The audit completion could not be recorded; check Supabase before proceeding.':'Customer account and portal records deleted.');toast('Customer account deleted.');
  });});
  bind('staff-reset-form','onsubmit',function(event){event.preventDefault();run(async function(){
-  if(!staff || !selected || selected===user.id)throw new Error('Select another customer. You cannot reset your own account here.');
+  if(!administrator || !selected || selected===user.id)throw new Error('An administrator must select another account for recovery.');
   if(!$('identity-confirmed').checked)throw new Error('Verify the account owner first.');
   var result=await accountAction({action:'staff-reset',targetId:selected,reason:$('verification-note').value.trim()});
   $('issued-password').value=result.temporaryPassword;$('issued-code').value=result.recoveryCode;hide('staff-reset-result',false);status('Reset recorded. Deliver the temporary credentials privately to the verified owner.');
@@ -430,7 +548,7 @@
   await refresh();status('Package details saved.');
  });});
  bind('message-form','onsubmit',function(event){event.preventDefault();run(async function(){
-  if(!user || !selected)throw new Error('Please sign in again.');
+  if(!user || !selected || (administrator && selected===user.id))throw new Error('Select a customer discussion.');
   var body=$('message').value.trim();if(!body)throw new Error('Enter a message.');
   check(await client.from('messages').insert({client_id:selected,sender_id:user.id,body:body}));
   $('message').value='';await refresh();status('Message sent.');
