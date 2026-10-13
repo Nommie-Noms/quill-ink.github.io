@@ -52,7 +52,7 @@
   finally {busy=false; buttons.forEach(function(button){button.disabled=false;});syncCopyButtons();}
  }
  function clearDashboard() {
-  stopNotifications();hide('notification-panel',true);hide('notifications-button',true);if($('notifications-button'))$('notifications-button').setAttribute('aria-expanded','false');text('notification-list','');text('notification-count','0');text('notification-state','');
+  stopNotifications();hide('notification-panel',true);hide('notifications-button',true);if($('notifications-button'))$('notifications-button').setAttribute('aria-expanded','false');text('notification-list','');text('notification-count','0');hide('notification-count',true);text('notification-state','');
   clearOwnRecovery();
   hide('restricted',true);hide('account-deletion',true);hide('management-link',true);hide('staff-chat-link',true);hide('staff-assignment-panel',true);text('staff-assignment-list','');text('assignment-staff','');text('staff-chat-messages','');value('staff-chat-message','');staffDirectory=[];scopeClients=[];scopeSignature='';staffChatSignature='';
   ['settings-username','settings-business','settings-password','delete-confirm','delete-password','issued-password','issued-code','current-temporary','permanent-password','verification-note'].forEach(function(id){value(id,'');});
@@ -241,7 +241,8 @@
    notifications.forEach(function(item){known[item.notification_id]=true;});
    var fresh=notificationKnown===null?[]:notifications.filter(function(item){return !notificationKnown[item.notification_id];});
    notificationKnown=known;
-   if($('notification-count').textContent!==String(count))text('notification-count',String(count));
+   var badge=count>99?'99+':String(count);
+   if($('notification-count').textContent!==badge)text('notification-count',badge);hide('notification-count',count===0);
    $('notifications-button').setAttribute('aria-label','Notifications: '+count+' unread client messages');
    var state=count+' unread client message'+(count===1?'':'s')+(count>20?' · showing latest 20':'');
    if($('notification-state').textContent!==state)text('notification-state',state);
@@ -270,7 +271,16 @@
    row.appendChild(heading);row.appendChild(when);row.appendChild(preview);row.appendChild(open);container.appendChild(row);
   });
  }
+ function closeNotifications(returnFocus) {
+  hide('notification-panel',true);if($('notifications-button'))$('notifications-button').setAttribute('aria-expanded','false');
+  if(returnFocus && $('notifications-button') && !$('notifications-button').hidden)$('notifications-button').focus();
+ }
  bind('notifications-button','onclick',function(){var visible=$('notification-panel').hidden;hide('notification-panel',!visible);$('notifications-button').setAttribute('aria-expanded',String(visible));if(visible)pollNotifications(true);});
+ bind('close-notifications','onclick',function(){closeNotifications(true);});
+ document.addEventListener('keydown',function(event){if(event.key==='Escape' && !$('notification-panel').hidden)closeNotifications(true);});
+ document.addEventListener('click',function(event){
+  if(!$('notification-panel').hidden && !$('notification-panel').contains(event.target) && !$('notifications-button').contains(event.target))closeNotifications(false);
+ });
  window.addEventListener('pagehide',stopNotifications);
  window.addEventListener('pageshow',function(){if(user && staff && !notificationTimer)startNotifications();});
 
@@ -341,7 +351,7 @@
   var current=user.id,ticket=version;
   var active=check(await client.rpc('is_staff'));
   if(!user || user.id!==current || ticket!==version)return;
-  if(!active){text('staff-chat-messages','');value('staff-chat-message','');hide('dashboard',true);hide('restricted',false);staff=false;stopNotifications();status('Staff access is no longer available.');return;}
+  if(!active){hide('notifications-button',true);closeNotifications(false);hide('notification-count',true);text('staff-chat-messages','');value('staff-chat-message','');hide('dashboard',true);hide('restricted',false);staff=false;stopNotifications();status('Staff access is no longer available.');return;}
   var results=await Promise.all([client.from('staff_chat_messages').select('id,sender_id,body,created_at').order('created_at',{ascending:false}).order('id',{ascending:false}).limit(100),client.rpc('staff_directory')]);
   if(!user || user.id!==current || ticket!==version)return;
   var messages=check(results[0]),authors=check(results[1]);authors.forEach(function(p){names[p.id]=p.display_name;usernames[p.id]=p.username;});
