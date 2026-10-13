@@ -15,7 +15,7 @@
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="assets/css/portal.css?v=single-session-1">
+  <link rel="stylesheet" href="assets/css/portal.css?v=owner-downgrade-1">
 </head>
 
 <body data-portal-page="management">
@@ -302,6 +302,19 @@
             </p>
           </section>
 
+      <section class="card" id="owner-downgrade-panel" hidden>
+        <h2>Downgrade business owner to employee</h2>
+        <p id="owner-downgrade-target"></p>
+        <p>Their login and memberships in other businesses stay with this account. Their former business package, documents, discussions, members and staff assignments are retained but unavailable while this account is an employee. Upgrading it again restores that business access.</p>
+        <p>The account will be signed out and must sign in again as an employee. Their private administrator chat remains available.</p>
+        <form id="owner-downgrade-form">
+          <label>Character name<input id="employee-character-name" maxlength="80" required></label>
+          <label>Type the selected account's exact username<input id="owner-downgrade-username" autocomplete="off" required></label>
+          <label><input id="owner-downgrade-confirmed" type="checkbox" required> I intend to downgrade the selected business owner to an employee.</label>
+          <button type="submit">Downgrade to employee</button>
+        </form>
+      </section>
+
       <section class="card" id="owner-upgrade-panel" hidden>
         <h2>Upgrade employee to business owner</h2>
         <p id="owner-upgrade-target"></p>
@@ -462,6 +475,6 @@
   <script src="assets/js/portal-compat.js?v=phone-1"></script>
   <script src="assets/js/vendor/supabase-2.57.4-compat.js?v=phone-1"></script>
   <script src="assets/js/portal-config.js"></script>
-  <script src="assets/js/portal.js?v=single-session-1"></script>
+  <script src="assets/js/portal.js?v=owner-downgrade-1"></script>
 </body>
 </html>
