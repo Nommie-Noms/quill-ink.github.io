@@ -197,7 +197,7 @@
   clearPackage();$('messages').textContent='';
   if(ownAdministrator || employeeSelected)return;
   text('package-eyebrow',selected===user.id?'YOUR CURRENT PACKAGE':'CURRENT CLIENT PACKAGE');
-  text('conversation-title',selected===user.id?'Private discussion':'Discussion with '+(names[selected] || 'client'));
+  text('conversation-title','Shared business discussion'+(selected!==user.id?' — '+(names[selected] || 'business'):''));
   $('package-name').textContent='Loading…';
   var results=await Promise.all([
    client.from('client_services').select('package_name,monthly_cost,contract_url,documentation_url').eq('client_id',target).maybeSingle(),
@@ -335,8 +335,8 @@
 
  function employeeChatTarget() {
   if(page!=='dashboard' || !user)return null;
-  if(administrator && selected && !staffIds.includes(selected))return selected;
-  if(!staff && profile)return user.id;
+  if(administrator && selected && accountTypes[selected]==='employee' && !staffIds.includes(selected))return selected;
+  if(!staff && profile && profile.account_type==='employee')return user.id;
   return null;
  }
  function startEmployeeChatPolling() {
@@ -350,7 +350,7 @@
  async function loadEmployeeChat(forceBottom) {
   var target=employeeChatTarget();
   if(target!==employeeChatLoadedTarget){employeeChatLoadedTarget=target;employeeChatSignature='';text('employee-chat-messages','');value('employee-chat-message','');}
-  if(!target){hide('employee-admin-chat',true);return;}
+  if(!target){ownAdminChat=false;hide('employee-admin-chat',true);text('employee-chat-messages','');value('employee-chat-message','');employeeChatSignature='';return;}
   var actor=user.id,ticket=version;
   var permitted=check(await client.rpc('employee_chat_access',{target:target}));
   if(!user || user.id!==actor || ticket!==version || target!==employeeChatTarget())return;
