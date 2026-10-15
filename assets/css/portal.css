@@ -78,3 +78,15 @@ body[data-portal-page] > header {
   top: 0;
   z-index: 1000;
 }
+
+/* Portal menu shares the sticky header with the notification bell. */
+header .portal-menu-toggle{display:flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:4px;background:none;border:0;border-radius:0;color:white;font-size:28px;line-height:1;flex-shrink:0}
+header .portal-menu{position:absolute;top:100%;right:max(5vw,20px);display:flex;flex-direction:column;align-items:stretch;gap:8px;width:280px;max-width:calc(100vw - 32px);margin:0;padding:18px;background:white;border:1px solid #eae7ef;border-radius:0 0 12px 12px;box-shadow:0 8px 24px #111b5a30;z-index:600;max-height:calc(100vh - 110px);overflow-y:auto}
+header .portal-menu a,header .portal-menu button{margin:0;text-align:left;white-space:normal}
+header .portal-menu .button-link{color:#23103b}
+header .portal-menu .button-link[aria-current=page]{color:white}
+.payment-summary{margin:20px 0}
+.payment-summary>div{display:flex;justify-content:space-between;gap:16px;padding:8px 0;border-bottom:1px solid #eae7ef}
+.payment-summary dt{font-weight:500}.payment-summary dd{margin:0;text-align:right;overflow-wrap:anywhere}
+#payment-status[data-state=paid]{color:#24633c}#payment-status[data-state=overdue]{color:#a02b39}
+@media(max-width:400px){header .portal-menu{right:16px}.portal-header-actions{gap:8px}}
