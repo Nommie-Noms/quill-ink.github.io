@@ -11,7 +11,7 @@ self.addEventListener('push',function(event){
   var payload={};try {payload=event.data?event.data.json():{};}catch(error){}
   event.waitUntil(self.registration.showNotification('Quill & Ink',{
     body:payload.channel==='employee'?'New employee message for administrators. Open the portal to read it.':'New client message. Open the portal to read it.',
-    icon:new URL('./portal-push-icon.svg',self.registration.scope).href,
+    icon:new URL('./apple-touch-icon.png?v=app-logo-1',self.registration.scope).href,
     tag:'quill-'+(payload.messageId || 'new-message'),
     data:{url:safePortalURL(payload.url)}
   }));
