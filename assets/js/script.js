@@ -33,32 +33,49 @@ for (let i = 0; i < navbarLinks.length; i++) {
   });
 }
 
-function copyNumber(number) {
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(number)
-      .then(() => showToast("Copied: " + number))
-      .catch(() => fallbackCopy(number));
-  } else {
-    fallbackCopy(number);
+async function copyNumber(value, successMessage) {
+  const text = String(value);
+  const message = successMessage || (/^https?:\/\//i.test(text) ? "Link copied." : "Phone number copied.");
+
+  try {
+    if (!navigator.clipboard || typeof navigator.clipboard.writeText !== "function") {
+      throw new Error("Clipboard unavailable");
+    }
+    await navigator.clipboard.writeText(text);
+    showToast(message);
+    return true;
+  } catch (error) {
+    return fallbackCopy(text, message);
   }
 }
 
-function fallbackCopy(number) {
+function fallbackCopy(value, successMessage) {
+  const previousFocus = document.activeElement;
   const textarea = document.createElement("textarea");
-  textarea.value = number;
-  textarea.style.position = "fixed"; // prevent scrolling
+  textarea.value = String(value);
+  textarea.readOnly = true;
+  textarea.setAttribute("aria-label", "Text to copy");
+  textarea.style.cssText = "position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;";
   document.body.appendChild(textarea);
   textarea.focus();
   textarea.select();
+  textarea.setSelectionRange(0, textarea.value.length);
 
+  let copied = false;
   try {
-    document.execCommand("copy");
-    showToast("Copied: " + number);
-  } catch {
-    showToast("Copy failed");
+    copied = typeof document.execCommand === "function" && document.execCommand("copy") === true;
+  } catch (error) {
+    copied = false;
+  } finally {
+    textarea.remove();
+    if (previousFocus && typeof previousFocus.focus === "function") {
+      try { previousFocus.focus({ preventScroll: true }); }
+      catch (error) { previousFocus.focus(); }
+    }
   }
 
-  document.body.removeChild(textarea);
+  showToast(copied ? (successMessage || "Copied.") : "Copy failed. Your browser blocked copying. Please copy manually.", !copied);
+  return copied;
 }
 
 function toggleDuties(dutiesId, button) {
@@ -111,15 +128,26 @@ if (mapOverlay) {
   });
 }
 
-function showToast(message) {
-  const toast = document.getElementById("toast");
+let copyToastTimer;
+
+function showToast(message, info = false) {
+  let toast = document.getElementById("toast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "toast";
+    document.body.appendChild(toast);
+  }
+  toast.setAttribute("role", "status");
+  toast.setAttribute("aria-live", "polite");
+  toast.setAttribute("aria-atomic", "true");
+  clearTimeout(copyToastTimer);
   toast.textContent = message;
+  toast.className = "toast visible" + (info ? " info" : "");
 
-  toast.classList.add("show");
-
-  setTimeout(() => {
-    toast.classList.remove("show");
-  }, 2000); // disappears after 2 seconds
+  copyToastTimer = setTimeout(() => {
+    toast.className = "toast";
+    toast.textContent = "";
+  }, info ? 6000 : 4000);
 }
 
 const alertBtn = document.getElementById("alertBtn");
