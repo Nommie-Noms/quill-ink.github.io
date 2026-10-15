@@ -1062,30 +1062,45 @@ body {
   text-decoration: underline;
 }
 
-/* ===== Toast Notification ===== */
+/* Copy notifications match the client portal. */
 .toast {
-  visibility: hidden;
-  min-width: 200px;
-  background: #333;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 12px;
-
   position: fixed;
   left: 50%;
-  bottom: 30px;
-  transform: translateX(-50%);
-
+  bottom: 24px;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  transform: translate(-50%, 16px);
   z-index: 9999;
-
+  box-sizing: border-box;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  max-width: min(440px, calc(100vw - 32px));
+  padding: 14px 22px;
+  border-radius: 12px;
+  background: var(--royal-blue-dark);
+  color: var(--white);
+  border-left: 4px solid var(--rajah);
+  box-shadow: 0 8px 30px #111b5a40;
+  font: 500 15px/1.7 var(--ff-poppins);
+  text-align: center;
+  overflow-wrap: anywhere;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .2s, transform .2s, visibility .2s;
 }
 
-.toast.show {
-  visibility: visible;
+.toast.visible {
   opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+.toast.info {
+  border-left-color: var(--chrome-yellow);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast { transition: none; }
 }
 
 .profile-pic {
