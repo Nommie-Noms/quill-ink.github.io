@@ -23,6 +23,7 @@
  function money(value) { return '$' + Number(value).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
  function syncCopyButtons() {if(page!=='dashboard')return; $('copy-contract').disabled=busy || !links.contract; $('copy-documentation').disabled=busy || !links.documentation; }
  function clearPackage() {
+  clearPayments();
   links={contract:'',documentation:''};text('package-name','Not assigned');text('monthly-cost','—');
   value('package-input','');value('cost-input','0');value('contract-input','');value('documentation-input','');value('manual-copy','');
   hide('manual-copy-label',true);text('links-note','');syncCopyButtons();
@@ -53,6 +54,7 @@
   finally {busy=false; buttons.forEach(function(button){button.disabled=false;});syncCopyButtons();}
  }
  function clearDashboard() {
+  closePortalMenu(false);hide('portal-menu-button',true);paymentRecords=[];paymentBusiness=null;paymentPreferred=null;
   if(sessionTimer)clearInterval(sessionTimer);sessionTimer=null;sessionCheckBusy=false;
   clearDowngrade();stopNotifications();ownAdminChat=false;hide('owner-upgrade-panel',true);value('owner-business-name','');if($('owner-upgrade-confirmed'))$('owner-upgrade-confirmed').checked=false;if(employeeChatTimer)clearInterval(employeeChatTimer);employeeChatTimer=null;employeeChatSignature='';employeeChatLoadedTarget=null;employeeRequestedMessage=null;employeeChatBusy=false;hide('employee-admin-chat',true);text('employee-chat-messages','');value('employee-chat-message','');hide('notification-panel',true);hide('notifications-button',true);if($('notifications-button'))$('notifications-button').setAttribute('aria-expanded','false');text('notification-list','');text('notification-count','0');hide('notification-count',true);text('notification-state','');
   clearOwnRecovery();
@@ -128,7 +130,7 @@
   names[accountId]=profile.display_name;usernames[accountId]=profile.username;
   $('account-name').textContent=profile.display_name;
   $('role-label').textContent=staff?'STAFF ACCOUNT':accountTypes[accountId]==='employee'?'EMPLOYEE ACCOUNT':'BUSINESS OWNER';
-  hide('notifications-button',false);hide('management-link',!staff);hide('staff-chat-link',!staff);hide('client-label',!staff);hide('service-editor',true);
+  hide('portal-menu-button',false);hide('notifications-button',false);hide('management-link',!staff);hide('staff-chat-link',!staff);hide('client-label',!staff);hide('service-editor',true);
   if(page==='settings'){hide('account',true);hide('dashboard',false);await loadBusinessSettings();startNotifications();return;}
   if((page==='management' || page==='staff-chat') && !staff){hide('account',true);hide('restricted',false);status('Staff access is required for this page.');startNotifications();return;}
   if(page==='staff-chat'){
@@ -217,6 +219,7 @@
   }
   $('links-note').textContent=(!links.contract || !links.documentation)?'Your team will add any missing document links.':'';
   syncCopyButtons();
+  await loadPayments(target,requestVersion);
   await addRequestedMessage(messages,target);
   if(requestVersion!==version || selected!==target || !user)return;
   renderMessages(messages,target,true);
@@ -320,11 +323,20 @@
    row.appendChild(heading);row.appendChild(when);row.appendChild(preview);row.appendChild(open);container.appendChild(row);
   });
  }
+ function closePortalMenu(returnFocus) {
+  hide('portal-menu',true);if($('portal-menu-button')){$('portal-menu-button').setAttribute('aria-expanded','false');$('portal-menu-button').setAttribute('aria-label','Open portal menu');if(returnFocus && !$('portal-menu-button').hidden)$('portal-menu-button').focus();}
+ }
+ bind('portal-menu-button','onclick',function(){
+  var opening=$('portal-menu').hidden;closeNotifications(false);hide('portal-menu',!opening);
+  this.setAttribute('aria-expanded',String(opening));this.setAttribute('aria-label',opening?'Close portal menu':'Open portal menu');
+ });
+ document.addEventListener('keydown',function(event){if(event.key==='Escape' && !$('portal-menu').hidden)closePortalMenu(true);});
+ document.addEventListener('click',function(event){if(!$('portal-menu').hidden && !$('portal-menu').contains(event.target) && !$('portal-menu-button').contains(event.target))closePortalMenu(false);});
  function closeNotifications(returnFocus) {
   hide('notification-panel',true);if($('notifications-button'))$('notifications-button').setAttribute('aria-expanded','false');
   if(returnFocus && $('notifications-button') && !$('notifications-button').hidden)$('notifications-button').focus();
  }
- bind('notifications-button','onclick',function(){var visible=$('notification-panel').hidden;hide('notification-panel',!visible);$('notifications-button').setAttribute('aria-expanded',String(visible));if(visible)pollNotifications(true);});
+ bind('notifications-button','onclick',function(){closePortalMenu(false);var visible=$('notification-panel').hidden;hide('notification-panel',!visible);$('notifications-button').setAttribute('aria-expanded',String(visible));if(visible)pollNotifications(true);});
  bind('close-notifications','onclick',function(){closeNotifications(true);});
  document.addEventListener('keydown',function(event){if(event.key==='Escape' && !$('notification-panel').hidden)closeNotifications(true);});
  document.addEventListener('click',function(event){
@@ -560,6 +572,42 @@
   var body=$('staff-chat-message').value.trim();if(!body)throw new Error('Enter a message.');
   check(await client.from('staff_chat_messages').insert({sender_id:user.id,body:body}));
   value('staff-chat-message','');await loadStaffChat(true);status('Message sent to staff room.');
+ });});
+ var paymentRecords=[],paymentBusiness=null,paymentPreferred=null,paymentDefaultCost=0;
+ function localPaymentDate() {
+  var now=new Date();return now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+ }
+ function clearPayments() {
+  hide('business-payments',true);hide('payment-form',true);hide('payment-summary',true);text('payment-month-select','');text('payment-empty','');
+  ['payment-month-input','payment-amount-input','payment-due-input','payment-paid-input'].forEach(function(id){value(id,'');});
+  ['payment-amount','payment-due','payment-status','payment-paid-on'].forEach(function(id){text(id,'');});
+ }
+ function paymentMonthLabel(month) {var parts=month.split('-');return new Date(Number(parts[0]),Number(parts[1])-1,1).toLocaleDateString(undefined,{year:'numeric',month:'long'});}
+ function togglePaidDate() {var paid=$('payment-state-input').value==='paid';hide('payment-paid-label',!paid);$('payment-paid-input').required=paid;if(paid && !$('payment-paid-input').value)value('payment-paid-input',localPaymentDate());}
+ function showPayment() {
+  if(!$('payment-month-select'))return;
+  var month=$('payment-month-select').value,row=paymentRecords.find(function(item){return item.billing_month===month;});paymentPreferred=month;
+  hide('payment-summary',!row);hide('payment-form',!administrator || !paymentBusiness);text('payment-empty',row?'':administrator?'Add a monthly payment record below.':'No payment records have been added yet.');
+  if(row){var state=row.paid?'Paid':row.due_date<localPaymentDate()?'Overdue':'Unpaid';text('payment-amount',money(row.amount_due));text('payment-due',row.due_date);text('payment-status',state);$('payment-status').setAttribute('data-state',state.toLowerCase());text('payment-paid-on',row.paid_on || '—');}
+  if(administrator){value('payment-month-input',row?row.billing_month.slice(0,7):localPaymentDate().slice(0,7));$('payment-month-input').readOnly=!!row;value('payment-amount-input',row?row.amount_due:paymentDefaultCost);value('payment-due-input',row?row.due_date:localPaymentDate().slice(0,7)+'-01');value('payment-state-input',row && row.paid?'paid':'unpaid');value('payment-paid-input',row && row.paid_on || '');togglePaidDate();}
+ }
+ async function loadPayments(target,ticket) {
+  var records=[],offset=0,batch;
+  do {batch=check(await client.from('business_payments').select('billing_month,amount_due,due_date,paid,paid_on').eq('business_id',target).order('billing_month',{ascending:false}).range(offset,offset+499));records=records.concat(batch);offset+=500;}while(batch.length===500);
+  if(!user || selected!==target || ticket!==version)return;
+  if(paymentBusiness!==target)paymentPreferred=null;paymentBusiness=target;paymentRecords=records;paymentDefaultCost=Number($('monthly-cost').textContent.replace(/[^0-9.]/g,'')) || 0;
+  text('payment-month-select','');records.forEach(function(row){var option=document.createElement('option');option.value=row.billing_month;option.textContent=paymentMonthLabel(row.billing_month);$('payment-month-select').appendChild(option);});
+  if(administrator){var option=document.createElement('option');option.value='new';option.textContent='Add a billing month…';$('payment-month-select').appendChild(option);}
+  $('payment-month-select').value=records.some(function(row){return row.billing_month===paymentPreferred;})?paymentPreferred:records.length?records[0].billing_month:administrator?'new':'';
+  hide('business-payments',false);showPayment();
+ }
+ bind('payment-month-select','onchange',showPayment);bind('payment-state-input','onchange',togglePaidDate);
+ bind('payment-form','onsubmit',function(event){event.preventDefault();run(async function(){
+  if(!administrator || !user || !selected || selected!==paymentBusiness || staffIds.includes(selected) || accountTypes[selected]==='employee')throw new Error('Select a customer business as an administrator.');
+  var target=selected,month=$('payment-month-input').value,amount=Number($('payment-amount-input').value),due=$('payment-due-input').value,paid=$('payment-state-input').value==='paid',datePaid=$('payment-paid-input').value;
+  if(!/^\d{4}-\d{2}$/.test(month) || !Number.isFinite(amount) || amount<0 || amount>9999999999 || !due || (paid && !datePaid))throw new Error('Enter a valid billing month, amount, due date and paid date.');
+  check(await client.rpc('save_business_payment',{business:target,month:month+'-01',amount:amount,due:due,is_paid:paid,date_paid:paid?datePaid:null}));
+  paymentPreferred=month+'-01';await loadPayments(target,version);status('Monthly payment record saved.');toast('Payment saved.');
  });});
  async function accountAction(data) {
   var controller=typeof AbortController!=='undefined'?new AbortController():null;
