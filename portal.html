@@ -15,7 +15,7 @@
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="assets/css/portal.css?v=owner-downgrade-1">
+  <link rel="stylesheet" href="assets/css/portal.css?v=payments-menu-1">
 </head>
 
 <body data-portal-page="dashboard">
@@ -40,7 +40,38 @@
         <svg xmlns="http://www.w3.org/2000/svg" class="portal-bell-icon" aria-hidden="true" focusable="false" viewBox="0 0 512 512"><path d="M427.68 351.43C402 320 383.87 304 383.87 217.35 383.87 138 343.35 109.73 310 96c-4.43-1.82-8.6-6-9.95-10.55C294.2 65.54 277.8 48 256 48s-38.21 17.55-44 37.47c-1.35 4.6-5.52 8.71-9.95 10.53-33.39 13.75-73.87 41.92-73.87 121.35C128.13 304 110 320 84.32 351.43 73.68 364.45 83 384 101.61 384h308.88c18.51 0 27.77-19.61 17.19-32.57zM320 384v16a64 64 0 01-128 0v-16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/></svg>
         <span id="notification-count" class="portal-notification-badge" aria-hidden="true" hidden>0</span>
       </button>
+      <button id="portal-menu-button" class="portal-menu-toggle" type="button" hidden aria-label="Open portal menu" aria-expanded="false" aria-controls="portal-menu">
+        <span aria-hidden="true">☰</span>
+      </button>
     </div>
+      <nav class="portal-navigation portal-menu" id="portal-menu" hidden aria-label="Portal pages">
+        <a
+          class="button-link"
+          href="portal.html"
+          aria-current="page"
+        >
+          Client portal
+        </a>
+
+        <a class="button-link" href="account-settings.html">
+          Account settings
+        </a>
+
+        <a
+          class="button-link"
+          id="management-link"
+          href="account-management.html"
+          hidden
+        >
+          Account management
+        </a>
+
+        <a class="button-link" id="staff-chat-link" href="staff-chat.html" hidden>Staff chat</a>
+
+
+
+        <button id="logout">Sign out</button>
+      </nav>
     <section class="card" id="notification-panel" hidden aria-labelledby="notification-title">
         <div class="notification-panel-heading"><h2 id="notification-title">Messages</h2><button id="close-notifications" type="button" aria-label="Close notifications"><span aria-hidden="true">×</span></button></div>
         <p id="notification-state" class="note" role="status" aria-live="polite"></p>
@@ -214,34 +245,7 @@
         </div>
       </div>
 
-      <nav class="portal-navigation" aria-label="Portal pages">
-        <a
-          class="button-link"
-          href="portal.html"
-          aria-current="page"
-        >
-          Client portal
-        </a>
 
-        <a class="button-link" href="account-settings.html">
-          Account settings
-        </a>
-
-        <a
-          class="button-link"
-          id="management-link"
-          href="account-management.html"
-          hidden
-        >
-          Account management
-        </a>
-
-        <a class="button-link" id="staff-chat-link" href="staff-chat.html" hidden>Staff chat</a>
-
-
-
-        <button id="logout">Sign out</button>
-      </nav>
 
 
 
@@ -295,6 +299,28 @@
             </label>
           </section>
 
+
+          <section class="card" id="business-payments" hidden aria-labelledby="payments-title">
+            <h2 id="payments-title">Monthly payments</h2>
+            <label>Billing month<select id="payment-month-select"></select></label>
+            <p id="payment-empty" class="note"></p>
+            <dl id="payment-summary" class="payment-summary" hidden>
+              <div><dt>Amount due</dt><dd id="payment-amount"></dd></div>
+              <div><dt>Due date</dt><dd id="payment-due"></dd></div>
+              <div><dt>Status</dt><dd id="payment-status"></dd></div>
+              <div><dt>Date paid</dt><dd id="payment-paid-on"></dd></div>
+            </dl>
+            <form id="payment-form" hidden>
+              <h3>Administrator payment controls</h3>
+              <label>Billing month<input id="payment-month-input" type="month" required></label>
+              <label>Amount due (GTA dollars)<input id="payment-amount-input" type="number" min="0" max="9999999999" step="0.01" required></label>
+              <label>Due date<input id="payment-due-input" type="date" required></label>
+              <label>Payment status<select id="payment-state-input"><option value="unpaid">Unpaid</option><option value="paid">Paid</option></select></label>
+              <label id="payment-paid-label" hidden>Date paid<input id="payment-paid-input" type="date"></label>
+              <button type="submit">Save payment record</button>
+            </form>
+            <p class="note">Only administrators can update payments. Overdue means the due date has passed and the payment is unpaid.</p>
+          </section>
 
         </div>
 
@@ -354,6 +380,6 @@
   <script src="assets/js/portal-compat.js?v=phone-1"></script>
   <script src="assets/js/vendor/supabase-2.57.4-compat.js?v=phone-1"></script>
   <script src="assets/js/portal-config.js"></script>
-  <script src="assets/js/portal.js?v=all-notifications-1"></script>
+  <script src="assets/js/portal.js?v=payments-menu-1"></script>
 </body>
 </html>
