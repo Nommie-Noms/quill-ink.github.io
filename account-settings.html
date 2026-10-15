@@ -16,6 +16,9 @@
   >
 
   <link rel="stylesheet" href="assets/css/portal.css?v=payments-menu-1">
+  <link rel="manifest" href="portal.webmanifest">
+  <meta name="theme-color" content="#111b5a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
 </head>
 
 <body data-portal-page="settings">
@@ -247,6 +250,18 @@
 
 
 
+      <section class="card account-settings" id="administrator-push-settings" hidden>
+        <h2>Administrator push notifications</h2>
+        <p>Receive alerts on this device for new client messages and employee messages to administrators, even when the portal page is closed.</p>
+        <p class="note">On iPhone or iPad, add the portal to your Home Screen and open it there before enabling notifications. Delivery depends on browser, device and notification settings. The in-game phone may not support push.</p>
+        <p class="note">Notifications use a generic preview. Open the portal and sign in to read messages.</p>
+        <p id="administrator-push-status" role="status" aria-live="polite"></p>
+        <div class="actions">
+          <button id="enable-administrator-push" type="button" disabled>Enable push notifications</button>
+          <button id="disable-administrator-push" type="button" hidden>Disable on this device</button>
+        </div>
+      </section>
+
       <!-- Personal account details -->
       <section class="card account-settings">
         <h2>Your account settings</h2>
@@ -373,6 +388,6 @@
   <script src="assets/js/portal-compat.js?v=phone-1"></script>
   <script src="assets/js/vendor/supabase-2.57.4-compat.js?v=phone-1"></script>
   <script src="assets/js/portal-config.js"></script>
-  <script src="assets/js/portal.js?v=payments-menu-1"></script>
+  <script src="assets/js/portal.js?v=administrator-push-1"></script>
 </body>
 </html>
