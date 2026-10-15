@@ -51,9 +51,10 @@
   var buttons=Array.from(document.querySelectorAll('button, input, select, textarea'));
   buttons.forEach(function(button){button.disabled=true;});
   try {await task();} catch(error) {status(error.message || 'Something went wrong. Please try again.');}
-  finally {busy=false; buttons.forEach(function(button){button.disabled=false;});syncCopyButtons();}
+  finally {busy=false; buttons.forEach(function(button){button.disabled=false;});syncCopyButtons();syncPushControls();}
  }
  function clearDashboard() {
+  pushSetupVersion++;pushRegistration=null;pushPublicKey=null;hide('administrator-push-settings',true);text('administrator-push-status','');
   closePortalMenu(false);hide('portal-menu-button',true);paymentRecords=[];paymentBusiness=null;paymentPreferred=null;
   if(sessionTimer)clearInterval(sessionTimer);sessionTimer=null;sessionCheckBusy=false;
   clearDowngrade();stopNotifications();ownAdminChat=false;hide('owner-upgrade-panel',true);value('owner-business-name','');if($('owner-upgrade-confirmed'))$('owner-upgrade-confirmed').checked=false;if(employeeChatTimer)clearInterval(employeeChatTimer);employeeChatTimer=null;employeeChatSignature='';employeeChatLoadedTarget=null;employeeRequestedMessage=null;employeeChatBusy=false;hide('employee-admin-chat',true);text('employee-chat-messages','');value('employee-chat-message','');hide('notification-panel',true);hide('notifications-button',true);if($('notifications-button'))$('notifications-button').setAttribute('aria-expanded','false');text('notification-list','');text('notification-count','0');hide('notification-count',true);text('notification-state','');
@@ -131,7 +132,7 @@
   $('account-name').textContent=profile.display_name;
   $('role-label').textContent=staff?'STAFF ACCOUNT':accountTypes[accountId]==='employee'?'EMPLOYEE ACCOUNT':'BUSINESS OWNER';
   hide('portal-menu-button',false);hide('notifications-button',false);hide('management-link',!staff);hide('staff-chat-link',!staff);hide('client-label',!staff);hide('service-editor',true);
-  if(page==='settings'){hide('account',true);hide('dashboard',false);await loadBusinessSettings();startNotifications();return;}
+  if(page==='settings'){hide('account',true);hide('dashboard',false);if(administrator)loadAdministratorPush();await loadBusinessSettings();startNotifications();return;}
   if((page==='management' || page==='staff-chat') && !staff){hide('account',true);hide('restricted',false);status('Staff access is required for this page.');startNotifications();return;}
   if(page==='staff-chat'){
    hide('account',true);hide('dashboard',false);await loadStaffChat(true);startNotifications();return;
@@ -608,6 +609,61 @@
   if(!/^\d{4}-\d{2}$/.test(month) || !Number.isFinite(amount) || amount<0 || amount>9999999999 || !due || (paid && !datePaid))throw new Error('Enter a valid billing month, amount, due date and paid date.');
   check(await client.rpc('save_business_payment',{business:target,month:month+'-01',amount:amount,due:due,is_paid:paid,date_paid:paid?datePaid:null}));
   paymentPreferred=month+'-01';await loadPayments(target,version);status('Monthly payment record saved.');toast('Payment saved.');
+ });});
+ var pushRegistration=null,pushPublicKey=null,pushSetupVersion=0;
+ function syncPushControls() {
+  if($('enable-administrator-push'))$('enable-administrator-push').disabled=busy || !administrator || !pushRegistration || !pushPublicKey || !pushSupported() || Notification.permission==='denied';
+ }
+ function pushNeedsInstall() {return (/iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1)) && !navigator.standalone && !(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);}
+ function pushSupported() {return !pushNeedsInstall() && window.isSecureContext && 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;}
+ function pushKeyBytes(key) {var raw=atob((key+'='.repeat((4-key.length%4)%4)).replace(/-/g,'+').replace(/_/g,'/'));return Uint8Array.from(raw,function(letter){return letter.charCodeAt(0);});}
+ function pushKeyMatches(subscription,key) {
+  if(!subscription.options || !subscription.options.applicationServerKey)return false;
+  var actual=new Uint8Array(subscription.options.applicationServerKey),expected=pushKeyBytes(key);
+  return actual.length===expected.length && actual.every(function(value,index){return value===expected[index];});
+ }
+ async function loadAdministratorPush() {
+  if(page!=='settings' || !administrator || !user)return;
+  var ticket=++pushSetupVersion,actor=user.id;hide('administrator-push-settings',false);hide('disable-administrator-push',true);$('enable-administrator-push').disabled=true;
+  if(!pushSupported()){text('administrator-push-status','Push is not supported here. On iPhone/iPad, add the portal to the Home Screen and open it there. The portal bell remains available.');return;}
+  text('administrator-push-status','Checking push notification setup…');
+  var controller=new AbortController(),timer=setTimeout(function(){controller.abort();},12000);
+  try {
+   var response=await fetch(config.supabaseUrl+'/functions/v1/admin-push',{headers:{apikey:config.supabasePublishableKey},signal:controller.signal});
+   var body=await response.json();if(!response.ok || !/^[A-Za-z0-9_-]{87}$/.test(body.publicKey || ''))throw new Error('Push is not configured yet. Complete the server setup first.');
+   var registration=await navigator.serviceWorker.register(new URL('portal-push-sw.js',window.location.href).href,{scope:new URL('./',window.location.href).href,updateViaCache:'none'});
+   await Promise.race([navigator.serviceWorker.ready,new Promise(function(resolve,reject){setTimeout(function(){reject(new Error('The push worker is not ready. Reopen this page after checking its upload.'));},12000);})]);
+   if(ticket!==pushSetupVersion || !user || user.id!==actor || !administrator)return;
+   pushRegistration=registration;pushPublicKey=body.publicKey;
+   var subscription=await registration.pushManager.getSubscription();
+   var enabled=subscription?check(await client.rpc('administrator_push_device_status',{device_endpoint:subscription.endpoint})):false;
+   if(ticket!==pushSetupVersion || !user || user.id!==actor)return;
+   hide('disable-administrator-push',!enabled);$('enable-administrator-push').disabled=Notification.permission==='denied';
+   text('administrator-push-status',Notification.permission==='denied'?'Notifications are blocked. Allow them in this browser or device settings, then reopen this page.':enabled?'Push notifications are enabled on this device.':'Push notifications are off on this device. Select Enable to allow them.');
+  }catch(error){if(ticket===pushSetupVersion)text('administrator-push-status',error.message || 'Push setup could not load. Reopen Account Settings to try again.');}
+  finally {clearTimeout(timer);syncPushControls();}
+ }
+ bind('enable-administrator-push','onclick',function(){
+  if(!administrator || !user || !pushRegistration || !pushPublicKey){text('administrator-push-status','Wait for push setup to finish, then reopen settings if needed.');return;}
+  // Request permission directly from the user gesture, before network operations.
+  var permission=Notification.permission==='granted'?Promise.resolve('granted'):Notification.requestPermission();
+  run(async function(){
+   var actor=user.id,registration=pushRegistration,key=pushPublicKey;
+   if(await permission!=='granted'){text('administrator-push-status','Notifications were not enabled. You can change permission in browser/device settings.');return;}
+   var subscription=await registration.pushManager.getSubscription();
+   if(subscription && !pushKeyMatches(subscription,key)){await subscription.unsubscribe();subscription=null;}
+   if(!subscription)subscription=await registration.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:pushKeyBytes(key)});
+   if(!user || actor!==user.id || !administrator)return;
+   var saved=subscription.toJSON();
+   check(await client.rpc('register_administrator_push',{device_endpoint:saved.endpoint,public_key:saved.keys.p256dh,auth_secret:saved.keys.auth}));
+   hide('disable-administrator-push',false);text('administrator-push-status','Push notifications are enabled on this device.');toast('Push notifications enabled.');
+  });
+ });
+ bind('disable-administrator-push','onclick',function(){run(async function(){
+  if(!administrator || !pushRegistration)return;
+  var subscription=await pushRegistration.pushManager.getSubscription();
+  if(subscription){check(await client.rpc('remove_administrator_push',{device_endpoint:subscription.endpoint}));await subscription.unsubscribe();}
+  hide('disable-administrator-push',true);text('administrator-push-status','Push notifications are disabled on this device.');toast('Push notifications disabled.');
  });});
  async function accountAction(data) {
   var controller=typeof AbortController!=='undefined'?new AbortController():null;
