@@ -15,6 +15,17 @@
   $('copy-toast').className='toast visible'+(info?' info':'');
   toastTimer=setTimeout(function(){$('copy-toast').className='toast';$('copy-toast').textContent='';},info?6000:4000);
  }
+ function sortAccountOptions(accounts,ownId) {
+  return accounts.slice().sort(function(a,b){
+   if(a.id===ownId && b.id!==ownId)return -1;
+   if(b.id===ownId && a.id!==ownId)return 1;
+   var aName=String(a.display_name || a.name || a.username || '');
+   var bName=String(b.display_name || b.name || b.username || '');
+   return aName.localeCompare(bName,undefined,{sensitivity:'base'}) ||
+    String(a.username || '').localeCompare(String(b.username || ''),undefined,{sensitivity:'base'}) ||
+    String(a.id).localeCompare(String(b.id));
+  });
+ }
  function status(text) { $('status').textContent = text || ''; }
  function hide(id, hidden) {if($(id))$(id).hidden=hidden;}
  function value(id,text){if($(id))$(id).value=text;}
@@ -149,7 +160,8 @@
    var ids=accountTypes[accountId]==='employee'?[]:[accountId];memberships.forEach(function(m){if(m.user_id===accountId && m.accepted_at && !ids.includes(m.business_id))ids.push(m.business_id);});
    var visible=check(await client.from('profiles').select('id,username,display_name').order('username'));
    visible.forEach(function(item){names[item.id]=item.display_name;usernames[item.id]=item.username;});
-   businesses=ids.map(function(id){return {id:id,name:names[id] || 'Business'};});
+   businesses=sortAccountOptions(ids.map(function(id){return {id:id,name:names[id] || 'Business',username:usernames[id]};}),accountId);
+   ids=businesses.map(function(item){return item.id;});
    businesses.forEach(function(item){var option=document.createElement('option');option.value=item.id;option.textContent=item.name+(item.id===accountId?' (owner)':' (member)');$('client-select').appendChild(option);});
    selected=ids.includes(preferred)?preferred:(accountTypes[accountId]==='employee'?(ids[0] || null):accountId);$('client-select').value=selected || '';
    hide('client-label',businesses.length<2);
@@ -421,6 +433,7 @@
  }
  function rebuildStaffSelector(clients,preferred,initial) {
   if(!$('client-select'))return;
+  clients=sortAccountOptions(clients,user.id);
   text('client-select','');
   if(page==='management' || !administrator){
    var placeholder=document.createElement('option');placeholder.value='';placeholder.textContent=clients.length?'Choose an account':'No assigned customer accounts';$('client-select').appendChild(placeholder);
