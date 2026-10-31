@@ -15,7 +15,7 @@
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="assets/css/portal.css?v=payments-menu-1">
+  <link rel="stylesheet" href="assets/css/portal.css?v=all-account-push-1">
   <link rel="manifest" href="portal.webmanifest?v=app-logo-1">
   <meta name="theme-color" content="#111b5a">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -251,16 +251,44 @@
 
 
 
-      <section class="card account-settings" id="administrator-push-settings" hidden>
-        <h2>Administrator push notifications</h2>
-        <p>Receive alerts on this device for new client messages and employee messages to administrators, even when the portal page is closed.</p>
-        <p class="note">On iPhone or iPad, add the portal to your Home Screen and open it there before enabling notifications. Delivery depends on browser, device and notification settings. The in-game phone may not support push.</p>
-        <p class="note">Notifications use a generic preview. Open the portal and sign in to read messages.</p>
-        <p id="administrator-push-status" role="status" aria-live="polite"></p>
+      <section class="card account-settings" id="portal-push-settings" hidden>
+        <p class="eyebrow">OPTIONAL · OUT OF CHARACTER</p>
+        <h2>Push notifications</h2>
+        <p>Receive a reminder on this device when someone sends a message in a conversation available to your account, even when the portal page is closed.</p>
+        <aside class="push-ooc-notice" aria-label="Out of character notice">
+          <strong>OOC (Out of character) notice</strong>
+          <p>These notifications are an out-of-character convenience. Receiving an alert does not give your character in-game knowledge. Keep OOC reminders separate from what your character learns through roleplay.</p>
+        </aside>
+        <p class="note">Lock-screen alerts show a generic reminder without names or message contents. Open the portal and sign in to read the message.</p>
+        <p class="note">Enable notifications separately on each device. Alerts can continue after signing out; choose “Disable on this device” before signing out on a shared device. Enabling push for another account in the same browser switches this device to that account.</p>
+        <p id="portal-push-status" role="status" aria-live="polite"></p>
         <div class="actions">
-          <button id="enable-administrator-push" type="button" disabled>Enable push notifications</button>
-          <button id="disable-administrator-push" type="button" hidden>Disable on this device</button>
+          <button id="enable-portal-push" type="button" disabled>Enable push notifications</button>
+          <button id="disable-portal-push" type="button" hidden>Disable on this device</button>
         </div>
+        <details class="push-install-guide">
+          <summary>Quick guide: install Quill &amp; Ink as an app</summary>
+          <p>Use your real phone or computer browser and open <a href="portal.html">the client portal</a>. Installation and push alerts may not be supported in the in-game phone.</p>
+          <h3>iPhone or iPad</h3>
+          <ol>
+            <li>Open the portal in Safari and tap <strong>Share</strong>.</li>
+            <li>Select <strong>Add to Home Screen</strong>. If shown, keep <strong>Open as Web App</strong> switched on, then tap <strong>Add</strong>.</li>
+            <li>Open the new Quill &amp; Ink icon from your Home Screen and sign in.</li>
+            <li>Open <strong>Account settings</strong>, select <strong>Enable push notifications</strong> and allow notifications. Home Screen push requires iOS/iPadOS 16.4 or later.</li>
+          </ol>
+          <h3>Android</h3>
+          <ol>
+            <li>Open the portal in Chrome and tap the <strong>three-dot menu</strong>.</li>
+            <li>Choose <strong>Install and create shortcut → Install</strong>, <strong>Install app</strong> or <strong>Add to Home screen</strong>, depending on your browser version.</li>
+            <li>Open the installed app, sign in, then enable push in <strong>Account settings</strong> and allow notifications.</li>
+          </ol>
+          <h3>Desktop</h3>
+          <ol>
+            <li>Open the portal in Chrome or Edge and look for the <strong>Install</strong> icon in the address bar. In Chrome you can also use <strong>Menu → Cast, save, and share → Install page as app</strong>.</li>
+            <li>Follow the installation prompt, then enable push in <strong>Account settings</strong>. Supported desktop browsers can also receive push without installing the app.</li>
+          </ol>
+          <p class="note">If alerts do not arrive, check browser and device notification permissions and Focus/Do Not Disturb settings. Delivery is not guaranteed. The portal bell remains available.</p>
+        </details>
       </section>
 
       <!-- Personal account details -->
@@ -389,6 +417,6 @@
   <script src="assets/js/portal-compat.js?v=phone-1"></script>
   <script src="assets/js/vendor/supabase-2.57.4-compat.js?v=phone-1"></script>
   <script src="assets/js/portal-config.js"></script>
-  <script src="assets/js/portal.js?v=account-sort-1"></script>
+  <script src="assets/js/portal.js?v=all-account-push-1"></script>
 </body>
 </html>
