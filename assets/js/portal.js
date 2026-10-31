@@ -8,6 +8,7 @@
  var staffDirectory=[],scopeClients=[],scopeSignature="",staffChatSignature="";
  var memberships=[],businesses=[],memberIds={},staffSenderIds={};
  var names = {}, usernames = {}, staffIds = [], busy = false, links = {contract:'',documentation:''};
+ var announcementRequest=null,requestedAnnouncement=null;
  var client,toastTimer,notificationTimer=null,notificationRun=0,notificationBusy=false,notificationKnown=null,notificationSignature='',requestedMessage=null;
  function toast(text,info) {
   clearTimeout(toastTimer);
@@ -65,6 +66,7 @@
   finally {busy=false; buttons.forEach(function(button){button.disabled=false;});syncCopyButtons();syncPushControls();}
  }
  function clearDashboard() {
+  announcementRequest=null;requestedAnnouncement=null;hide('announcement-composer',true);text('announcement-send-status','');value('announcement-title','');value('announcement-body','');if($('announcement-confirmed'))$('announcement-confirmed').checked=false;syncAnnouncementPreview();
   pushSetupVersion++;pushRegistration=null;pushPublicKey=null;hide('portal-push-settings',true);text('portal-push-status','');
   closePortalMenu(false);hide('portal-menu-button',true);paymentRecords=[];paymentBusiness=null;paymentPreferred=null;
   if(sessionTimer)clearInterval(sessionTimer);sessionTimer=null;sessionCheckBusy=false;
@@ -87,10 +89,14 @@
  function sessionId(session) {
   try {return JSON.parse(atob(session.access_token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'))).session_id || null;}catch(error){return null;}
  }
+ async function signOutPortal() {
+  try {check(await client.rpc('end_portal_session'));}catch(error){/* Local sign-out still works while offline. */}
+  return client.auth.signOut({scope:'local'});
+ }
  async function displacedSession() {
   clearDashboard();value('recovery-output','');hide('recovery-result',true);
-  try {check(await client.auth.signOut({scope:'local'}));}catch(error){/* Keep private UI cleared even if the logout request fails. */}
-  status('You were signed out because this account signed in elsewhere or its access changed. Sign in again.');
+  try {check(await signOutPortal());}catch(error){/* Keep private UI cleared even if the logout request fails. */}
+  status('This session ended because two newer sign-ins replaced it or your account access changed. Sign in again.');
  }
  async function checkPortalSession() {
   if(!user || busy || sessionCheckBusy)return;
@@ -99,12 +105,12 @@
    var current=check(await client.auth.getSession()).session;
    if(!current || current.user.id!==accountId)return;
    var expectedId=sessionId(current);
-   var security=check(await client.from('account_security').select('active_session_id').eq('user_id',accountId).maybeSingle());
+   var active=check(await client.rpc('portal_session_active'));
    if(version!==expectedVersion || !user || user.id!==accountId)return;
    var latest=check(await client.auth.getSession()).session;
    // Ignore a late response when another tab has already installed a new session.
    if(sessionId(latest)!==expectedId)return;
-   if(!expectedId || !security || security.active_session_id!==expectedId)await displacedSession();
+   if(!expectedId || !active)await displacedSession();
   }catch(error){/* Offline checks retry; the database still enforces the active session. */}
   finally {if(version===expectedVersion)sessionCheckBusy=false;}
  }
@@ -117,12 +123,12 @@
  window.addEventListener('pageshow',checkPortalSession);
  async function loadDashboard(session) {
   var preferred=selected;clearDashboard();
-  if(page==='dashboard'){var parameters=new URLSearchParams(window.location.search);if(!preferred)preferred=parameters.get('employee') || parameters.get('client');requestedMessage=parameters.get('message');employeeRequestedMessage=parameters.get('employee_message');}
+  if(page==='dashboard'){var parameters=new URLSearchParams(window.location.search);if(!preferred)preferred=parameters.get('employee') || parameters.get('client');requestedMessage=parameters.get('message');employeeRequestedMessage=parameters.get('employee_message');requestedAnnouncement=parameters.get('announcement');}
   if(!session) return;
   user=session.user;
   var accountId=user.id;
-  var security=check(await client.from('account_security').select('password_required,revoked_before,phase,active_session_id').eq('user_id',accountId).maybeSingle());
-  if(!sessionId(session) || !security || security.active_session_id!==sessionId(session)){await displacedSession();return;}
+  var security=check(await client.from('account_security').select('password_required,revoked_before,phase').eq('user_id',accountId).maybeSingle());
+  if(!sessionId(session) || !security || !check(await client.rpc('portal_session_active'))){await displacedSession();return;}
   watchPortalSession();
   if(security && ['editing_profile','deleting'].includes(security.phase)) {hide('account',true);status('An account change is in progress. Contact an administrator if it does not finish.');return;}
   if(security && security.password_required) {
@@ -132,7 +138,7 @@
   }
   if(security && security.revoked_before) {
    var claims=JSON.parse(atob(session.access_token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
-   if(Number(claims.iat)<=Number(security.revoked_before)){check(await client.auth.signOut({scope:'local'}));clearDashboard();status('This session has been revoked. Sign in again.');return;}
+   if(Number(claims.iat)<=Number(security.revoked_before)){check(await signOutPortal());clearDashboard();status('This session has been revoked. Sign in again.');return;}
   }
   var results=await Promise.all([client.from('profiles').select('id,username,display_name,account_type').eq('id',accountId).single(),client.from('staff').select('user_id'),client.from('administrators').select('user_id').eq('user_id',accountId)]);
   profile=check(results[0]);staffIds=check(results[1]).map(function(item){return item.user_id;});staff=staffIds.includes(accountId);administrator=check(results[2]).some(function(item){return item.user_id===accountId;});
@@ -142,7 +148,7 @@
   names[accountId]=profile.display_name;usernames[accountId]=profile.username;
   $('account-name').textContent=profile.display_name;
   $('role-label').textContent=staff?'STAFF ACCOUNT':accountTypes[accountId]==='employee'?'EMPLOYEE ACCOUNT':'BUSINESS OWNER';
-  hide('portal-menu-button',false);hide('notifications-button',false);hide('management-link',!staff);hide('staff-chat-link',!staff);hide('client-label',!staff);hide('service-editor',true);
+  hide('announcement-composer',page!=='management' || !administrator);hide('portal-menu-button',false);hide('notifications-button',false);hide('management-link',!staff);hide('staff-chat-link',!staff);hide('client-label',!staff);hide('service-editor',true);
   if(page==='settings'){hide('account',true);hide('dashboard',false);loadPortalPush();await loadBusinessSettings();startNotifications();return;}
   if((page==='management' || page==='staff-chat') && !staff){hide('account',true);hide('restricted',false);status('Staff access is required for this page.');startNotifications();return;}
   if(page==='staff-chat'){
@@ -300,20 +306,21 @@
    else if(staff && !administrator && (page==='dashboard' || page==='management'))await syncStaffScope();
    if(cycle!==notificationRun || !user)return;
    if(page==='dashboard' && (administrator || ownAdminChat))await loadEmployeeChat(false);
-   var results=await Promise.all([client.rpc(staff?'staff_message_notifications':'customer_message_notifications'),client.rpc(staff?'staff_unread_message_count':'customer_unread_message_count'),administrator?client.rpc('admin_employee_notifications'):Promise.resolve({data:[],error:null}),administrator?client.rpc('admin_employee_unread_count'):Promise.resolve({data:0,error:null})]);
+   var results=await Promise.all([client.rpc(staff?'staff_message_notifications':'customer_message_notifications'),client.rpc(staff?'staff_unread_message_count':'customer_unread_message_count'),administrator?client.rpc('admin_employee_notifications'):Promise.resolve({data:[],error:null}),administrator?client.rpc('admin_employee_unread_count'):Promise.resolve({data:0,error:null}),client.rpc('portal_announcement_notifications'),client.rpc('portal_announcement_unread_count')]);
    if(cycle!==notificationRun || !user)return;
-   var notifications=check(results[0]).concat(check(results[2]).map(function(item){item.channel='employee';return item;})).sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);}).slice(0,20),count=Number(check(results[1]))+Number(check(results[3])),known={};
+   var notifications=check(results[0]).concat(check(results[2]).map(function(item){item.channel='employee';return item;})).concat(check(results[4])).sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);}).slice(0,20),count=Number(check(results[1]))+Number(check(results[3]))+Number(check(results[5])),known={};
    notifications.forEach(function(item){known[(item.channel || 'business')+':'+item.notification_id]=true;});
    var fresh=notificationKnown===null?[]:notifications.filter(function(item){return !notificationKnown[(item.channel || 'business')+':'+item.notification_id];});
    notificationKnown=known;
    var badge=count>99?'99+':String(count);
    if($('notification-count').textContent!==badge)text('notification-count',badge);hide('notification-count',count===0);
-   $('notifications-button').setAttribute('aria-label','Notifications: '+count+' unread messages');
-   var state=count+' unread message'+(count===1?'':'s')+(count>20?' · showing latest 20':'');
+   $('notifications-button').setAttribute('aria-label','Notifications: '+count+' unread notifications');
+   var state=count+' unread notification'+(count===1?'':'s')+(count>20?' · showing latest 20':'');
    if($('notification-state').textContent!==state)text('notification-state',state);
    var signature=JSON.stringify(notifications);
    if(signature!==notificationSignature){notificationSignature=signature;renderNotifications(notifications);}
-   if(!silent && fresh.length)toast(fresh.length===1?(staff?'New message from '+fresh[0].client_name:fresh[0].channel==='employee'?'New private message from an administrator.':'New message in '+fresh[0].client_name):fresh.length+' new messages.');
+   if(requestedAnnouncement){hide('notification-panel',false);$('notifications-button').setAttribute('aria-expanded','true');requestedAnnouncement=null;}
+   if(!silent && fresh.length)toast(fresh.length===1?(fresh[0].channel==='announcement'?'New announcement: '+fresh[0].title:staff?'New message from '+fresh[0].client_name:fresh[0].channel==='employee'?'New private message from an administrator.':'New message in '+fresh[0].client_name):fresh.length+' new notifications.');
    if(page==='dashboard' && !busy && !document.hidden && selected && !skipConversation){
     await loadConversation(selected,version);
     notificationBusy=false;
@@ -324,8 +331,17 @@
  }
  function renderNotifications(notifications) {
   var container=$('notification-list');container.textContent='';
-  if(!notifications.length){container.textContent='No unread messages.';return;}
+  if(!notifications.length){container.textContent='No unread notifications.';return;}
   notifications.forEach(function(item){
+   if(item.channel==='announcement'){
+    var announcement=document.createElement('div');announcement.className='notification-item portal-announcement';
+    var title=document.createElement('strong');title.textContent='Announcement · '+item.title;
+    var date=document.createElement('small');date.textContent=new Date(item.created_at).toLocaleString();
+    var body=document.createElement('p');body.textContent=item.preview;
+    var mark=document.createElement('button');mark.type='button';mark.textContent='Mark as read';
+    mark.onclick=function(){if(busy)return;run(async function(){check(await client.rpc('mark_portal_announcement_read',{announcement:item.notification_id}));await pollNotifications(true);});};
+    announcement.appendChild(title);announcement.appendChild(date);announcement.appendChild(body);announcement.appendChild(mark);container.appendChild(announcement);return;
+   }
    var row=document.createElement('div');row.className='notification-item';
    var heading=document.createElement('strong');heading.textContent=(item.channel==='employee'?'Private · ':'Business · ')+item.client_name+' (@'+item.username+')';
    var when=document.createElement('small');when.textContent=new Date(item.created_at).toLocaleString();
@@ -623,6 +639,26 @@
   check(await client.rpc('save_business_payment',{business:target,month:month+'-01',amount:amount,due:due,is_paid:paid,date_paid:paid?datePaid:null}));
   paymentPreferred=month+'-01';await loadPayments(target,version);status('Monthly payment record saved.');toast('Payment saved.');
  });});
+ function syncAnnouncementPreview() {
+  text('announcement-preview-title',$('announcement-title')?$('announcement-title').value.trim() || 'Announcement title':'');
+  text('announcement-preview-body',$('announcement-body')?$('announcement-body').value.trim() || 'Your announcement will appear here.':'');
+ }
+ function announcementId() {
+  var bytes=crypto.getRandomValues(new Uint8Array(16));bytes[6]=(bytes[6]&15)|64;bytes[8]=(bytes[8]&63)|128;
+  var hex=Array.from(bytes,function(b){return ('0'+b.toString(16)).slice(-2);}).join('');
+  return hex.slice(0,8)+'-'+hex.slice(8,12)+'-'+hex.slice(12,16)+'-'+hex.slice(16,20)+'-'+hex.slice(20);
+ }
+ bind('announcement-title','oninput',syncAnnouncementPreview);bind('announcement-body','oninput',syncAnnouncementPreview);
+ bind('announcement-form','onsubmit',function(event){event.preventDefault();run(async function(){
+  if(!administrator || !user)throw new Error('Administrator access required.');
+  var subject=$('announcement-title').value.trim(),content=$('announcement-body').value.trim();
+  if(!subject || subject.length>100 || !content || content.length>2000 || !$('announcement-confirmed').checked)throw new Error('Enter an announcement and confirm sending it to every account.');
+  if(!announcementRequest || announcementRequest.subject!==subject || announcementRequest.content!==content)announcementRequest={id:announcementId(),subject:subject,content:content};
+  var result=check(await client.rpc('send_portal_announcement',{request_id:announcementRequest.id,subject:subject,content:content}))[0];
+  if(!result)throw new Error('The announcement could not be confirmed. Retry with the same text.');
+  value('announcement-title','');value('announcement-body','');$('announcement-confirmed').checked=false;announcementRequest=null;syncAnnouncementPreview();
+  text('announcement-send-status','Announcement sent to '+result.account_count+' accounts. Push delivery is queued for enabled devices.');toast('Announcement sent.');await pollNotifications(true);
+ });});
  var pushRegistration=null,pushPublicKey=null,pushSetupVersion=0;
  function syncPushControls() {
   if($('enable-portal-push'))$('enable-portal-push').disabled=busy || !user || !pushRegistration || !pushPublicKey || !pushSupported() || Notification.permission==='denied';
@@ -728,7 +764,7 @@
  $('recovery-saved').onclick=function(){$('recovery-output').value='';hide('recovery-result',true);hide('account',false);setMode('login');};
  bind('client-select','onchange',function(){clearDowngrade();hide('staff-reset-result',true);['issued-password','issued-code','verification-note','delete-password','delete-confirm'].forEach(function(id){value(id,'');});if($('identity-confirmed'))$('identity-confirmed').checked=false;if($('delete-acknowledged'))$('delete-acknowledged').checked=false;if(selected!==(this.value || null))value('message','');selected=this.value || null;value('owner-business-name','');if($('owner-upgrade-confirmed'))$('owner-upgrade-confirmed').checked=false;requestedMessage=null;employeeRequestedMessage=null;status('');run(refresh);});
  bind('logo-refresh','onclick',function(event){event.preventDefault();if(!busy)window.location.reload();});
- bind('logout','onclick',function(){run(async function(){check(await client.auth.signOut({scope:'local'}));clearDashboard();status('Signed out.');});});
+ bind('logout','onclick',function(){run(async function(){check(await signOutPortal());clearDashboard();status('Signed out.');});});
  bind('restricted-logout','onclick',function(){$('logout').click();});
  function clearOwnRecovery() {
   value('own-recovery-password','');value('own-recovery-code','');hide('own-recovery-result',true);
@@ -800,7 +836,7 @@
  bind('own-password-form','onsubmit',function(event){event.preventDefault();run(async function(){
   if($('own-new-password').value!==$('own-confirm-password').value)throw new Error('New passwords do not match.');
   var result=await accountAction({action:'change-password',currentPassword:$('own-current-password').value,password:$('own-new-password').value});
-  check(await client.auth.signOut({scope:'local'}));clearDashboard();hide('account',true);
+  check(await signOutPortal());clearDashboard();hide('account',true);
   value('recovery-output',result.recoveryCode);hide('recovery-result',false);status('Your password changed. Save your replacement recovery code, then sign in again.');
  });});
  bind('profile-form','onsubmit',function(event){event.preventDefault();run(async function(){
@@ -808,7 +844,7 @@
   var result=await accountAction({action:'update-profile',username:username,displayName:$('settings-business').value.trim(),currentPassword:$('settings-password').value});
   $('settings-password').value='';
   if(result.usernameChanged){
-   await client.auth.signOut({scope:'local'});clearDashboard();$('username').value=result.username;
+   await signOutPortal();clearDashboard();$('username').value=result.username;
    $('recovery-output').value=result.recoveryCode;hide('account',true);hide('recovery-result',false);
    status('Username updated. Save your new recovery code, then sign in with your new username and existing password.');
   }else{var session=check(await client.auth.getSession()).session;await loadDashboard(session);status('Your own business or character name updated.');toast('Account name updated.');}
@@ -830,10 +866,10 @@
  bind('dismiss-credentials','onclick',function(){hide('staff-reset-result',true);$('issued-password').value='';$('issued-code').value='';$('verification-note').value='';$('identity-confirmed').checked=false;});
  bind('temporary-form','onsubmit',function(event){event.preventDefault();run(async function(){
   var result=await accountAction({action:'change-temporary',currentPassword:$('current-temporary').value,password:$('permanent-password').value});
-  check(await client.auth.signOut({scope:'local'}));clearDashboard();hide('account',true);hide('password-change',true);
+  check(await signOutPortal());clearDashboard();hide('account',true);hide('password-change',true);
   $('recovery-output').value=result.recoveryCode;hide('recovery-result',false);status('Password updated. Save your replacement recovery code, then sign in again.');
  });});
- bind('temporary-logout','onclick',function(){run(async function(){check(await client.auth.signOut({scope:'local'}));clearDashboard();status('Signed out.');});});
+ bind('temporary-logout','onclick',function(){run(async function(){check(await signOutPortal());clearDashboard();status('Signed out.');});});
  function validLink(value) {
   try {var url=new URL(value);return url.protocol==='https:' && url.hostname && !url.username && !url.password ? url.href : '';} catch(error) {return '';}
  }
