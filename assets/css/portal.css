@@ -90,3 +90,13 @@ header .portal-menu .button-link[aria-current=page]{color:white}
 .payment-summary dt{font-weight:500}.payment-summary dd{margin:0;text-align:right;overflow-wrap:anywhere}
 #payment-status[data-state=paid]{color:#24633c}#payment-status[data-state=overdue]{color:#a02b39}
 @media(max-width:400px){header .portal-menu{right:16px}.portal-header-actions{gap:8px}}
+
+/* OOC push settings and installation guide */
+.push-ooc-notice { margin: 20px 0; padding: 16px 18px; border-left: 3px solid #ffbc91; border-radius: 8px; background: rgba(255, 188, 145, .08); }
+.push-ooc-notice p { margin-bottom: 0; }
+.push-install-guide { margin-top: 24px; border-top: 1px solid #eae7ef; padding-top: 18px; }
+.push-install-guide summary { cursor: pointer; font-weight: 600; }
+.push-install-guide h3 { margin: 22px 0 8px; }
+.push-install-guide ol { padding-left: 24px; }
+.push-install-guide li { margin: 8px 0; }
+.push-install-guide a { color: var(--purple); text-decoration: underline; }
