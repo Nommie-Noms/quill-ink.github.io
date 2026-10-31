@@ -100,3 +100,11 @@ header .portal-menu .button-link[aria-current=page]{color:white}
 .push-install-guide ol { padding-left: 24px; }
 .push-install-guide li { margin: 8px 0; }
 .push-install-guide a { color: var(--purple); text-decoration: underline; }
+
+/* Administrator announcement composer */
+.announcement-preview{margin:20px 0;padding:18px;background:#f6f3fa;border-radius:8px;overflow-wrap:anywhere}
+.announcement-preview>.eyebrow{margin-top:0}
+.announcement-preview>p:last-child{white-space:pre-wrap;margin-bottom:0}
+.announcement-confirmation{display:flex;align-items:flex-start;gap:12px}
+.announcement-confirmation input{width:auto;margin:6px 0 0;flex-shrink:0}
+.portal-announcement button{padding:8px 16px;font-size:12px}
