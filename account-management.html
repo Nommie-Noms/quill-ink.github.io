@@ -1,79 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Account management | Quill &amp; Ink Services</title>
+  <title>Store management | Umai Mart</title>
 
-  <link rel="icon" href="assets/images/Favicon-3.png">
+  <link rel="icon" href="assets/images/app-icon.svg">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&amp;family=Source+Sans+Pro:wght@600;700&amp;display=swap"
-    rel="stylesheet"
-  >
+  
+  
+  
 
-  <link rel="stylesheet" href="assets/css/portal.css?v=two-sessions-announcements-1">
+  <link rel="stylesheet" href="assets/css/portal.css?v=catalogue-1">
   <link rel="manifest" href="portal.webmanifest?v=app-logo-1">
-  <meta name="theme-color" content="#111b5a">
+  <meta name="theme-color" content="#174c3d">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png?v=app-logo-1">
-</head>
+  <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/css/store.css?v=catalogue-1"><link rel="stylesheet" href="assets/css/umai-portal.css?v=catalogue-1"></head>
 
-<body data-portal-page="management">
+<body data-portal-page="management" class="umai-portal">
   <!-- Header -->
   <header>
-    <a
-      href="account-management.html"
-      id="logo-refresh"
-      aria-label="Refresh current page"
-      title="Refresh current page"
-    >
-      <img
-        src="assets/images/QUILL_INK_MINI_WHITE.png"
-        alt="Quill &amp; Ink"
-      >
+    <a href="account-management.html" id="logo-refresh" aria-label="Refresh current page" title="Refresh current page">
+      <img src="assets/images/umai-logo.svg" alt="Umai Mart">
     </a>
 
     <div class="portal-header-actions">
-      <a href="portal.html">Back to client portal</a>
-      <button id="notifications-button" class="portal-notification-bell" type="button" hidden
-        aria-label="Notifications: 0 unread notifications" aria-expanded="false" aria-controls="notification-panel">
-        <svg xmlns="http://www.w3.org/2000/svg" class="portal-bell-icon" aria-hidden="true" focusable="false" viewBox="0 0 512 512"><path d="M427.68 351.43C402 320 383.87 304 383.87 217.35 383.87 138 343.35 109.73 310 96c-4.43-1.82-8.6-6-9.95-10.55C294.2 65.54 277.8 48 256 48s-38.21 17.55-44 37.47c-1.35 4.6-5.52 8.71-9.95 10.53-33.39 13.75-73.87 41.92-73.87 121.35C128.13 304 110 320 84.32 351.43 73.68 364.45 83 384 101.61 384h308.88c18.51 0 27.77-19.61 17.19-32.57zM320 384v16a64 64 0 01-128 0v-16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/></svg>
-        <span id="notification-count" class="portal-notification-badge" aria-hidden="true" hidden>0</span>
+      <a href="portal.html">Back to delivery portal</a>
+      <button id="notifications-button" class="portal-notification-bell" type="button" hidden="" aria-label="Notifications: 0 unread notifications" aria-expanded="false" aria-controls="notification-panel">
+        <svg xmlns="http://www.w3.org/2000/svg" class="portal-bell-icon" aria-hidden="true" focusable="false" viewBox="0 0 512 512"><path d="M427.68 351.43C402 320 383.87 304 383.87 217.35 383.87 138 343.35 109.73 310 96c-4.43-1.82-8.6-6-9.95-10.55C294.2 65.54 277.8 48 256 48s-38.21 17.55-44 37.47c-1.35 4.6-5.52 8.71-9.95 10.53-33.39 13.75-73.87 41.92-73.87 121.35C128.13 304 110 320 84.32 351.43 73.68 364.45 83 384 101.61 384h308.88c18.51 0 27.77-19.61 17.19-32.57zM320 384v16a64 64 0 01-128 0v-16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"></path></svg>
+        <span id="notification-count" class="portal-notification-badge" aria-hidden="true" hidden="">0</span>
       </button>
-      <button id="portal-menu-button" class="portal-menu-toggle" type="button" hidden aria-label="Open portal menu" aria-expanded="false" aria-controls="portal-menu">
+      <button id="portal-menu-button" class="portal-menu-toggle" type="button" hidden="" aria-label="Open portal menu" aria-expanded="false" aria-controls="portal-menu">
         <span aria-hidden="true">☰</span>
       </button>
     </div>
-      <nav class="portal-navigation portal-menu" id="portal-menu" hidden aria-label="Portal pages">
+      <nav class="portal-navigation portal-menu" id="portal-menu" hidden="" aria-label="Portal pages">
         <a class="button-link" href="portal.html">
-          Client portal
+          Delivery portal
         </a>
 
         <a class="button-link" href="account-settings.html">
           Account settings
         </a>
 
-        <a
-          class="button-link"
-          id="management-link"
-          href="account-management.html"
-          hidden
-          aria-current="page"
-        >
+        <a class="button-link" id="management-link" href="account-management.html" hidden="" aria-current="page">
           Account management
         </a>
 
-        <a class="button-link" id="staff-chat-link" href="staff-chat.html" hidden>Staff chat</a>
+        <a class="button-link" id="staff-chat-link" href="staff-chat.html" hidden="">Staff chat</a>
 
 
 
         <button id="logout">Sign out</button>
       </nav>
-    <section class="card" id="notification-panel" hidden aria-labelledby="notification-title">
+    <section class="card" id="notification-panel" hidden="" aria-labelledby="notification-title">
         <div class="notification-panel-heading"><h2 id="notification-title">Notifications</h2><button id="close-notifications" type="button" aria-label="Close notifications"><span aria-hidden="true">×</span></button></div>
         <p id="notification-state" class="note" role="status" aria-live="polite"></p>
         <div id="notification-list" class="notification-list"></div>
@@ -84,9 +64,9 @@
   <!-- Hero -->
   <section class="portal-hero">
     <div class="hero-inner">
-      <p class="eyebrow">PRECISION IN EVERY DETAIL</p>
-      <h1>Account management</h1>
-      <p>Manage staff assignments, client packages, account recovery, and customer deletion.</p>
+      <p class="eyebrow">LITTLE STORE. BIG GOODNESS.</p>
+      <h1>Store management.</h1>
+      <p>Orders, parcels, products and the people who keep Umai moving.</p>
     </div>
   </section>
 
@@ -106,53 +86,28 @@
       <form id="auth-form">
         <label>
           Username
-          <input
-            id="username"
-            autocomplete="username"
-            minlength="3"
-            maxlength="24"
-            pattern="[A-Za-z0-9_]{3,24}"
-            required
-          >
+          <input id="username" autocomplete="username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]{3,24}" required="">
           <span class="note">
             3–24 letters, numbers, or underscores.
           </span>
         </label>
 
-        <label id="registration-type-label" hidden>
-          Account type
-          <select id="registration-type">
-            <option value="business_owner">Business owner</option>
-            <option value="employee">Employee</option>
-          </select>
-          <span class="note">Employees have no business until an administrator adds them or they accept a business invitation.</span>
-        </label>
+        <p class="note">New accounts are customer accounts. Only an administrator can grant staff access.</p>
 
-        <label id="display-label" hidden>
-          <span id="registration-name-label">Business name</span>
+        <label id="display-label" hidden="">
+          <span id="registration-name-label">Full name / account name</span>
           <input id="display-name" maxlength="80">
         </label>
 
         <label>
           Password
-          <input
-            id="password"
-            type="password"
-            autocomplete="current-password"
-            minlength="12"
-            maxlength="128"
-            required
-          >
+          <input id="password" type="password" autocomplete="current-password" minlength="12" maxlength="128" required="">
           <span class="note">At least 12 characters.</span>
         </label>
 
-        <label id="recovery-label" hidden>
+        <label id="recovery-label" hidden="">
           Recovery code
-          <input
-            id="recovery-input"
-            autocomplete="off"
-            maxlength="80"
-          >
+          <input id="recovery-input" autocomplete="off" maxlength="80">
         </label>
 
         <button id="auth-submit" type="submit">Sign in</button>
@@ -165,17 +120,16 @@
     </section>
 
     <!-- Recovery code -->
-    <section class="card" id="recovery-result" hidden>
+    <section class="card" id="recovery-result" hidden="">
       <h2>Save your recovery code</h2>
 
       <p>
-        This code can reset your password. Store it privately outside the
-        in-game phone. A successful reset replaces it with a new code.
+        This code can reset your password. Store it privately in a safe place. A successful reset replaces it with a new code.
       </p>
 
       <label>
         Recovery code
-        <input id="recovery-output" readonly>
+        <input id="recovery-output" readonly="">
       </label>
 
       <button id="copy-registration-recovery" type="button">Copy recovery code</button>
@@ -186,7 +140,7 @@
     </section>
 
     <!-- Required password change -->
-    <section class="card" id="password-change" hidden>
+    <section class="card" id="password-change" hidden="">
       <h2>Choose your own password</h2>
 
       <p>
@@ -197,24 +151,12 @@
       <form id="temporary-form">
         <label>
           Temporary password
-          <input
-            id="current-temporary"
-            type="password"
-            autocomplete="current-password"
-            required
-          >
+          <input id="current-temporary" type="password" autocomplete="current-password" required="">
         </label>
 
         <label>
           New password
-          <input
-            id="permanent-password"
-            type="password"
-            minlength="12"
-            maxlength="128"
-            autocomplete="new-password"
-            required
-          >
+          <input id="permanent-password" type="password" minlength="12" maxlength="128" autocomplete="new-password" required="">
         </label>
 
         <button>Save new password</button>
@@ -224,22 +166,22 @@
     </section>
 
     <!-- Restricted access -->
-    <section id="restricted" class="card" hidden>
+    <section id="restricted" class="card" hidden="">
       <h2>Staff access required</h2>
-      <p>This page is available to Quill &amp; Ink staff.</p>
+      <p>This page is available to Umai Mart staff.</p>
 
       <a class="button-link" href="portal.html">
-        Back to client portal
+        Back to delivery portal
       </a>
 
       <button id="restricted-logout">Sign out</button>
     </section>
 
     <!-- Account management dashboard -->
-    <section id="dashboard" hidden>
+    <section id="dashboard" hidden="">
       <div class="actions">
         <div>
-          <p class="eyebrow" id="role-label">CLIENT ACCOUNT</p>
+          <p class="eyebrow" id="role-label">CUSTOMER ACCOUNT</p>
           <h2 id="account-name"></h2>
         </div>
       </div>
@@ -248,16 +190,16 @@
 
 
 
-      <section class="card" id="announcement-composer" hidden>
+      <section class="card" id="announcement-composer" hidden="">
         <p class="eyebrow">ADMINISTRATOR · ALL ACCOUNTS</p>
         <h2>Send an announcement</h2>
-        <p>Post a notice to every existing account’s notification bell. Accounts with push enabled also receive a generic OOC reminder on their subscribed devices.</p>
+        <p>Post a notice to every existing account’s notification bell. Accounts with push enabled also receive a generic  reminder on their subscribed devices.</p>
         <form id="announcement-form">
           <label>Title
-            <input id="announcement-title" maxlength="100" required>
+            <input id="announcement-title" maxlength="100" required="">
           </label>
           <label>Announcement
-            <textarea id="announcement-body" rows="5" maxlength="2000" required></textarea>
+            <textarea id="announcement-body" rows="5" maxlength="2000" required=""></textarea>
           </label>
           <div class="announcement-preview" aria-label="Announcement preview">
             <p class="eyebrow">PREVIEW</p>
@@ -265,7 +207,7 @@
             <p id="announcement-preview-body">Your announcement will appear here.</p>
           </div>
           <label class="announcement-confirmation">
-            <input id="announcement-confirmed" type="checkbox" required>
+            <input id="announcement-confirmed" type="checkbox" required="">
             <span>I intend to send this announcement to every portal account.</span>
           </label>
           <button type="submit">Send to all accounts</button>
@@ -273,7 +215,7 @@
         <p id="announcement-send-status" role="status" aria-live="polite"></p>
       </section>
 
-      <label id="client-label" hidden>
+      <section id="store-manager" class="card" hidden=""><p class="eyebrow">ADMINISTRATOR · SHOP SETTINGS</p><h2>Products &amp; stock</h2><button id="store-menu-refresh" type="button">Reload stock</button><div class="catalogue-actions"><button type="button" id="store-add-product">Add new item +</button><p class="note">Add a product once here. Visible products appear on the storefront automatically.</p></div><label>Product<select id="store-product-select"><option value="">New product</option></select></label><form id="store-product-form"><label>Name<input id="store-product-name" maxlength="100" required=""></label><label>Category<input id="store-product-category" required="" maxlength="60" list="store-category-options" placeholder="Choose a category or type a new one"><datalist id="store-category-options"></datalist></label><label>Description<textarea id="store-product-description" maxlength="300" rows="2"></textarea></label><label>Price ($)<input id="store-product-price" type="number" min="0" max="10000000" step="0.01" required=""></label><label>Available stock<input id="store-product-stock" type="number" min="0" max="100000" required=""></label><div class="catalogue-photo"><label>Product photo<input id="store-product-file" type="file" accept="image/jpeg,image/png,image/webp"><span class="note">JPG, PNG or WebP, up to 5 MB. Product photos are public.</span></label><button type="button" id="store-upload-photo">Upload selected photo</button><label>Photo URL (optional)<input id="store-product-image" type="url" maxlength="2048" placeholder="https://…"><span class="note">Upload a photo above or paste a hosted image URL. Leave blank to use an illustration.</span></label></div><label>Illustration<select id="store-product-art"><option>onigiri</option><option>bento</option><option>ramen</option><option>tea</option><option>soda</option><option>chips</option><option>candy</option><option>pantry</option></select></label><label class="check-row"><input type="checkbox" id="store-product-available" checked="">Show this product on the menu</label><div class="catalogue-preview" aria-label="Product preview"><p class="eyebrow">LIVE PREVIEW</p><img id="store-preview-image" alt="Product preview" width="220" height="180"><strong id="store-preview-name">New item</strong><p id="store-preview-category">Category</p><p id="store-preview-description"></p><span id="store-preview-price">$0.00</span></div><button>Save item</button></form><p id="store-manager-status" role="status" aria-live="polite"></p><details class="store-preferences"><summary>Delivery fees and ordering settings</summary><form id="store-settings-form"><label>Delivery fee ($)<input type="number" id="store-delivery-fee" min="0" max="10000000" step="0.01" required=""></label><label>Parcel holding fee ($)<input type="number" id="store-parcel-fee" min="0" max="10000000" step="0.01" required=""></label><label class="check-row"><input type="checkbox" id="store-enabled">Accept new orders and parcel bookings</label><label class="check-row"><input type="checkbox" id="store-sample">Show sample menu / price notice</label><button>Save store settings</button></form></details></section><label id="client-label" hidden="">
         Account to manage
         <select id="client-select"></select>
       </label>
@@ -282,110 +224,69 @@
 
       <!-- Staff-assisted recovery -->
           <!-- Staff package editor -->
-          <section class="card" id="service-editor" hidden>
-            <h2>Manage client package</h2>
+          
 
-            <form id="service-form">
-              <label>
-                Package name
-                <input
-                  id="package-input"
-                  maxlength="100"
-                  placeholder="e.g. Ledger Management"
-                >
-              </label>
-
-              <label>
-                Monthly cost
-                <input
-                  id="cost-input"
-                  type="number"
-                  min="0"
-                  max="9999999999"
-                  step="0.01"
-                  required
-                >
-              </label>
-
-              <label>
-                Contract link
-                <input
-                  id="contract-input"
-                  type="url"
-                  maxlength="2048"
-                  placeholder="https://…"
-                >
-              </label>
-
-              <label>
-                Documentation link
-                <input
-                  id="documentation-input"
-                  type="url"
-                  maxlength="2048"
-                  placeholder="https://…"
-                >
-              </label>
-
-              <button>Save package details</button>
-            </form>
-
-            <p class="note">
-              Leave a link blank if it is not available yet.
-            </p>
-          </section>
-
-      <section class="card" id="owner-downgrade-panel" hidden>
-        <h2>Downgrade business owner to employee</h2>
+      <section class="card" id="owner-downgrade-panel" hidden="">
+        <h2>Downgrade customer account owner to employee</h2>
         <p id="owner-downgrade-target"></p>
         <p>Their login and memberships in other businesses stay with this account. Their former business package, documents, discussions, members and staff assignments are retained but unavailable while this account is an employee. Upgrading it again restores that business access.</p>
         <p>The account will be signed out and must sign in again as an employee. Their private administrator chat remains available.</p>
         <form id="owner-downgrade-form">
-          <label>Full name<input id="employee-character-name" maxlength="80" required></label>
-          <label>Type the selected account's exact username<input id="owner-downgrade-username" autocomplete="off" required></label>
+          <label>Full name<input id="employee-character-name" maxlength="80" required=""></label>
+          <label>Type the selected account's exact username<input id="owner-downgrade-username" autocomplete="off" required=""></label>
           <label style="display: flex; align-items: center; gap: 12px;">
             <input id="owner-downgrade-confirmed" type="checkbox" required="" style="width: auto; margin: 0; flex-shrink: 0;">
             <span>
-              I intend to downgrade the selected business owner to an employee.
+              I intend to downgrade the selected customer account owner to an employee.
             </span>
           </label>
           <button type="submit">Downgrade to employee</button>
         </form>
       </section>
 
-      <section class="card" id="owner-upgrade-panel" hidden>
-        <h2>Upgrade employee to business owner</h2>
+      <section class="card" id="staff-promotion-panel" hidden>
+        <h2>Upgrade customer to staff</h2>
+        <p id="staff-promotion-target"></p>
+        <p>Staff can use team chat and manage only assigned customers, orders and parcels. This does not grant administrator access. Customer records are retained, but the account will use the staff portal. The person must sign in again.</p>
+        <form id="staff-promotion-form">
+          <label><input id="staff-promotion-confirmed" type="checkbox" required> I intend to grant staff access to this account.</label>
+          <button type="submit">Upgrade to staff</button>
+        </form>
+      </section>
+
+      <section class="card" id="owner-upgrade-panel" hidden="">
+        <h2>Upgrade employee to customer account owner</h2>
         <p id="owner-upgrade-target"></p>
         <p>This adds their own business portal. Their login, existing memberships and administrator conversation are preserved.</p>
         <form id="owner-upgrade-form">
-          <label>Business name<input id="owner-business-name" maxlength="80" required></label>
-          <label><input id="owner-upgrade-confirmed" type="checkbox" required> I intend to upgrade the selected employee to a business owner.</label>
+          <label>Full name / account name<input id="owner-business-name" maxlength="80" required=""></label>
+          <label><input id="owner-upgrade-confirmed" type="checkbox" required=""> I intend to upgrade the selected employee to a customer account owner.</label>
           <button>Upgrade selected employee</button>
         </form>
       </section>
 
-      <section class="card" id="employee-members-panel" hidden>
+      <section class="card" id="employee-members-panel" hidden="">
         <h2>Business employees and members</h2>
         <p>Add an existing employee login to this business. Access is active immediately; their password and recovery code stay unchanged.</p>
         <form id="employee-add-form">
-          <label>Employee<select id="employee-select" required></select></label>
+          <label>Employee<select id="employee-select" required=""></select></label>
           <button>Add employee to selected business</button>
         </form>
         <div id="employee-member-list"></div>
       </section>
 
-      <section class="card" id="staff-assignment-panel" hidden>
+      <section class="card" id="staff-assignment-panel" hidden="">
         <h2>Assigned staff</h2>
         <p>Assigned staff can manage this business's package and customer discussion. Administrators retain access to all accounts.</p>
         <form id="staff-assignment-form">
-          <label>Staff member<select id="assignment-staff" required></select></label>
+          <label>Staff member<select id="assignment-staff" required=""></select></label>
           <button>Assign to selected business</button>
         </form>
         <div id="staff-assignment-list"></div>
         <p id="assignment-note" class="note"></p>
       </section>
 
-      <section class="card" id="staff-recovery" hidden>
+      <section class="card" id="staff-recovery" hidden="">
         <h2>Recover selected account</h2>
 
         <p>
@@ -397,22 +298,11 @@
         <form id="staff-reset-form">
           <label>
             Identity verification note
-            <textarea
-              id="verification-note"
-              minlength="10"
-              maxlength="500"
-              rows="3"
-              required
-              placeholder="Describe how you verified the account owner. Do not include passwords or recovery codes."
-            ></textarea>
+            <textarea id="verification-note" minlength="10" maxlength="500" rows="3" required="" placeholder="Describe how you verified the account owner. Do not include passwords or recovery codes."></textarea>
           </label>
 
           <label>
-            <input
-              id="identity-confirmed"
-              type="checkbox"
-              required
-            >
+            <input id="identity-confirmed" type="checkbox" required="">
             I have verified this person's identity and intend to reset
             the selected account.
           </label>
@@ -420,7 +310,7 @@
           <button>Issue temporary password</button>
         </form>
 
-        <div id="staff-reset-result" hidden>
+        <div id="staff-reset-result" hidden="">
           <p>
             Share these credentials privately with the verified owner.
             They are shown only for this reset. The previous recovery
@@ -429,12 +319,12 @@
 
           <label>
             Temporary password
-            <input id="issued-password" readonly>
+            <input id="issued-password" readonly="">
           </label>
 
           <label>
             Recovery code
-            <input id="issued-code" readonly>
+            <input id="issued-code" readonly="">
           </label>
 
           <p>
@@ -449,7 +339,7 @@
       </section>
 
       <!-- Customer account deletion -->
-      <section class="card danger-zone" id="account-deletion" hidden>
+      <section class="card danger-zone" id="account-deletion" hidden="">
         <h2>Delete selected customer account</h2>
 
         <p id="delete-target"></p>
@@ -463,29 +353,16 @@
         <form id="delete-form">
           <label>
             Type the customer's exact username
-            <input
-              id="delete-confirm"
-              autocomplete="off"
-              required
-            >
+            <input id="delete-confirm" autocomplete="off" required="">
           </label>
 
           <label>
             Your administrator password
-            <input
-              id="delete-password"
-              type="password"
-              autocomplete="current-password"
-              required
-            >
+            <input id="delete-password" type="password" autocomplete="current-password" required="">
           </label>
 
           <label>
-            <input
-              id="delete-acknowledged"
-              type="checkbox"
-              required
-            >
+            <input id="delete-acknowledged" type="checkbox" required="">
             I intend to permanently delete this customer account and
             its portal records.
           </label>
@@ -498,21 +375,46 @@
     </section>
 
     <!-- Toast notifications -->
-    <div
-      id="copy-toast"
-      class="toast"
-      role="status"
-      aria-live="polite"
-      aria-atomic="true"
-    ></div>
+    <div id="copy-toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
     <noscript>This portal needs JavaScript enabled.</noscript>
-  </main>
+  <div hidden="" id="legacy-finance-markup"><section class="card" id="service-editor" hidden="">
+            <h2>Manage client package</h2>
+
+            <form id="service-form">
+              <label>
+                Package name
+                <input id="package-input" maxlength="100" placeholder="e.g. Ledger Management">
+              </label>
+
+              <label>
+                Monthly cost
+                <input id="cost-input" type="number" min="0" max="9999999999" step="0.01" required="">
+              </label>
+
+              <label>
+                Contract link
+                <input id="contract-input" type="url" maxlength="2048" placeholder="https://…">
+              </label>
+
+              <label>
+                Documentation link
+                <input id="documentation-input" type="url" maxlength="2048" placeholder="https://…">
+              </label>
+
+              <button>Save package details</button>
+            </form>
+
+            <p class="note">
+              Leave a link blank if it is not available yet.
+            </p>
+          </section></div></main>
 
   <!-- Scripts -->
-  <script src="assets/js/portal-compat.js?v=phone-1"></script>
+  <script src="assets/js/portal-compat.js?v=catalogue-1"></script>
   <script src="assets/js/vendor/supabase-2.57.4-compat.js?v=phone-1"></script>
   <script src="assets/js/portal-config.js"></script>
-  <script src="assets/js/portal.js?v=two-sessions-announcements-1"></script>
-</body>
-</html>
+  <script src="assets/js/store-config.js?v=catalogue-1"></script><script src="assets/js/product-images.js?v=catalogue-1"></script><script src="assets/js/delivery.js?v=collection-1"></script><script src="assets/js/portal-demo.js?v=collection-1"></script><script src="assets/js/portal.js?v=staff-1"></script>
+
+
+</body></html>
