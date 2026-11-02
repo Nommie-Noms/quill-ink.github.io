@@ -1,72 +1,95 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Account settings | Umai Mart</title>
+  <title>Account settings | Quill &amp; Ink Services</title>
 
-  <link rel="icon" href="assets/images/app-icon.svg">
+  <link rel="icon" href="assets/images/Favicon-3.png">
 
-  
-  
-  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&amp;family=Source+Sans+Pro:wght@600;700&amp;display=swap"
+    rel="stylesheet"
+  >
 
-  <link rel="stylesheet" href="assets/css/portal.css?v=catalogue-1">
+  <link rel="stylesheet" href="assets/css/portal.css?v=all-account-push-1">
   <link rel="manifest" href="portal.webmanifest?v=app-logo-1">
-  <meta name="theme-color" content="#174c3d">
+  <meta name="theme-color" content="#111b5a">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
-<link rel="stylesheet" href="assets/css/store.css?v=catalogue-1"><link rel="stylesheet" href="assets/css/umai-portal.css?v=catalogue-1"></head>
+  <link rel="apple-touch-icon" href="apple-touch-icon.png?v=app-logo-1">
+</head>
 
-<body data-portal-page="settings" class="umai-portal">
+<body data-portal-page="settings">
   <!-- Header -->
   <header>
-    <a href="account-settings.html" id="logo-refresh" aria-label="Refresh current page" title="Refresh current page">
-      <img src="assets/images/umai-logo.svg" alt="Umai Mart">
+    <a
+      href="account-settings.html"
+      id="logo-refresh"
+      aria-label="Refresh current page"
+      title="Refresh current page"
+    >
+      <img
+        src="assets/images/QUILL_INK_MINI_WHITE.png"
+        alt="Quill &amp; Ink"
+      >
     </a>
 
     <div class="portal-header-actions">
-      <a href="portal.html">Back to delivery portal</a>
-      <button id="notifications-button" class="portal-notification-bell" type="button" hidden="" aria-label="Notifications: 0 unread notifications" aria-expanded="false" aria-controls="notification-panel">
-        <svg xmlns="http://www.w3.org/2000/svg" class="portal-bell-icon" aria-hidden="true" focusable="false" viewBox="0 0 512 512"><path d="M427.68 351.43C402 320 383.87 304 383.87 217.35 383.87 138 343.35 109.73 310 96c-4.43-1.82-8.6-6-9.95-10.55C294.2 65.54 277.8 48 256 48s-38.21 17.55-44 37.47c-1.35 4.6-5.52 8.71-9.95 10.53-33.39 13.75-73.87 41.92-73.87 121.35C128.13 304 110 320 84.32 351.43 73.68 364.45 83 384 101.61 384h308.88c18.51 0 27.77-19.61 17.19-32.57zM320 384v16a64 64 0 01-128 0v-16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"></path></svg>
-        <span id="notification-count" class="portal-notification-badge" aria-hidden="true" hidden="">0</span>
+      <a href="portal.html">Back to client portal</a>
+      <button id="notifications-button" class="portal-notification-bell" type="button" hidden
+        aria-label="Notifications: 0 unread client messages" aria-expanded="false" aria-controls="notification-panel">
+        <svg xmlns="http://www.w3.org/2000/svg" class="portal-bell-icon" aria-hidden="true" focusable="false" viewBox="0 0 512 512"><path d="M427.68 351.43C402 320 383.87 304 383.87 217.35 383.87 138 343.35 109.73 310 96c-4.43-1.82-8.6-6-9.95-10.55C294.2 65.54 277.8 48 256 48s-38.21 17.55-44 37.47c-1.35 4.6-5.52 8.71-9.95 10.53-33.39 13.75-73.87 41.92-73.87 121.35C128.13 304 110 320 84.32 351.43 73.68 364.45 83 384 101.61 384h308.88c18.51 0 27.77-19.61 17.19-32.57zM320 384v16a64 64 0 01-128 0v-16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/></svg>
+        <span id="notification-count" class="portal-notification-badge" aria-hidden="true" hidden>0</span>
       </button>
-      <button id="portal-menu-button" class="portal-menu-toggle" type="button" hidden="" aria-label="Open portal menu" aria-expanded="false" aria-controls="portal-menu">
+      <button id="portal-menu-button" class="portal-menu-toggle" type="button" hidden aria-label="Open portal menu" aria-expanded="false" aria-controls="portal-menu">
         <span aria-hidden="true">☰</span>
       </button>
     </div>
-      <nav class="portal-navigation portal-menu" id="portal-menu" hidden="" aria-label="Portal pages">
+      <nav class="portal-navigation portal-menu" id="portal-menu" hidden aria-label="Portal pages">
         <a class="button-link" href="portal.html">
-          Delivery portal
+          Client portal
         </a>
 
-        <a class="button-link" href="account-settings.html" aria-current="page">
+        <a
+          class="button-link"
+          href="account-settings.html"
+          aria-current="page"
+        >
           Account settings
         </a>
 
-        <a class="button-link" id="management-link" href="account-management.html" hidden="">
+        <a
+          class="button-link"
+          id="management-link"
+          href="account-management.html"
+          hidden
+        >
           Account management
         </a>
 
-        <a class="button-link" id="staff-chat-link" href="staff-chat.html" hidden="">Staff chat</a>
+        <a class="button-link" id="staff-chat-link" href="staff-chat.html" hidden>Staff chat</a>
 
 
 
         <button id="logout">Sign out</button>
       </nav>
-    <section class="card" id="notification-panel" hidden="" aria-labelledby="notification-title">
-        <div class="notification-panel-heading"><h2 id="notification-title">Notifications</h2><button id="close-notifications" type="button" aria-label="Close notifications"><span aria-hidden="true">×</span></button></div>
+    <section class="card" id="notification-panel" hidden aria-labelledby="notification-title">
+        <div class="notification-panel-heading"><h2 id="notification-title">Messages</h2><button id="close-notifications" type="button" aria-label="Close notifications"><span aria-hidden="true">×</span></button></div>
         <p id="notification-state" class="note" role="status" aria-live="polite"></p>
         <div id="notification-list" class="notification-list"></div>
-        <p class="note">Opening a conversation marks the messages you view as read for your account. Use “Mark as read” to dismiss an announcement.</p>
+        <p class="note">Opening a conversation marks the messages you view as read for your account.</p>
       </section>
   </header>
 
   <!-- Hero -->
   <section class="portal-hero">
     <div class="hero-inner">
-      <p class="eyebrow">LITTLE STORE. BIG GOODNESS.</p>
-      <h1>Your account.</h1>
-      <p>Your details, shared accounts, recovery and  notifications.</p>
+      <p class="eyebrow">PRECISION IN EVERY DETAIL</p>
+      <h1>Account settings</h1>
+      <p>Manage your login and business membership.</p>
     </div>
   </section>
 
@@ -86,28 +109,53 @@
       <form id="auth-form">
         <label>
           Username
-          <input id="username" autocomplete="username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]{3,24}" required="">
+          <input
+            id="username"
+            autocomplete="username"
+            minlength="3"
+            maxlength="24"
+            pattern="[A-Za-z0-9_]{3,24}"
+            required
+          >
           <span class="note">
             3–24 letters, numbers, or underscores.
           </span>
         </label>
 
-        <p class="note">New accounts are customer accounts. Only an administrator can grant staff access.</p>
+        <label id="registration-type-label" hidden>
+          Account type
+          <select id="registration-type">
+            <option value="business_owner">Business owner</option>
+            <option value="employee">Employee</option>
+          </select>
+          <span class="note">Employees have no business until an administrator adds them or they accept a business invitation.</span>
+        </label>
 
-        <label id="display-label" hidden="">
-          <span id="registration-name-label">Full name / account name</span>
+        <label id="display-label" hidden>
+          <span id="registration-name-label">Business name</span>
           <input id="display-name" maxlength="80">
         </label>
 
         <label>
           Password
-          <input id="password" type="password" autocomplete="current-password" minlength="12" maxlength="128" required="">
+          <input
+            id="password"
+            type="password"
+            autocomplete="current-password"
+            minlength="12"
+            maxlength="128"
+            required
+          >
           <span class="note">At least 12 characters.</span>
         </label>
 
-        <label id="recovery-label" hidden="">
+        <label id="recovery-label" hidden>
           Recovery code
-          <input id="recovery-input" autocomplete="off" maxlength="80">
+          <input
+            id="recovery-input"
+            autocomplete="off"
+            maxlength="80"
+          >
         </label>
 
         <button id="auth-submit" type="submit">Sign in</button>
@@ -120,16 +168,17 @@
     </section>
 
     <!-- Recovery code -->
-    <section class="card" id="recovery-result" hidden="">
+    <section class="card" id="recovery-result" hidden>
       <h2>Save your recovery code</h2>
 
       <p>
-        This code can reset your password. Store it privately in a safe place. A successful reset replaces it with a new code.
+        This code can reset your password. Store it privately outside the
+        in-game phone. A successful reset replaces it with a new code.
       </p>
 
       <label>
         Recovery code
-        <input id="recovery-output" readonly="">
+        <input id="recovery-output" readonly>
       </label>
 
       <button id="copy-registration-recovery" type="button">Copy recovery code</button>
@@ -140,7 +189,7 @@
     </section>
 
     <!-- Required password change -->
-    <section class="card" id="password-change" hidden="">
+    <section class="card" id="password-change" hidden>
       <h2>Choose your own password</h2>
 
       <p>
@@ -151,12 +200,24 @@
       <form id="temporary-form">
         <label>
           Temporary password
-          <input id="current-temporary" type="password" autocomplete="current-password" required="">
+          <input
+            id="current-temporary"
+            type="password"
+            autocomplete="current-password"
+            required
+          >
         </label>
 
         <label>
           New password
-          <input id="permanent-password" type="password" minlength="12" maxlength="128" autocomplete="new-password" required="">
+          <input
+            id="permanent-password"
+            type="password"
+            minlength="12"
+            maxlength="128"
+            autocomplete="new-password"
+            required
+          >
         </label>
 
         <button>Save new password</button>
@@ -166,22 +227,22 @@
     </section>
 
     <!-- Restricted access -->
-    <section id="restricted" class="card" hidden="">
+    <section id="restricted" class="card" hidden>
       <h2>Staff access required</h2>
-      <p>This page is available to Umai Mart staff.</p>
+      <p>This page is available to Quill &amp; Ink staff.</p>
 
       <a class="button-link" href="portal.html">
-        Back to delivery portal
+        Back to client portal
       </a>
 
       <button id="restricted-logout">Sign out</button>
     </section>
 
     <!-- Account settings dashboard -->
-    <section id="dashboard" hidden="">
+    <section id="dashboard" hidden>
       <div class="actions">
         <div>
-          <p class="eyebrow" id="role-label">CUSTOMER ACCOUNT</p>
+          <p class="eyebrow" id="role-label">CLIENT ACCOUNT</p>
           <h2 id="account-name"></h2>
         </div>
       </div>
@@ -190,11 +251,11 @@
 
 
 
-      <section class="card account-settings" id="portal-push-settings" hidden="">
+      <section class="card account-settings" id="portal-push-settings" hidden>
         <p class="eyebrow">OPTIONAL · OUT OF CHARACTER</p>
         <h2>Push notifications</h2>
         <p>Receive a reminder on this device when someone sends a message in a conversation available to your account, even when the portal page is closed.</p>
-        <aside class="push-privacy-notice" aria-label="Out of character notice">
+        <aside class="push-ooc-notice" aria-label="Out of character notice">
           <strong>OOC (Out of character) notice</strong>
           <p>These notifications are an out-of-character convenience. Receiving an alert does not give your character in-game knowledge. Keep OOC reminders separate from what your character learns through roleplay.</p>
         </aside>
@@ -202,17 +263,17 @@
         <p class="note">Enable notifications separately on each device. Alerts can continue after signing out; choose “Disable on this device” before signing out on a shared device. Enabling push for another account in the same browser switches this device to that account.</p>
         <p id="portal-push-status" role="status" aria-live="polite"></p>
         <div class="actions">
-          <button id="enable-portal-push" type="button" disabled="">Enable push notifications</button>
-          <button id="disable-portal-push" type="button" hidden="">Disable on this device</button>
+          <button id="enable-portal-push" type="button" disabled>Enable push notifications</button>
+          <button id="disable-portal-push" type="button" hidden>Disable on this device</button>
         </div>
         <details class="push-install-guide">
-          <summary>Quick guide: install Umai Mart as an app</summary>
-          <p>Use your real phone or computer browser and open <a href="portal.html">the delivery portal</a>. Installation and push alerts are not supported in the in-game phone.</p>
+          <summary>Quick guide: install Quill &amp; Ink as an app</summary>
+          <p>Use your real phone or computer browser and open <a href="portal.html">the client portal</a>. Installation and push alerts may not be supported in the in-game phone.</p>
           <h3>iPhone or iPad</h3>
           <ol>
             <li>Open the portal in Safari and tap <strong>Share</strong>.</li>
             <li>Select <strong>Add to Home Screen</strong>. If shown, keep <strong>Open as Web App</strong> switched on, then tap <strong>Add</strong>.</li>
-            <li>Open the new Umai Mart icon from your Home Screen and sign in.</li>
+            <li>Open the new Quill &amp; Ink icon from your Home Screen and sign in.</li>
             <li>Open <strong>Account settings</strong>, select <strong>Enable push notifications</strong> and allow notifications. Home Screen push requires iOS/iPadOS 16.4 or later.</li>
           </ol>
           <h3>Android</h3>
@@ -233,22 +294,36 @@
       <!-- Personal account details -->
       <section class="card account-settings">
         <h2>Your account settings</h2>
-        <p class="note">Your account can stay signed in on two browser sessions at once. A third sign-in replaces the oldest. Password changes and account recovery sign out both sessions.</p>
 
         <form id="profile-form">
           <label>
             Your username
-            <input id="settings-username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]{3,24}" autocomplete="username" required="">
+            <input
+              id="settings-username"
+              minlength="3"
+              maxlength="24"
+              pattern="[A-Za-z0-9_]{3,24}"
+              autocomplete="username"
+              required
+            >
           </label>
 
           <label>
-            <span id="settings-name-label">Your account name</span>
-            <input id="settings-business" maxlength="80" required="">
+            <span id="settings-name-label">Your business name</span>
+            <input
+              id="settings-business"
+              maxlength="80"
+              required
+            >
           </label>
 
           <label>
             Current password (required when changing username)
-            <input id="settings-password" type="password" autocomplete="current-password">
+            <input
+              id="settings-password"
+              type="password"
+              autocomplete="current-password"
+            >
           </label>
 
           <button>Save account settings</button>
@@ -265,29 +340,29 @@
         <h2>Change your password</h2>
         <p>This changes only your own login. Other business members keep their passwords.</p>
         <form id="own-password-form">
-          <label>Current password<input id="own-current-password" type="password" autocomplete="current-password" maxlength="128" required=""></label>
-          <label>New password<input id="own-new-password" type="password" autocomplete="new-password" minlength="12" maxlength="128" required=""></label>
-          <label>Confirm new password<input id="own-confirm-password" type="password" autocomplete="new-password" minlength="12" maxlength="128" required=""></label>
+          <label>Current password<input id="own-current-password" type="password" autocomplete="current-password" maxlength="128" required></label>
+          <label>New password<input id="own-new-password" type="password" autocomplete="new-password" minlength="12" maxlength="128" required></label>
+          <label>Confirm new password<input id="own-confirm-password" type="password" autocomplete="new-password" minlength="12" maxlength="128" required></label>
           <button>Change my password</button>
         </form>
       </section>
 
-      <section class="card" id="business-members-section" hidden="">
+      <section class="card" id="business-members-section" hidden>
         <h2>Members of your business</h2>
-        <p>You own this business. Invite an existing customer username; they must accept in their Account Settings. Members share your package, documents and discussion, but cannot change your account name or login.</p>
+        <p>You own this business. Invite an existing customer username; they must accept in their Account Settings. Members share your package, documents and discussion, but cannot change your business name or login.</p>
         <form id="member-invite-form">
-          <label>Registered username<input id="member-username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]{3,24}" autocomplete="off" required=""></label>
+          <label>Registered username<input id="member-username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]{3,24}" autocomplete="off" required></label>
           <button>Invite member</button>
         </form>
         <div id="business-member-list"></div>
       </section>
 
-      <section class="card" id="business-invitations-section" hidden="">
+      <section class="card" id="business-invitations-section" hidden>
         <h2>Business invitations</h2>
         <div id="business-invitations"></div>
       </section>
 
-      <section class="card" id="joined-business-section" hidden="">
+      <section class="card" id="joined-business-section" hidden>
         <h2>Businesses you have joined</h2>
         <p>Use the business selector in Client Portal to view a shared business. Its owner manages membership and business settings.</p>
         <div id="joined-business-list"></div>
@@ -301,16 +376,22 @@
         <form id="recovery-code-form">
           <label>
             Current password
-            <input id="own-recovery-password" type="password" autocomplete="current-password" maxlength="128" required="">
+            <input
+              id="own-recovery-password"
+              type="password"
+              autocomplete="current-password"
+              maxlength="128"
+              required
+            >
           </label>
           <button type="submit">Generate new recovery code</button>
         </form>
 
-        <div id="own-recovery-result" hidden="">
+        <div id="own-recovery-result" hidden>
           <p>Save this code privately. It is cleared when you leave or reload this page.</p>
           <label>
             Your new recovery code
-            <input id="own-recovery-code" readonly="" autocomplete="off" spellcheck="false">
+            <input id="own-recovery-code" readonly autocomplete="off" spellcheck="false">
           </label>
           <div class="portal-navigation">
             <button id="copy-own-recovery" type="button">Copy code</button>
@@ -321,16 +402,21 @@
     </section>
 
     <!-- Toast notifications -->
-    <div id="copy-toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+    <div
+      id="copy-toast"
+      class="toast"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
 
     <noscript>This portal needs JavaScript enabled.</noscript>
-  <div hidden="" id="legacy-finance-markup"></div></main>
+  </main>
 
   <!-- Scripts -->
-  <script src="assets/js/portal-compat.js?v=catalogue-1"></script>
+  <script src="assets/js/portal-compat.js?v=phone-1"></script>
   <script src="assets/js/vendor/supabase-2.57.4-compat.js?v=phone-1"></script>
   <script src="assets/js/portal-config.js"></script>
-  <script src="assets/js/store-config.js?v=catalogue-1"></script><script src="assets/js/product-images.js?v=catalogue-1"></script><script src="assets/js/delivery.js?v=collection-1"></script><script src="assets/js/portal-demo.js?v=collection-1"></script><script src="assets/js/portal.js?v=staff-1"></script>
-
-
-</body></html>
+  <script src="assets/js/portal.js?v=all-account-push-1"></script>
+</body>
+</html>
