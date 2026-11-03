@@ -20,6 +20,7 @@
   <meta name="theme-color" content="#111b5a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=app-logo-1">
+  <link rel="stylesheet" href="assets/css/multiple-businesses.css?v=multiple-businesses-1">
 </head>
 
 <body data-portal-page="management">
@@ -282,7 +283,7 @@
 
       <!-- Staff-assisted recovery -->
           <!-- Staff package editor -->
-          <section class="card" id="service-editor" hidden>
+          <section class="card" id="owned-business-management" hidden><h2>Businesses for this account</h2><p class="note">Select a business below before editing its package, staff assignments or members. Recovery and account deletion still apply to the selected person's entire login.</p><nav id="managed-business-switcher" class="business-switcher" aria-label="Businesses for selected account"></nav><form id="new-business-form" hidden><label>Additional business name<input id="new-business-name" maxlength="80" required></label><button>Add business to this owner</button></form></section><section class="card" id="service-editor" hidden>
             <h2>Manage client package</h2>
 
             <form id="service-form">
@@ -455,9 +456,9 @@
         <p id="delete-target"></p>
 
         <p>
-          This permanently deletes the customer's login, package details,
+          This permanently deletes the customer's login, every business they own, package details,
           messages, and saved ledger entries. It cannot be undone through
-          the portal. Linked documents themselves are not deleted. If this account owns a shared business, its membership links are removed too. Members keep their separate logins and their own businesses.
+          the portal. Linked documents themselves are not deleted. Membership links for all businesses owned by this account are removed too. Members keep their separate logins and their own businesses.
         </p>
 
         <form id="delete-form">
@@ -513,6 +514,6 @@
   <script src="assets/js/portal-compat.js?v=phone-1"></script>
   <script src="assets/js/vendor/supabase-2.57.4-compat.js?v=phone-1"></script>
   <script src="assets/js/portal-config.js"></script>
-  <script src="assets/js/portal.js?v=two-sessions-announcements-1"></script>
+  <script src="assets/js/portal.js?v=multiple-businesses-1"></script>
 </body>
 </html>

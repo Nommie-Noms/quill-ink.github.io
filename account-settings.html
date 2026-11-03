@@ -20,6 +20,7 @@
   <meta name="theme-color" content="#111b5a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=app-logo-1">
+  <link rel="stylesheet" href="assets/css/multiple-businesses.css?v=multiple-businesses-1">
 </head>
 
 <body data-portal-page="settings">
@@ -310,7 +311,7 @@
           </label>
 
           <label>
-            <span id="settings-name-label">Your business name</span>
+            <span id="settings-name-label">Account display name</span>
             <input
               id="settings-business"
               maxlength="80"
@@ -350,8 +351,8 @@
 
       <section class="card" id="business-members-section" hidden>
         <h2>Members of your business</h2>
-        <p>You own this business. Invite an existing customer username; they must accept in their Account Settings. Members share your package, documents and discussion, but cannot change your business name or login.</p>
-        <form id="member-invite-form">
+        <p>Select one of your businesses below. Invite an existing customer username; they must accept in their Account Settings. Members share your package, documents and discussion, but cannot change your business name or login.</p>
+        <label>Your business<select id="settings-business-select"></select></label><form id="business-rename-form"><label>Business name<input id="business-rename-input" maxlength="80" required></label><button>Save this business name</button></form><hr><form id="member-invite-form">
           <label>Registered username<input id="member-username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]{3,24}" autocomplete="off" required></label>
           <button>Invite member</button>
         </form>
@@ -365,7 +366,7 @@
 
       <section class="card" id="joined-business-section" hidden>
         <h2>Businesses you have joined</h2>
-        <p>Use the business selector in Client Portal to view a shared business. Its owner manages membership and business settings.</p>
+        <p>Use the business buttons in Client Portal to view a shared business. Its owner manages membership and business settings.</p>
         <div id="joined-business-list"></div>
       </section>
 
@@ -418,6 +419,6 @@
   <script src="assets/js/portal-compat.js?v=phone-1"></script>
   <script src="assets/js/vendor/supabase-2.57.4-compat.js?v=phone-1"></script>
   <script src="assets/js/portal-config.js"></script>
-  <script src="assets/js/portal.js?v=two-sessions-announcements-1"></script>
+  <script src="assets/js/portal.js?v=multiple-businesses-1"></script>
 </body>
 </html>
