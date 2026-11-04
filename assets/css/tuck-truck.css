@@ -1,5 +1,0 @@
-.tuck-truck-banner{background:#F9D6E0;color:#fff;text-align:center;padding:14px 24px;font:700 16px/1.5 Arial,Helvetica,sans-serif;overflow-wrap:anywhere;border-bottom:1px solid #EBC1CF}
-.tuck-truck-banner[hidden],#tuck-truck-management[hidden]{display:none!important}
-#tuck-truck-management .tuck-truck-toggle{display:flex;align-items:center;gap:10px}
-#tuck-truck-management .tuck-truck-toggle input{width:auto;margin:0;flex:0 0 auto}
-@media(max-width:600px){.tuck-truck-banner{font-size:14px;padding:12px 18px}}
