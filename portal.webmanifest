@@ -1,23 +1,23 @@
 {
   "id": "./portal.html",
-  "name": "Umai Mart Delivery",
-  "short_name": "Umai Mart",
+  "name": "Quill & Ink Portal",
+  "short_name": "Quill & Ink",
   "start_url": "./portal.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#FCFCFA",
-  "theme_color": "#F9D6E0",
+  "background_color": "#111b5a",
+  "theme_color": "#111b5a",
   "icons": [
     {
-      "src": "assets/images/app-icon-192.png",
-      "sizes": "192x192",
+      "src": "apple-touch-icon.png?v=app-logo-1",
+      "sizes": "1024x1024",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "assets/images/app-icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
+      "src": "portal-push-icon.svg?v=app-logo-1",
+      "sizes": "any",
+      "type": "image/svg+xml",
       "purpose": "any"
     }
   ]

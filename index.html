@@ -1,59 +1,351 @@
-<!DOCTYPE html><html lang="en"><head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#F9D6E0">
-  <meta name="description" content="Umai Mart — a konbini-inspired convenience store for everyday shopping. Browse snacks, drinks and everyday essentials in your neighbourhood.">
-  <title>Umai Mart — Little store. Big goodness.</title>
-  <link rel="icon" href="assets/images/app-icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
-  <link rel="stylesheet" href="assets/css/store.css?v=pink-1">
-  <script defer="" src="assets/js/store-config.js?v=catalogue-1"></script><script defer="" src="assets/js/portal-config.js"></script>
-  <script src="assets/js/product-images.js?v=catalogue-1" defer=""></script><script defer="" src="assets/js/store.js?v=catalogue-1"></script>
-  <link rel="stylesheet" href="assets/css/tuck-truck.css?v=pink-1">
-  <script defer src="assets/js/tuck-truck.js?v=1"></script>
-  <link rel="stylesheet" href="assets/css/pink-theme.css?v=pink-1">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quill & Ink Services</title>
+
+  <!-- 
+    - favicon
+  -->
+  <link rel="shortcut icon" href="assets/images/Favicon-3.png" type="image/png">
+
+  <!-- 
+    - custom css link
+  -->
+  <link rel="stylesheet" href="./assets/css/style.css?v=5">
+
+  <!-- 
+    - google font link
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Source+Sans+Pro:wght@600;700&display=swap"
+    rel="stylesheet">
 </head>
-<body>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <div class="top-strip"><span>YOUR NEIGHBOURHOOD · EVERYDAY GOODNESS</span><span>LITTLE STORE. BIG GOODNESS.</span></div>
-  <header class="site-header">
-    <a class="brand" href="index.html" aria-label="Umai Mart home"><img src="assets/images/umai-logo.svg?v=pink-1" width="210" height="63" alt="Umai Mart — Little store. Big goodness."></a>
-    <nav id="main-nav" aria-label="Main navigation">
-      <a href="#shop">The shelves</a><a href="#about">Our little store</a><a href="#visit">Find us</a>
-    </nav>
-    <div class="header-actions">
-      <a class="basket-button header-portal-button" href="portal.html">Delivery portal</a>
-      <button class="basket-button" id="open-basket" type="button" aria-haspopup="dialog">Your basket <span id="basket-count">0</span></button>
-      <button class="menu-button" id="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Open navigation">☰</button>
+
+<body id="top">
+
+  <!-- 
+    - #HEADER
+  -->
+
+  <header class="header" data-header>
+    <div class="container">
+
+      <div class="overlay" data-overlay></div>
+
+      <a href="" onclick="location.reload(); return false;" class="logo-link">
+        <img src="assets/images/QUILL_INK_MINI_WHITE.png"
+        alt="Quill & Ink" class="logo-img logo-light">
+      </a>
+
+      <nav class="navbar" data-navbar>
+
+        <div class="navbar-top">
+          <a href="#" class="logo">Quill & Ink</a>
+          
+          <button class="nav-close-btn" aria-label="Close Menu" data-nav-close-btn>
+            <ion-icon name="close-outline"></ion-icon>
+          </button>
+        </div>
+
+        <ul class="navbar-list">
+          <li class="navbar-item"><a href="portal.html" class="navbar-link">Client Portal</a></li>
+
+          <li class="navbar-item">
+            <a href="#home" class="navbar-link" data-navbar-link>Home</a>
+          </li>
+
+          <li class="navbar-item">
+            <a href="testimonials.html" class="navbar-link">Testimonials</a>
+          </li>
+
+          <li class="navbar-item">
+            <a href="#about" class="navbar-link" data-navbar-link>About</a>
+          </li>
+
+          <li class="navbar-item">
+            <a href="#services" class="navbar-link" data-navbar-link>Services</a>
+          </li>
+
+          <li class="navbar-item">
+            <a href="contact-us.html" class="navbar-link" data-navbar-link>Contact Us</a>
+          </li>
+
+        </ul>
+
+      </nav>
+
+      <button class="alert-btn" id="alertBtn" aria-label="Open alerts">
+        <ion-icon name="notifications-outline"></ion-icon>
+        <span class="alert-badge" id="alertBadge"></span>
+      </button>
+      
+      <button class="nav-open-btn" aria-label="Open Menu" data-nav-open-btn>
+        <ion-icon name="menu-outline"></ion-icon>
+      </button>
+
     </div>
   </header>
-  <div id="tuck-truck-banner" class="tuck-truck-banner" role="status" aria-live="polite" hidden></div>
-  <main id="main">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-copy">
-        <p class="eyebrow"><span class="small-spark" aria-hidden="true">✳</span> A LITTLE TASTE OF THE EVERYDAY</p>
-        <h1 id="hero-title">Good things.<br>Just around<br><span>the corner.</span></h1>
-        <p class="hero-description">Snack breaks. Late lunches. One more drink for the road. Your konbini-inspired corner store, made for life in your neighbourhood.</p>
-        <div class="hero-actions"><a class="button primary" href="#shop">Browse the shelves <span aria-hidden="true">↗</span></a></div>
-        <p class="hero-footnote">うまいマート <span aria-hidden="true">/</span> A little store with a lot of good stuff.</p>
+
+
+
+
+
+  <main>
+    <article>
+
+      <!-- 
+        - #HERO
+      -->
+
+      <section class="hero" id="home">
+        <div class="container">
+
+          <div class="hero-content">
+
+            <p class="hero-subtitle">Precision in Every Detail</p>
+
+            <p class="hero-text">
+              Quill and Ink is designed to work with new and existing businesses to help them build and manage their financial data and meet the Department of Commerce and Labor's standard.</p>
+
+          </div>
+
+          <figure class="hero-banner">
+            <img src="./assets/images/feautres-banner.png" width="694" height="529" loading="lazy" alt="hero-banner"
+              class="w-100 banner-animation">
+          </figure>
+
+        </div>
+      </section>
+
+
+
+
+
+      <!-- 
+        - #ABOUT
+      -->
+
+      <section class="section about" id="about">
+        <div class="container">
+
+          <div class="about-content">
+
+            <h2 class="h2 section-title underline">Why Us</h2>
+
+            <p class="about-text">
+              At Quill & Ink Services we will work with your business to tailor a Ledger to your business and it's scope, With quick support helping add new pages and correcting problems as soon as we can.
+            </p>
+            <p class="about-text">  
+              We aim to ensure your information stays up to the Department of Commerce and Labor's standards by keeping an up to date record of incoming and outgoing finances with weekly updates to ensure your business can stay running with little interference.
+            </p>
+
+          </div>
+
+        </div>
+      </section>
+
+
+
+
+
+      <!-- 
+        - #SERVICE
+      -->
+
+      <section class="section service" id="services">
+        <div class="container">
+
+          <h2 class="h2 section-title underline">Our Services</h2>
+
+          <ul class="service-list">
+
+            <li>
+              <div class="service-card">
+
+                <div class="card-icon">
+                  <ion-icon name="document-outline"></ion-icon>
+                </div>
+
+                <h3 class="h3 title">Ledger Management</h3>
+
+                <p class="text">
+                  We will update your ledger with information you provide.
+                <p>  
+
+                <p class="text">
+                  <b>New Business</b>
+                </p>  
+
+                <p class="text">
+                  From <b>$2500/Month</b> for 2 Months then <b>$4000</b> after.
+                </p>  
+
+                <p class="text">
+                  <b>Existing Business</b>
+                </p>
+                <p class="text"> 
+                  From <b>$4000/Month</b>
+                </p>
+
+              </div>
+            </li>
+
+            <li>
+              <div class="service-card">
+
+                <div class="card-icon">
+                  <ion-icon name="checkmark-circle-outline"></ion-icon>
+                </div>
+
+                <h3 class="h3 title">Audit Preparation</h3>
+
+                <p class="text">
+                  Got an Audit request from DoCL?
+                </p>
+                
+                <p class="text">
+                  We can help prepare your books before they are sent.
+                </p>
+                
+                <p class="text">
+                  Due to the audit process this is an urgent service. Please have the information to hand ready for our team.
+                </p>  
+                
+                <p class="text">  
+                  From <b>$6000</b>
+                </p>
+
+              </div>
+            </li>
+
+            <li>
+              <div class="service-card">
+
+                <div class="card-icon">
+                  <ion-icon name="create-outline"></ion-icon>
+                </div>
+
+                <h3 class="h3 title">Ledger Creation</h3>
+
+                <p class="text">
+                  Are you in need of a ledger?
+                </p>  
+                <p class="text">
+                  We can make you a ledger tailored for your business.
+                </p>
+                <p class="text">                  
+                  <b>New Business</b></p>
+                <p class="text">  
+                From <b>$2500</b>
+                </p>  
+
+                <p class="text">
+                  <b>Existing Business</b>
+                </p>
+                <p class="text">
+                  From <b>$5000</b>
+                </p>
+                <p class="text">
+                  We will transfer all transactions for the previous 3 months.
+                </p>
+
+              </div>
+             </li>
+            
+              <div class="service-card">
+
+                <div class="card-icon">
+                  <ion-icon name="clipboard-outline"></ion-icon>
+                </div>
+
+                <h3 class="h3 title">Ledger Editing</h3>                
+                
+                <p class="text">
+                  Need help reworking your ledger?
+                </p>  
+                <p class="text">
+                  We will modify your current ledger and help tailor it for your business.
+                </p>
+                <p class="text">  
+                  From <b>$4000</b>
+                </p>
+
+              </div>
+            </li>
+
+          </ul>
+
+        </div>
+      </section>
+
+<br>
+      
+  </div>
+
+  </article>
+</main>
+
+<br>
+  <!-- 
+    - #FOOTER
+  -->
+
+  <footer class="footer">
+    <div class="footer-bottom">
+      <div class="container">
+        
+        
+        <p class="copyright">
+          &copy; 2026 <a href="#" class="copyright-link">Quill & Ink Services</a>. All Right Reserved
+        </p>
       </div>
-      <figure class="hero-art"><img src="assets/images/store-haul.svg?v=pink-1" width="850" height="800" alt="Illustrated Umai Mart shopping bag with peach tea, onigiri, nori chips and melon soda."></figure>
-    </section>
-    <div class="ticker" aria-label="Ready to eat, snacks, drinks and everyday essentials"><span>READY TO EAT</span><span aria-hidden="true">✳</span><span>SNACK BREAKS</span><span aria-hidden="true">✳</span><span>COLD DRINKS</span><span aria-hidden="true">✳</span><span>EVERYDAY ESSENTIALS</span></div>
-    <section id="shop" class="shop-section section-wrap" aria-labelledby="shop-title">
-      <div class="section-heading"><div><p class="eyebrow">A QUICK LOOK AROUND</p><h2 id="shop-title">Meet your new<br>everyday favourites.</h2></div><p class="section-description">From the first bite to the last sip.<br>Find a little something for your day.</p></div>
-      <div class="shop-toolbar"><div id="category-filters" class="filters" role="group" aria-label="Filter products"><button type="button" data-category="All" aria-pressed="true">All the good stuff</button><button type="button" data-category="Ready to eat" aria-pressed="false">Ready to eat</button><button type="button" data-category="Snacks" aria-pressed="false">Snacks</button><button type="button" data-category="Drinks" aria-pressed="false">Drinks</button><button type="button" data-category="Pantry" aria-pressed="false">Pantry</button></div><span id="sample-label" class="sample-label">SAMPLE MENU · $</span></div>
-      <p class="menu-notice" id="menu-notice">This is a preview range with sample prices. Confirm live prices and availability in the delivery portal.</p>
-      <div id="product-grid" class="product-grid" aria-live="polite"></div>
-      <noscript><p>Enable JavaScript to browse the sample menu and save a basket. No orders are being accepted on this preview.</p></noscript>
-    </section>
-    <section id="about" class="about-section" aria-labelledby="about-title"><div class="about-label"><span class="about-symbol" aria-hidden="true">う</span><p>YOUR FRIENDLY<br>NEIGHBOURHOOD UMAI.</p></div><div class="about-copy"><p class="eyebrow">SMALL STORE ENERGY. BIG CITY DAYS.</p><h2 id="about-title">For the in-between<br>bits of your day.</h2><p>The stop before a shift. The snack after a long drive. The lunch you forgot to pack. Umai Mart brings a little konbini spirit to the city: simple favourites, everyday essentials and something worth popping in for.</p><a class="text-link" href="#shop">Take a look around <span aria-hidden="true">→</span></a></div></section>
-    <section id="delivery" class="delivery-section section-wrap" aria-labelledby="delivery-title"><div class="delivery-intro"><p class="eyebrow">YOUR CORNER STORE, ON THE WAY</p><h2 id="delivery-title">The good stuff.<br><span>To your doorstep.</span></h2><p id="delivery-note">Sign in to place a delivery order, track its progress or book a parcel to leave at Umai Mart for collection.</p><a class="button primary" href="portal.html">Delivery portal <span aria-hidden="true">↗</span></a><p class="quiet-note">Your basket stays in this browser until you confirm the order in the portal. Umai Mart can also hold a parcel for a named recipient to collect.</p></div><ol class="delivery-steps"><li><span class="step-number">01</span><div><h3>Pick your favourites.</h3><p>Browse the shelves and build a little basket. Your list stays saved for your next visit.</p></div></li><li><span class="step-number">02</span><div><h3>A place for your delivery.</h3><p>Sign in to the delivery portal and provide your  delivery details.</p></div></li><li><span class="step-number">03</span><div><h3>From our store to your door.</h3><p>Track your order and message the Umai team through your delivery portal.</p></div></li></ol></section>
-    <section id="visit" class="visit-section section-wrap" aria-labelledby="visit-title"><div class="section-heading"><div><p class="eyebrow">COME SAY HELLO</p><h2 id="visit-title">Your next little stop.</h2></div><span class="visit-mark" aria-hidden="true">umai.</span></div><div class="visit-grid"><div><p class="eyebrow">FIND THE STORE</p><h3 id="location-text">Location to be announced.</h3><p>Your neighbourhood</p></div><div><p class="eyebrow">OPENING HOURS</p><h3 id="hours-text">Hours coming soon.</h3><p>Check back before making the trip.</p></div><div><p class="eyebrow">GET IN TOUCH</p><h3>Let’s talk good stuff.</h3><button class="text-link" id="copy-phone" type="button" disabled="">Contact details coming soon</button></div></div></section>
-  </main>
-  <footer class="site-footer"><div class="footer-top"><a href="index.html" class="footer-brand">umai<span>.</span> <small>MART</small></a><p>Little store.<br>Big goodness.</p><div><a href="#shop">Browse the shelves</a><a href="portal.html">Delivery portal</a><a href="#visit">Find us</a></div></div><div class="footer-bottom"><span>Umai Mart · Little store. Big goodness.</span><span>All prices in dollars. Delivery and parcel collection.</span></div></footer>
-  <div id="basket-overlay" class="basket-overlay" hidden=""><section id="basket-dialog" class="basket-dialog" role="dialog" aria-modal="true" aria-labelledby="basket-title" tabindex="-1"><div class="basket-heading"><div><p class="eyebrow">A LITTLE HAUL</p><h2 id="basket-title">Your basket.</h2></div><button id="close-basket" class="close-button" type="button" aria-label="Close basket">×</button></div><div id="basket-items" class="basket-items"></div><div class="basket-summary"><div><span>Items subtotal</span><strong id="basket-subtotal">$0</strong></div><p>Estimated items subtotal. Confirm live prices and delivery fees in the portal.</p><button class="button primary" id="copy-basket" type="button">Copy shopping list</button><a class="button secondary" href="portal.html">Delivery portal <span aria-hidden="true">→</span></a><p class="quiet-note">Your basket is a saved shopping list. Sign in and confirm in the portal to place an order.</p></div></section></div>
-  <div id="toast" class="store-toast" role="status" aria-live="polite" aria-atomic="true"></div>
+  </footer>
 
 
-</body></html>
+
+
+
+  <!-- 
+    - #GO TO TOP
+  -->
+
+  <a href="#top" class="go-top  active" aria-label="Go To Top" data-go-top>
+    <ion-icon name="arrow-up-outline"></ion-icon>
+  </a>
+
+
+<div class="alert-popup" id="alertPopup">
+
+  <div class="alert-popup-header">
+    <h3>Notifications & Deadlines</h3>
+  </div>
+
+  <div class="alert-list" id="alertList"></div>
+
+</div>
+
+
+  <!-- 
+    - custom js link
+  -->
+  <script src="./assets/js/script.js?v=8"></script>
+  <script src="./assets/js/alerts.js?v=6"></script>
+
+  <!-- 
+    - ionicon link
+  -->
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+<!-- Toast Notification -->
+<div id="toast" class="toast"></div>
+  
+</body>
+
+</html>

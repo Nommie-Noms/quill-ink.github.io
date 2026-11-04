@@ -15,7 +15,7 @@
   <!-- 
     - custom css link
   -->
-  <link rel="stylesheet" href="./assets/css/style.css?v=portal-toast-1">
+  <link rel="stylesheet" href="./assets/css/style.css?v=5">
 
   <!-- 
     - google font link
@@ -54,12 +54,10 @@
         </div>
 
         <ul class="navbar-list">
+          <li class="navbar-item"><a href="portal.html" class="navbar-link">Client Portal</a></li>
+
           <li class="navbar-item">
             <a href="index.html" class="navbar-link" data-navbar-link>Home</a>
-          </li>
-          
-          <li class="navbar-item">
-            <a href="portal.html" class="navbar-link">Client Portal</a>
           </li>
 
           <li class="navbar-item">
@@ -127,7 +125,7 @@
 
       <!-- Charlee -->
       <div class="contact-card">
-        <img src="assets/images/Charlee_Profile_Pic.jpg"
+        <img src="assets/images/Charlee_Henderson_Profile_Pic.png"
              alt="Charlee Henderson"
              class="profile-pic">
 
@@ -207,15 +205,13 @@
 
       <!-- Email Chain -->
       <div class="contact-card">
-        <h3 class="contact-name">Client Portal</h3>
-        <p class="contact-role">Join our client portal</p>
+        <h3 class="contact-name">Email Chain</h3>
+        <p class="contact-role">Join our email chain</p>
 
-        <button
-          type="button"
-          class="map-expand-btn"
-          onclick="window.location.href='portal.html'">
-          Open Client Portal
-        </button>
+        <span class="phone"
+              onclick="copyNumber('https://discord.gg/S4rkSg86hX')">
+          Copy Link
+        </span>
       </div>
 
  <!-- Application Form -->
@@ -298,8 +294,8 @@
   <!-- 
     - custom js link
   -->
-  <script src="./assets/js/script.js?v=portal-toast-1"></script>
-  <script src="./assets/js/alerts.js?v=7"></script>
+  <script src="./assets/js/script.js?v=7"></script>
+  <script src="./assets/js/alerts.js?v=6"></script>
 
   <!-- 
     - ionicon link
@@ -308,7 +304,7 @@
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
 <!-- Toast Notification -->
-<div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+<div id="toast" class="toast"></div>
 
 </body>
 
