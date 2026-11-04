@@ -11,6 +11,7 @@ const siteAlerts = [
   },
 ];
 
+
 function loadAlerts() {
   const alertList = document.getElementById("alertList");
   const alertBadge = document.getElementById("alertBadge");
