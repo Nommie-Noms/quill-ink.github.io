@@ -5,9 +5,9 @@ const siteAlerts = [
   countdown: "2026-11-13T23:59:00"
   },
   {
-  title: "DoCL: Nightclub",
+  title: "DoCL: Greasy Joe's Diner",
   message: "Time remaining:",
-  countdown: "2026-10-08T23:59:00"
+  countdown: "2026-11-13T23:59:00"
   },
 ];
 
