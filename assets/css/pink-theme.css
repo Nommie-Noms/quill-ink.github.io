@@ -1,0 +1,20 @@
+/* Umai Mart: white and pink surfaces with high-contrast plum text. */
+:root{--green:#593747;--green-dark:#452A37;--orange:#97516F;--cream:#FCFCFA;--white:#FCFCFA;--ink:#452A37;--muted:#715967;--line:#E5C5D1;--soft:#F9D6E0;--blue:#593747;--navy:#593747;--purple:#593747;--yellow:#593747;--pink:#F9D6E0;--peach:#F9D6E0;--gradient:linear-gradient(#F9D6E0,#F9D6E0);--accent:linear-gradient(#F9D6E0,#F9D6E0)}
+body,body.umai-portal{background:#FCFCFA;color:#452A37}
+.top-strip,.ticker,.about-section,.site-footer,.tuck-truck-banner{background:#F9D6E0;color:#452A37}
+.about-copy p:not(.eyebrow),.footer-bottom,.about-copy .text-link{color:#593747}
+.about-symbol,.visit-mark,.footer-brand span,.small-spark,.step-number,.hero h1 span,.delivery-intro h2 span{color:#97516F}
+.site-header,body.umai-portal header,body.umai-portal header .portal-menu,.basket-dialog{background:#FCFCFA}
+.primary,.primary:hover,body.umai-portal button,body.umai-portal .button-link,body.umai-portal button:hover{background:#F9D6E0;color:#452A37}
+.primary:hover,body.umai-portal button:hover,body.umai-portal .button-link:hover{background:#EBC1CF}
+.filters button[aria-pressed=true],.basket-button span,.product-add:hover,body.umai-portal .tabs button[aria-pressed=true]{background:#F9D6E0;color:#452A37}
+body.umai-portal input,body.umai-portal select,body.umai-portal textarea{background:#FCFCFA;color:#452A37;border-color:#C9A6B6}
+body.umai-portal .portal-hero{background:#F9D6E0!important;color:#452A37}
+body.umai-portal .card{background:#FCFCFA}
+body.umai-portal .portal-hero h1,body.umai-portal h1,body.umai-portal h2,body.umai-portal h3,body.umai-portal header a,body.umai-portal .portal-hero .eyebrow{color:#593747}
+body.umai-portal header .portal-notification-bell,body.umai-portal header .portal-notification-bell:hover{background:transparent;color:#593747}
+body.umai-portal .toast{background:#593747;color:#FCFCFA}
+body.umai-portal .notification-item,body.umai-portal .message{color:#452A37}
+body.umai-portal .danger-zone{border-color:#A93555}body.umai-portal .danger-button{background:#A93555;color:#FCFCFA}body.umai-portal .danger-button:hover{background:#8C2643;color:#FCFCFA}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #97516F;outline-offset:3px}
+.tuck-truck-banner{border-color:#E5C5D1}
