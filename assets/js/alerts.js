@@ -1,13 +1,19 @@
 const siteAlerts = [
   {
-  title: "DoCL: Greasy Joe's Diner",
-  message: "Time remaining:",
-  countdown: "2026-11-13T23:59:00"
+    title: "Applications Open",
+    message: "Applications are open for \nAccountants and Advertisers",
+    copyLink: "https://forms.gle/pDzFazoo2Xqp1jNM8",
+    linkText: "Click here to apply"
   },
   {
-  title: "DoCL: The Dusty Boot",
+  title: "DoCL: Gun Store",
   message: "Time remaining:",
-  countdown: "2026-11-13T23:59:00"
+  countdown: "2026-09-22T23:59:00"
+  },
+  {
+  title: "DoCL: Nightclub",
+  message: "Time remaining:",
+  countdown: "2026-10-08T23:59:00"
   },
 ];
 
