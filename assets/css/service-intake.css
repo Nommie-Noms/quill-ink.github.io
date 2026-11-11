@@ -1,0 +1,4 @@
+#registration-service{border:1px solid #d8d3e1;border-radius:8px;padding:16px;margin:20px 0;min-width:0}
+#registration-service .registration-service-toggle{display:flex;align-items:center;gap:10px}
+#registration-service .registration-service-toggle input{display:inline-block;width:auto;margin:0;flex:0 0 auto}
+#service-request-card{width:100%;max-width:none}
