@@ -98,9 +98,9 @@
           Account type
           <select id="registration-type">
             <option value="business_owner">Business owner</option>
-            <option value="employee">Employee</option>
+            <option value="employee">Client</option>
           </select>
-          <span class="note">Employees have no business until an administrator adds them or they accept a business invitation.</span>
+          <span class="note">Clients have no business until an administrator adds them or they accept a business invitation.</span>
         </label>
 
         <label id="display-label" hidden="">
@@ -119,7 +119,7 @@
           <input id="recovery-input" autocomplete="off" maxlength="80">
         </label>
 
-        <fieldset id="registration-service" hidden=""><legend>Service request (optional)</legend><label class="registration-service-toggle"><input id="registration-request-service" type="checkbox"> I would like to request a service</label><div id="registration-service-fields" hidden=""><label>Service requested<input id="registration-service-name" maxlength="100"></label><label>How can we help?<textarea id="registration-service-details" minlength="10" maxlength="2000" rows="3"></textarea></label><p class="note">Your request will be sent to Quill &amp; Ink administrators and staff when your account is created. This does not change your package or create a charge. Do not include passwords or recovery codes.</p></div></fieldset><button id="auth-submit" type="submit">Sign in</button>
+        <fieldset id="registration-service" hidden=""><legend>Service request (optional)</legend><label class="registration-service-toggle"><input id="registration-request-service" type="checkbox"> I would like to request a service</label><div id="registration-service-fields" hidden=""><label>Service requested<select id="registration-service-name"><option value="">Choose a service</option><option value="Ledger management">Ledger management</option><option value="Audit Preparation">Audit Preparation</option><option value="Ledger Creation">Ledger Creation</option><option value="Ledger Editing">Ledger Editing</option></select></label><label>How can we help?<textarea id="registration-service-details" minlength="10" maxlength="2000" rows="3"></textarea></label><p class="note">Your request will be sent to Quill &amp; Ink administrators and staff when your account is created. This does not change your package or create a charge. Do not include passwords or recovery codes.</p></div></fieldset><button id="auth-submit" type="submit">Sign in</button>
       </form>
 
       <p class="note">
@@ -267,40 +267,40 @@
           </section>
 
       <section class="card" id="owner-downgrade-panel" hidden="">
-        <h2>Downgrade business owner to employee</h2>
+        <h2>Downgrade business owner to client</h2>
         <p id="owner-downgrade-target"></p>
-        <p>Their login and memberships in other businesses stay with this account. Their former business package, documents, discussions, members and staff assignments are retained but unavailable while this account is an employee. Upgrading it again restores that business access.</p>
-        <p>The account will be signed out and must sign in again as an employee. Their private administrator chat remains available.</p>
+        <p>Their login and memberships in other businesses stay with this account. Their former business package, documents, discussions, members and staff assignments are retained but unavailable while this account is a client. Upgrading it again restores that business access.</p>
+        <p>The account will be signed out and must sign in again as a client. Their private administrator chat remains available.</p>
         <form id="owner-downgrade-form">
           <label>Full name<input id="employee-character-name" maxlength="80" required=""></label>
           <label>Type the selected account's exact username<input id="owner-downgrade-username" autocomplete="off" required=""></label>
           <label style="display: flex; align-items: center; gap: 12px;">
             <input id="owner-downgrade-confirmed" type="checkbox" required="" style="width: auto; margin: 0; flex-shrink: 0;">
             <span>
-              I intend to downgrade the selected business owner to an employee.
+              I intend to downgrade the selected business owner to a client.
             </span>
           </label>
-          <button type="submit">Downgrade to employee</button>
+          <button type="submit">Downgrade to client</button>
         </form>
       </section>
 
       <section class="card" id="owner-upgrade-panel" hidden="">
-        <h2>Upgrade employee to business owner</h2>
+        <h2>Upgrade client to business owner</h2>
         <p id="owner-upgrade-target"></p>
         <p>This adds their own business portal. Their login, existing memberships and administrator conversation are preserved.</p>
         <form id="owner-upgrade-form">
           <label>Business name<input id="owner-business-name" maxlength="80" required=""></label>
-          <label><input id="owner-upgrade-confirmed" type="checkbox" required=""> I intend to upgrade the selected employee to a business owner.</label>
-          <button>Upgrade selected employee</button>
+          <label><input id="owner-upgrade-confirmed" type="checkbox" required=""> I intend to upgrade the selected client to a business owner.</label>
+          <button>Upgrade selected client</button>
         </form>
       </section>
 
       <section class="card" id="employee-members-panel" hidden="">
-        <h2>Business employees and members</h2>
-        <p>Add an existing employee login to this business. Access is active immediately; their password and recovery code stay unchanged.</p>
+        <h2>Business clients and members</h2>
+        <p>Add an existing client login to this business. Access is active immediately; their password and recovery code stay unchanged.</p>
         <form id="employee-add-form">
-          <label>Employee<select id="employee-select" required=""></select></label>
-          <button>Add employee to selected business</button>
+          <label>Client<select id="employee-select" required=""></select></label>
+          <button>Add client to selected business</button>
         </form>
         <div id="employee-member-list"></div>
       </section>
@@ -414,7 +414,7 @@
   <script src="assets/js/portal-compat.js?v=phone-1"></script>
   <script src="assets/js/vendor/supabase-2.57.4-compat.js?v=phone-1"></script>
   <script src="assets/js/portal-config.js"></script>
-  <script src="assets/js/portal.js?v=service-intake-1"></script>
+  <script src="assets/js/portal.js?v=service-options-client-1"></script>
 
 
 </body></html>

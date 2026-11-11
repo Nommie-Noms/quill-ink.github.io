@@ -98,9 +98,9 @@
           Account type
           <select id="registration-type">
             <option value="business_owner">Business owner</option>
-            <option value="employee">Employee</option>
+            <option value="employee">Client</option>
           </select>
-          <span class="note">Employees have no business until an administrator adds them or they accept a business invitation.</span>
+          <span class="note">Clients have no business until an administrator adds them or they accept a business invitation.</span>
         </label>
 
         <label id="display-label" hidden="">
@@ -119,7 +119,7 @@
           <input id="recovery-input" autocomplete="off" maxlength="80">
         </label>
 
-        <fieldset id="registration-service" hidden=""><legend>Service request (optional)</legend><label class="registration-service-toggle"><input id="registration-request-service" type="checkbox"> I would like to request a service</label><div id="registration-service-fields" hidden=""><label>Service requested<input id="registration-service-name" maxlength="100"></label><label>How can we help?<textarea id="registration-service-details" minlength="10" maxlength="2000" rows="3"></textarea></label><p class="note">Your request will be sent to Quill &amp; Ink administrators and staff when your account is created. This does not change your package or create a charge. Do not include passwords or recovery codes.</p></div></fieldset><button id="auth-submit" type="submit">Sign in</button>
+        <fieldset id="registration-service" hidden=""><legend>Service request (optional)</legend><label class="registration-service-toggle"><input id="registration-request-service" type="checkbox"> I would like to request a service</label><div id="registration-service-fields" hidden=""><label>Service requested<select id="registration-service-name"><option value="">Choose a service</option><option value="Ledger management">Ledger management</option><option value="Audit Preparation">Audit Preparation</option><option value="Ledger Creation">Ledger Creation</option><option value="Ledger Editing">Ledger Editing</option></select></label><label>How can we help?<textarea id="registration-service-details" minlength="10" maxlength="2000" rows="3"></textarea></label><p class="note">Your request will be sent to Quill &amp; Ink administrators and staff when your account is created. This does not change your package or create a charge. Do not include passwords or recovery codes.</p></div></fieldset><button id="auth-submit" type="submit">Sign in</button>
       </form>
 
       <p class="note">
@@ -340,7 +340,7 @@
   <script src="assets/js/portal-compat.js?v=phone-1"></script>
   <script src="assets/js/vendor/supabase-2.57.4-compat.js?v=phone-1"></script>
   <script src="assets/js/portal-config.js"></script>
-  <script src="assets/js/portal.js?v=service-intake-1"></script>
+  <script src="assets/js/portal.js?v=service-options-client-1"></script>
 
 
 </body></html>
