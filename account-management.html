@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -9,47 +8,35 @@
   <link rel="icon" href="assets/images/Favicon-3.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&amp;family=Source+Sans+Pro:wght@600;700&amp;display=swap"
-    rel="stylesheet"
-  >
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&amp;family=Source+Sans+Pro:wght@600;700&amp;display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="assets/css/portal.css?v=quill-restore-1">
+  <link rel="stylesheet" href="assets/css/portal.css?v=two-sessions-announcements-1">
   <link rel="manifest" href="portal.webmanifest?v=app-logo-1">
   <meta name="theme-color" content="#111b5a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=app-logo-1">
-  <link rel="stylesheet" href="assets/css/multiple-businesses.css?v=quill-restore-1">
-</head>
+  <link rel="stylesheet" href="assets/css/multiple-businesses.css?v=multiple-businesses-1">
+<link rel="stylesheet" href="assets/css/service-intake.css?v=1"></head>
 
 <body data-portal-page="management">
   <!-- Header -->
   <header>
-    <a
-      href="account-management.html"
-      id="logo-refresh"
-      aria-label="Refresh current page"
-      title="Refresh current page"
-    >
-      <img
-        src="assets/images/QUILL_INK_MINI_WHITE.png"
-        alt="Quill &amp; Ink"
-      >
+    <a href="account-management.html" id="logo-refresh" aria-label="Refresh current page" title="Refresh current page">
+      <img src="assets/images/QUILL_INK_MINI_WHITE.png" alt="Quill &amp; Ink">
     </a>
 
     <div class="portal-header-actions">
       <a href="portal.html">Back to client portal</a>
-      <button id="notifications-button" class="portal-notification-bell" type="button" hidden
-        aria-label="Notifications: 0 unread notifications" aria-expanded="false" aria-controls="notification-panel">
-        <svg xmlns="http://www.w3.org/2000/svg" class="portal-bell-icon" aria-hidden="true" focusable="false" viewBox="0 0 512 512"><path d="M427.68 351.43C402 320 383.87 304 383.87 217.35 383.87 138 343.35 109.73 310 96c-4.43-1.82-8.6-6-9.95-10.55C294.2 65.54 277.8 48 256 48s-38.21 17.55-44 37.47c-1.35 4.6-5.52 8.71-9.95 10.53-33.39 13.75-73.87 41.92-73.87 121.35C128.13 304 110 320 84.32 351.43 73.68 364.45 83 384 101.61 384h308.88c18.51 0 27.77-19.61 17.19-32.57zM320 384v16a64 64 0 01-128 0v-16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/></svg>
-        <span id="notification-count" class="portal-notification-badge" aria-hidden="true" hidden>0</span>
+      <button id="notifications-button" class="portal-notification-bell" type="button" hidden="" aria-label="Notifications: 0 unread notifications" aria-expanded="false" aria-controls="notification-panel">
+        <svg xmlns="http://www.w3.org/2000/svg" class="portal-bell-icon" aria-hidden="true" focusable="false" viewBox="0 0 512 512"><path d="M427.68 351.43C402 320 383.87 304 383.87 217.35 383.87 138 343.35 109.73 310 96c-4.43-1.82-8.6-6-9.95-10.55C294.2 65.54 277.8 48 256 48s-38.21 17.55-44 37.47c-1.35 4.6-5.52 8.71-9.95 10.53-33.39 13.75-73.87 41.92-73.87 121.35C128.13 304 110 320 84.32 351.43 73.68 364.45 83 384 101.61 384h308.88c18.51 0 27.77-19.61 17.19-32.57zM320 384v16a64 64 0 01-128 0v-16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"></path></svg>
+        <span id="notification-count" class="portal-notification-badge" aria-hidden="true" hidden="">0</span>
       </button>
-      <button id="portal-menu-button" class="portal-menu-toggle" type="button" hidden aria-label="Open portal menu" aria-expanded="false" aria-controls="portal-menu">
+      <button id="portal-menu-button" class="portal-menu-toggle" type="button" hidden="" aria-label="Open portal menu" aria-expanded="false" aria-controls="portal-menu">
         <span aria-hidden="true">☰</span>
       </button>
     </div>
-      <nav class="portal-navigation portal-menu" id="portal-menu" hidden aria-label="Portal pages">
+      <nav class="portal-navigation portal-menu" id="portal-menu" hidden="" aria-label="Portal pages">
         <a class="button-link" href="portal.html">
           Client portal
         </a>
@@ -58,23 +45,17 @@
           Account settings
         </a>
 
-        <a
-          class="button-link"
-          id="management-link"
-          href="account-management.html"
-          hidden
-          aria-current="page"
-        >
+        <a class="button-link" id="management-link" href="account-management.html" hidden="" aria-current="page">
           Account management
         </a>
 
-        <a class="button-link" id="staff-chat-link" href="staff-chat.html" hidden>Staff chat</a>
+        <a class="button-link" id="staff-chat-link" href="staff-chat.html" hidden="">Staff chat</a>
 
 
 
         <button id="logout">Sign out</button>
       </nav>
-    <section class="card" id="notification-panel" hidden aria-labelledby="notification-title">
+    <section class="card" id="notification-panel" hidden="" aria-labelledby="notification-title">
         <div class="notification-panel-heading"><h2 id="notification-title">Notifications</h2><button id="close-notifications" type="button" aria-label="Close notifications"><span aria-hidden="true">×</span></button></div>
         <p id="notification-state" class="note" role="status" aria-live="polite"></p>
         <div id="notification-list" class="notification-list"></div>
@@ -107,20 +88,13 @@
       <form id="auth-form">
         <label>
           Username
-          <input
-            id="username"
-            autocomplete="username"
-            minlength="3"
-            maxlength="24"
-            pattern="[A-Za-z0-9_]{3,24}"
-            required
-          >
+          <input id="username" autocomplete="username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]{3,24}" required="">
           <span class="note">
             3–24 letters, numbers, or underscores.
           </span>
         </label>
 
-        <label id="registration-type-label" hidden>
+        <label id="registration-type-label" hidden="">
           Account type
           <select id="registration-type">
             <option value="business_owner">Business owner</option>
@@ -129,34 +103,23 @@
           <span class="note">Employees have no business until an administrator adds them or they accept a business invitation.</span>
         </label>
 
-        <label id="display-label" hidden>
+        <label id="display-label" hidden="">
           <span id="registration-name-label">Business name</span>
           <input id="display-name" maxlength="80">
         </label>
 
         <label>
           Password
-          <input
-            id="password"
-            type="password"
-            autocomplete="current-password"
-            minlength="12"
-            maxlength="128"
-            required
-          >
+          <input id="password" type="password" autocomplete="current-password" minlength="12" maxlength="128" required="">
           <span class="note">At least 12 characters.</span>
         </label>
 
-        <label id="recovery-label" hidden>
+        <label id="recovery-label" hidden="">
           Recovery code
-          <input
-            id="recovery-input"
-            autocomplete="off"
-            maxlength="80"
-          >
+          <input id="recovery-input" autocomplete="off" maxlength="80">
         </label>
 
-        <button id="auth-submit" type="submit">Sign in</button>
+        <fieldset id="registration-service" hidden=""><legend>Service request (optional)</legend><label class="registration-service-toggle"><input id="registration-request-service" type="checkbox"> I would like to request a service</label><div id="registration-service-fields" hidden=""><label>Service requested<input id="registration-service-name" maxlength="100"></label><label>How can we help?<textarea id="registration-service-details" minlength="10" maxlength="2000" rows="3"></textarea></label><p class="note">Your request will be sent to Quill &amp; Ink administrators and staff when your account is created. This does not change your package or create a charge. Do not include passwords or recovery codes.</p></div></fieldset><button id="auth-submit" type="submit">Sign in</button>
       </form>
 
       <p class="note">
@@ -166,7 +129,7 @@
     </section>
 
     <!-- Recovery code -->
-    <section class="card" id="recovery-result" hidden>
+    <section class="card" id="recovery-result" hidden="">
       <h2>Save your recovery code</h2>
 
       <p>
@@ -176,7 +139,7 @@
 
       <label>
         Recovery code
-        <input id="recovery-output" readonly>
+        <input id="recovery-output" readonly="">
       </label>
 
       <button id="copy-registration-recovery" type="button">Copy recovery code</button>
@@ -187,7 +150,7 @@
     </section>
 
     <!-- Required password change -->
-    <section class="card" id="password-change" hidden>
+    <section class="card" id="password-change" hidden="">
       <h2>Choose your own password</h2>
 
       <p>
@@ -198,24 +161,12 @@
       <form id="temporary-form">
         <label>
           Temporary password
-          <input
-            id="current-temporary"
-            type="password"
-            autocomplete="current-password"
-            required
-          >
+          <input id="current-temporary" type="password" autocomplete="current-password" required="">
         </label>
 
         <label>
           New password
-          <input
-            id="permanent-password"
-            type="password"
-            minlength="12"
-            maxlength="128"
-            autocomplete="new-password"
-            required
-          >
+          <input id="permanent-password" type="password" minlength="12" maxlength="128" autocomplete="new-password" required="">
         </label>
 
         <button>Save new password</button>
@@ -225,7 +176,7 @@
     </section>
 
     <!-- Restricted access -->
-    <section id="restricted" class="card" hidden>
+    <section id="restricted" class="card" hidden="">
       <h2>Staff access required</h2>
       <p>This page is available to Quill &amp; Ink staff.</p>
 
@@ -237,7 +188,7 @@
     </section>
 
     <!-- Account management dashboard -->
-    <section id="dashboard" hidden>
+    <section id="dashboard" hidden="">
       <div class="actions">
         <div>
           <p class="eyebrow" id="role-label">CLIENT ACCOUNT</p>
@@ -249,16 +200,16 @@
 
 
 
-      <section class="card" id="announcement-composer" hidden>
+      <section class="card" id="announcement-composer" hidden="">
         <p class="eyebrow">ADMINISTRATOR · ALL ACCOUNTS</p>
         <h2>Send an announcement</h2>
         <p>Post a notice to every existing account’s notification bell. Accounts with push enabled also receive a generic OOC reminder on their subscribed devices.</p>
         <form id="announcement-form">
           <label>Title
-            <input id="announcement-title" maxlength="100" required>
+            <input id="announcement-title" maxlength="100" required="">
           </label>
           <label>Announcement
-            <textarea id="announcement-body" rows="5" maxlength="2000" required></textarea>
+            <textarea id="announcement-body" rows="5" maxlength="2000" required=""></textarea>
           </label>
           <div class="announcement-preview" aria-label="Announcement preview">
             <p class="eyebrow">PREVIEW</p>
@@ -266,7 +217,7 @@
             <p id="announcement-preview-body">Your announcement will appear here.</p>
           </div>
           <label class="announcement-confirmation">
-            <input id="announcement-confirmed" type="checkbox" required>
+            <input id="announcement-confirmed" type="checkbox" required="">
             <span>I intend to send this announcement to every portal account.</span>
           </label>
           <button type="submit">Send to all accounts</button>
@@ -274,7 +225,7 @@
         <p id="announcement-send-status" role="status" aria-live="polite"></p>
       </section>
 
-      <label id="client-label" hidden>
+      <label id="client-label" hidden="">
         Account to manage
         <select id="client-select"></select>
       </label>
@@ -283,49 +234,28 @@
 
       <!-- Staff-assisted recovery -->
           <!-- Staff package editor -->
-          <section class="card" id="owned-business-management" hidden><h2>Businesses for this account</h2><p class="note">Select a business below before editing its package, staff assignments or members. Recovery and account deletion still apply to the selected person's entire login.</p><nav id="managed-business-switcher" class="business-switcher" aria-label="Businesses for selected account"></nav><form id="new-business-form" hidden><label>Additional business name<input id="new-business-name" maxlength="80" required></label><button>Add business to this owner</button></form></section><section class="card" id="service-editor" hidden>
+          <section class="card" id="owned-business-management" hidden=""><h2>Businesses for this account</h2><p class="note">Select a business below before editing its package, staff assignments or members. Recovery and account deletion still apply to the selected person's entire login.</p><nav id="managed-business-switcher" class="business-switcher" aria-label="Businesses for selected account"></nav><form id="new-business-form" hidden=""><label>Additional business name<input id="new-business-name" maxlength="80" required=""></label><button>Add business to this owner</button></form></section><section class="card" id="service-editor" hidden="">
             <h2>Manage client package</h2>
 
             <form id="service-form">
               <label>
                 Package name
-                <input
-                  id="package-input"
-                  maxlength="100"
-                  placeholder="e.g. Ledger Management"
-                >
+                <input id="package-input" maxlength="100" placeholder="e.g. Ledger Management">
               </label>
 
               <label>
                 Monthly cost
-                <input
-                  id="cost-input"
-                  type="number"
-                  min="0"
-                  max="9999999999"
-                  step="0.01"
-                  required
-                >
+                <input id="cost-input" type="number" min="0" max="9999999999" step="0.01" required="">
               </label>
 
               <label>
                 Contract link
-                <input
-                  id="contract-input"
-                  type="url"
-                  maxlength="2048"
-                  placeholder="https://…"
-                >
+                <input id="contract-input" type="url" maxlength="2048" placeholder="https://…">
               </label>
 
               <label>
                 Documentation link
-                <input
-                  id="documentation-input"
-                  type="url"
-                  maxlength="2048"
-                  placeholder="https://…"
-                >
+                <input id="documentation-input" type="url" maxlength="2048" placeholder="https://…">
               </label>
 
               <button>Save package details</button>
@@ -336,14 +266,14 @@
             </p>
           </section>
 
-      <section class="card" id="owner-downgrade-panel" hidden>
+      <section class="card" id="owner-downgrade-panel" hidden="">
         <h2>Downgrade business owner to employee</h2>
         <p id="owner-downgrade-target"></p>
         <p>Their login and memberships in other businesses stay with this account. Their former business package, documents, discussions, members and staff assignments are retained but unavailable while this account is an employee. Upgrading it again restores that business access.</p>
         <p>The account will be signed out and must sign in again as an employee. Their private administrator chat remains available.</p>
         <form id="owner-downgrade-form">
-          <label>Full name<input id="employee-character-name" maxlength="80" required></label>
-          <label>Type the selected account's exact username<input id="owner-downgrade-username" autocomplete="off" required></label>
+          <label>Full name<input id="employee-character-name" maxlength="80" required=""></label>
+          <label>Type the selected account's exact username<input id="owner-downgrade-username" autocomplete="off" required=""></label>
           <label style="display: flex; align-items: center; gap: 12px;">
             <input id="owner-downgrade-confirmed" type="checkbox" required="" style="width: auto; margin: 0; flex-shrink: 0;">
             <span>
@@ -354,39 +284,39 @@
         </form>
       </section>
 
-      <section class="card" id="owner-upgrade-panel" hidden>
+      <section class="card" id="owner-upgrade-panel" hidden="">
         <h2>Upgrade employee to business owner</h2>
         <p id="owner-upgrade-target"></p>
         <p>This adds their own business portal. Their login, existing memberships and administrator conversation are preserved.</p>
         <form id="owner-upgrade-form">
-          <label>Business name<input id="owner-business-name" maxlength="80" required></label>
-          <label><input id="owner-upgrade-confirmed" type="checkbox" required> I intend to upgrade the selected employee to a business owner.</label>
+          <label>Business name<input id="owner-business-name" maxlength="80" required=""></label>
+          <label><input id="owner-upgrade-confirmed" type="checkbox" required=""> I intend to upgrade the selected employee to a business owner.</label>
           <button>Upgrade selected employee</button>
         </form>
       </section>
 
-      <section class="card" id="employee-members-panel" hidden>
+      <section class="card" id="employee-members-panel" hidden="">
         <h2>Business employees and members</h2>
         <p>Add an existing employee login to this business. Access is active immediately; their password and recovery code stay unchanged.</p>
         <form id="employee-add-form">
-          <label>Employee<select id="employee-select" required></select></label>
+          <label>Employee<select id="employee-select" required=""></select></label>
           <button>Add employee to selected business</button>
         </form>
         <div id="employee-member-list"></div>
       </section>
 
-      <section class="card" id="staff-assignment-panel" hidden>
+      <section class="card" id="staff-assignment-panel" hidden="">
         <h2>Assigned staff</h2>
         <p>Assigned staff can manage this business's package and customer discussion. Administrators retain access to all accounts.</p>
         <form id="staff-assignment-form">
-          <label>Staff member<select id="assignment-staff" required></select></label>
+          <label>Staff member<select id="assignment-staff" required=""></select></label>
           <button>Assign to selected business</button>
         </form>
         <div id="staff-assignment-list"></div>
         <p id="assignment-note" class="note"></p>
       </section>
 
-      <section class="card" id="staff-recovery" hidden>
+      <section class="card" id="staff-recovery" hidden="">
         <h2>Recover selected account</h2>
 
         <p>
@@ -398,22 +328,11 @@
         <form id="staff-reset-form">
           <label>
             Identity verification note
-            <textarea
-              id="verification-note"
-              minlength="10"
-              maxlength="500"
-              rows="3"
-              required
-              placeholder="Describe how you verified the account owner. Do not include passwords or recovery codes."
-            ></textarea>
+            <textarea id="verification-note" minlength="10" maxlength="500" rows="3" required="" placeholder="Describe how you verified the account owner. Do not include passwords or recovery codes."></textarea>
           </label>
 
           <label>
-            <input
-              id="identity-confirmed"
-              type="checkbox"
-              required
-            >
+            <input id="identity-confirmed" type="checkbox" required="">
             I have verified this person's identity and intend to reset
             the selected account.
           </label>
@@ -421,7 +340,7 @@
           <button>Issue temporary password</button>
         </form>
 
-        <div id="staff-reset-result" hidden>
+        <div id="staff-reset-result" hidden="">
           <p>
             Share these credentials privately with the verified owner.
             They are shown only for this reset. The previous recovery
@@ -430,12 +349,12 @@
 
           <label>
             Temporary password
-            <input id="issued-password" readonly>
+            <input id="issued-password" readonly="">
           </label>
 
           <label>
             Recovery code
-            <input id="issued-code" readonly>
+            <input id="issued-code" readonly="">
           </label>
 
           <p>
@@ -450,7 +369,7 @@
       </section>
 
       <!-- Customer account deletion -->
-      <section class="card danger-zone" id="account-deletion" hidden>
+      <section class="card danger-zone" id="account-deletion" hidden="">
         <h2>Delete selected customer account</h2>
 
         <p id="delete-target"></p>
@@ -464,29 +383,16 @@
         <form id="delete-form">
           <label>
             Type the customer's exact username
-            <input
-              id="delete-confirm"
-              autocomplete="off"
-              required
-            >
+            <input id="delete-confirm" autocomplete="off" required="">
           </label>
 
           <label>
             Your administrator password
-            <input
-              id="delete-password"
-              type="password"
-              autocomplete="current-password"
-              required
-            >
+            <input id="delete-password" type="password" autocomplete="current-password" required="">
           </label>
 
           <label>
-            <input
-              id="delete-acknowledged"
-              type="checkbox"
-              required
-            >
+            <input id="delete-acknowledged" type="checkbox" required="">
             I intend to permanently delete this customer account and
             its portal records.
           </label>
@@ -499,13 +405,7 @@
     </section>
 
     <!-- Toast notifications -->
-    <div
-      id="copy-toast"
-      class="toast"
-      role="status"
-      aria-live="polite"
-      aria-atomic="true"
-    ></div>
+    <div id="copy-toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
     <noscript>This portal needs JavaScript enabled.</noscript>
   </main>
@@ -514,6 +414,7 @@
   <script src="assets/js/portal-compat.js?v=phone-1"></script>
   <script src="assets/js/vendor/supabase-2.57.4-compat.js?v=phone-1"></script>
   <script src="assets/js/portal-config.js"></script>
-  <script src="assets/js/portal.js?v=quill-restore-1"></script>
-</body>
-</html>
+  <script src="assets/js/portal.js?v=service-intake-1"></script>
+
+
+</body></html>
