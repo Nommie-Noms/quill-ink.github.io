@@ -150,7 +150,7 @@
   value('settings-username',profile.username);value('settings-business',profile.display_name);
   names[accountId]=profile.display_name;usernames[accountId]=profile.username;
   $('account-name').textContent=profile.display_name;
-  $('role-label').textContent=staff?'STAFF ACCOUNT':accountTypes[accountId]==='employee'?'EMPLOYEE ACCOUNT':'BUSINESS OWNER';
+  $('role-label').textContent=staff?'STAFF ACCOUNT':accountTypes[accountId]==='employee'?'CLIENT ACCOUNT':'BUSINESS OWNER';
   hide('announcement-composer',page!=='management' || !administrator);hide('portal-menu-button',false);hide('notifications-button',false);hide('management-link',!staff);hide('staff-chat-link',!staff);hide('client-label',!staff);hide('service-editor',true);
   if(page==='settings'){hide('account',true);hide('dashboard',false);loadPortalPush();await loadBusinessSettings();startNotifications();return;}
   if((page==='management' || page==='staff-chat') && !staff){hide('account',true);hide('restricted',false);status('Staff access is required for this page.');startNotifications();return;}
@@ -195,7 +195,7 @@
    hide('owner-upgrade-panel',!(permitted && administrator && accountTypes[selected]==='employee' && !staffIds.includes(selected)));
    hide('owner-downgrade-panel',!(permitted && administrator && accountTypes[selected]==='business_owner' && !staffIds.includes(selected)));
    text('owner-downgrade-target','Selected business owner: @'+(usernames[selected] || ''));
-   text('owner-upgrade-target','Selected employee: @'+(usernames[selected] || ''));
+   text('owner-upgrade-target','Selected client: @'+(usernames[selected] || ''));
    var packageAllowed=permitted && !!requested && !staffIds.includes(selected) && accountTypes[selected]!=='employee';
    clearPackage();hide('service-editor',!packageAllowed);hide('staff-assignment-panel',!(administrator && packageAllowed));text('staff-assignment-list','');
    hide('employee-members-panel',!(administrator && packageAllowed));text('employee-member-list','');
@@ -204,7 +204,7 @@
    hide('account-deletion',!(permitted && administrator && !staffIds.includes(selected)));
    text('delete-target','Selected account: @'+(usernames[selected] || ''));
    text('management-note',!selected?(administrator?'Select an account to manage assignments, packages, recovery, or deletion.':'Select an assigned business to manage its package.'):staffIds.includes(selected)?(administrator?'This is a staff account. Recovery is available; deletion is protected.':'Only an administrator can recover this staff account.'):(administrator?'Assignments, package management, recovery and deletion are available for this customer.':'Package management is available for this assigned business. Account recovery and deletion require an administrator.'));
-   if(accountTypes[selected]==='employee' && !staffIds.includes(selected))text('management-note','This is an employee login. Select a business owner to add this employee to that business. Administrators can upgrade this login to a business owner, recover it or delete it.');
+   if(accountTypes[selected]==='employee' && !staffIds.includes(selected))text('management-note','This is a client login. Select a business owner to add this client to that business. Administrators can upgrade this login to a business owner, recover it or delete it.');
    if(packageAllowed){
     var service=check(await client.from('client_services').select('package_name,monthly_cost,contract_url,documentation_url').eq('client_id',requested).maybeSingle());
     if(requestTicket!==version || businessTarget()!==requested || !user)return;
@@ -226,7 +226,7 @@
   var ownAdministrator=administrator && selected===user.id;
   var employeeSelected=staff && accountTypes[selected]==='employee';
   hide('client-content',ownAdministrator || employeeSelected);hide('administrator-home-note',!(ownAdministrator || employeeSelected));
-  if(employeeSelected)text('administrator-home-note','This employee\'s private administrator discussion is below. Select a business owner to view its package and business discussion.');
+  if(employeeSelected)text('administrator-home-note','This client\'s private administrator discussion is below. Select a business owner to view its package and business discussion.');
   if(ownAdministrator)text('administrator-home-note','Use Account Management to assign staff and edit client packages, or open Staff chat to talk with your team. Select a customer to view their package and discussion.');
   clearPackage();$('messages').textContent='';
   if(ownAdministrator || employeeSelected)return;
@@ -436,7 +436,7 @@
    employeeChatSignature=signature;container.textContent='';
    messages.slice().sort(function(a,b){return new Date(a.created_at)-new Date(b.created_at);}).forEach(function(m){
     var row=document.createElement('div');row.className='message'+(m.sender_id!==target?' staff':'');
-    var author=document.createElement('small');author.textContent=(names[m.sender_id] || (m.sender_id===null?'Deleted account':m.sender_id===target?'Employee':'Administrator'))+' · '+new Date(m.created_at).toLocaleString();
+    var author=document.createElement('small');author.textContent=(names[m.sender_id] || (m.sender_id===null?'Deleted account':m.sender_id===target?'Client':'Administrator'))+' · '+new Date(m.created_at).toLocaleString();
     var body=document.createElement('p');body.textContent=m.body;row.appendChild(author);row.appendChild(body);
     if(m.sender_id===actor){
      var controls=document.createElement('div');controls.className='message-actions';
@@ -461,7 +461,7 @@
   if(!document.hidden && messages.length)check(await client.rpc(administrator?'mark_employee_notifications':'mark_customer_notifications',{message_ids:messages.map(function(m){return m.id;})}));
  }
  bind('employee-chat-form','onsubmit',function(event){event.preventDefault();run(async function(){
-  var target=employeeChatTarget();if(!target)throw new Error('Select an employee conversation.');
+  var target=employeeChatTarget();if(!target)throw new Error('Select a client conversation.');
   var body=$('employee-chat-message').value.trim();if(!body)throw new Error('Enter a message.');
   check(await client.from('employee_admin_messages').insert({employee_id:target,sender_id:user.id,body:body}));
   value('employee-chat-message','');await loadEmployeeChat(true);if(administrator)await pollNotifications(true);status('Private message sent.');
@@ -482,7 +482,7 @@
    names[item.id]=item.display_name;usernames[item.id]=item.username;accountTypes[item.id]=item.account_type || 'business_owner';if(item.owner_id){businessOwners[item.id]=item.owner_id;businessNames[item.id]=item.display_name;}
    if(page==='management' && item.id===user.id)return;
    var option=document.createElement('option');option.value=item.id;
-   option.textContent=(administrator && item.id===user.id?'Your administrator account':item.display_name)+' (@'+item.username+')'+(accountTypes[item.id]==='employee'?' · Employee':'');$('client-select').appendChild(option);
+   option.textContent=(administrator && item.id===user.id?'Your administrator account':item.display_name)+' (@'+item.username+')'+(accountTypes[item.id]==='employee'?' · Client':'');$('client-select').appendChild(option);
   });
   selected=clients.some(function(item){return item.id===preferred && (page!=='management' || item.id!==user.id);})?preferred:
    (page==='management' || !initial?null:administrator?user.id:clients.length?clients[0].id:null);
@@ -506,9 +506,9 @@
   employeeDirectory.forEach(function(p){names[p.id]=p.display_name;usernames[p.id]=p.username;});
   text('employee-select','');text('employee-member-list','');
   var available=employeeDirectory.filter(function(p){return !rows.some(function(m){return m.user_id===p.id && m.accepted_at;});});
-  var empty=document.createElement('option');empty.value='';empty.textContent=available.length?'Choose an employee':'No available employee logins';$('employee-select').appendChild(empty);
+  var empty=document.createElement('option');empty.value='';empty.textContent=available.length?'Choose a client':'No available client logins';$('employee-select').appendChild(empty);
   available.forEach(function(p){var o=document.createElement('option');o.value=p.id;o.textContent=p.display_name+' (@'+p.username+')';$('employee-select').appendChild(o);});
-  if(!rows.length)text('employee-member-list','No employees or members added yet.');
+  if(!rows.length)text('employee-member-list','No clients or members added yet.');
   rows.forEach(function(m){
    var row=document.createElement('div');row.className='membership-row';
    var label=document.createElement('span');label.textContent=(names[m.user_id] || 'Member')+' (@'+(usernames[m.user_id] || 'customer')+') · '+(m.accepted_at?'Active':'Invitation pending');row.appendChild(label);
@@ -537,23 +537,23 @@
   if(confirmation!==usernames[target])throw new Error('Type the selected account’s exact username.');
   check(await client.rpc('downgrade_owner_to_employee',{target:target,character_name:characterName,confirmation:confirmation}));
   clearDowngrade();var session=check(await client.auth.getSession()).session;await loadDashboard(session);
-  status('Business owner downgraded to employee. Their former business records are retained. They must sign in again.');toast('Employee downgrade saved.');
+  status('Business owner downgraded to client. Their former business records are retained. They must sign in again.');toast('Client downgrade saved.');
  });});
  bind('owner-upgrade-form','onsubmit',function(event){event.preventDefault();run(async function(){
   var target=selected;
-  if(!administrator || !target || accountTypes[target]!=='employee' || staffIds.includes(target))throw new Error('Select a customer employee account.');
-  if(!$('owner-upgrade-confirmed').checked)throw new Error('Confirm the selected employee upgrade.');
+  if(!administrator || !target || accountTypes[target]!=='employee' || staffIds.includes(target))throw new Error('Select a client account.');
+  if(!$('owner-upgrade-confirmed').checked)throw new Error('Confirm the selected client upgrade.');
   var businessName=$('owner-business-name').value.trim();
   if(!businessName || businessName.length>80)throw new Error('Enter a business name of 1–80 characters.');
   check(await client.rpc('upgrade_employee_to_owner',{target:target,business_name:businessName}));
   value('owner-business-name','');$('owner-upgrade-confirmed').checked=false;
   var session=check(await client.auth.getSession()).session;await loadDashboard(session);
-  status('Employee upgraded to business owner. Their login and memberships are unchanged. They should refresh their portal.');toast('Business owner upgrade saved.');
+  status('Client upgraded to business owner. Their login and memberships are unchanged. They should refresh their portal.');toast('Business owner upgrade saved.');
  });});
  bind('employee-add-form','onsubmit',function(event){event.preventDefault();run(async function(){
   if(!administrator || !selected || accountTypes[selected]==='employee' || staffIds.includes(selected))throw new Error('Select a business owner account.');
-  var employee=$('employee-select').value;if(!employee)throw new Error('Select an employee.');
-  check(await client.rpc('admin_business_member',{business:businessTarget(),employee:employee,add_member:true}));await refresh();status('Employee added. They can refresh their portal to open this business.');toast('Employee added to business.');
+  var employee=$('employee-select').value;if(!employee)throw new Error('Select a client.');
+  check(await client.rpc('admin_business_member',{business:businessTarget(),employee:employee,add_member:true}));await refresh();status('Client added. They can refresh their portal to open this business.');toast('Client added to business.');
  });});
  async function loadAssignments(target,ticket) {
   var rows=check(await client.from('staff_assignments').select('business_id,staff_id').eq('business_id',target));
