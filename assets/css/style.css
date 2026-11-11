@@ -1444,3 +1444,49 @@ h2.section-title {
   .footer-brand { grid-column: auto; }
 
 }
+
+
+/* Quill & Ink: keep the mobile header controls inside the background. */
+@media (max-width: 991.98px) {
+  .header .container {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding-inline: 16px;
+    gap: 10px;
+  }
+
+  .header .logo-link {
+    flex: 0 1 240px;
+    min-width: 0;
+    max-width: calc(100% - 108px);
+  }
+
+  .header .logo-link .logo-img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: 50px;
+    object-fit: contain;
+    object-position: left center;
+  }
+
+  .header .alert-btn,
+  .header .nav-open-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 44px;
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    box-sizing: border-box;
+    padding: 4px;
+    margin: 0;
+  }
+
+  .header .alert-btn {
+    margin-inline-start: auto;
+  }
+}
