@@ -51,12 +51,12 @@
  function check(result) { if(result.error) throw new Error(result.error.message); return result.data; }
  function setMode(next) {
   mode = next;
-  hide('registration-type-label',next!=='register');hide('display-label',next!=='register'); hide('recovery-label',next!=='recover');
+  hide('registration-service',next!=='register');syncRegistrationService();hide('registration-type-label',next!=='register');hide('display-label',next!=='register'); hide('recovery-label',next!=='recover');
   $('display-name').required = next==='register'; $('recovery-input').required = next==='recover';
   $('password').autocomplete = next==='login' ? 'current-password' : 'new-password';
   $('auth-title').textContent = next==='login' ? 'Sign in' : next==='register' ? 'Create account' : 'Reset your password';
   $('auth-submit').textContent = next==='login' ? 'Sign in' : next==='register' ? 'Create account' : 'Reset password';
-  document.querySelectorAll('[data-mode]').forEach(function(button) {button.setAttribute('aria-pressed',String(button.dataset.mode===next));});
+ document.querySelectorAll('[data-mode]').forEach(function(button) {button.setAttribute('aria-pressed',String(button.dataset.mode===next));});
   status('');
  }
  async function run(task) {
@@ -177,17 +177,18 @@
   await refresh();startNotifications();if(!staff && page==='dashboard' && ownAdminChat)startEmployeeChatPolling();
  }
  function clearServiceRequest(){serviceRequest=null;value('requested-service','');value('requested-service-details','');hide('service-request-form',true);if($('show-service-request'))$('show-service-request').setAttribute('aria-expanded','false');}
- async function loadServiceRequests(target,ticket){if(page!=='dashboard' || staff || !$('service-request-card'))return;var rows=check(await client.from('service_requests').select('service,details,created_at').eq('business_id',target).eq('requester_id',user.id).order('created_at',{ascending:false}).limit(5));if(!user || selected!==target || ticket!==version)return;text('service-request-business','Requesting for '+(businessNames[target] || names[target] || 'your business')+'. Administrators receive a portal bell notification.');var box=$('service-request-history');box.textContent='';if(!rows.length)text('service-request-history','No requests sent yet.');rows.forEach(function(r){var row=document.createElement('p');row.style.whiteSpace='pre-wrap';row.style.overflowWrap='anywhere';var strong=document.createElement('strong');strong.textContent=r.service;var detail=document.createElement('span');detail.textContent=' — '+new Date(r.created_at).toLocaleString()+' · '+r.details;row.appendChild(strong);row.appendChild(detail);box.appendChild(row);});}
+ async function loadServiceRequests(target,ticket){if(page!=='dashboard' || staff || !$('service-request-card'))return;var actor=user.id,query=client.from('service_requests').select('service,details,created_at').eq('requester_id',actor);query=target?query.eq('business_id',target):query.is('business_id',null);var rows=check(await query.order('created_at',{ascending:false}).limit(5));if(!user || user.id!==actor || selected!==target)return;text('service-request-business','Requesting for '+(target?(businessNames[target] || names[target] || 'your business'):'your account')+'. Administrators and staff receive a portal bell notification.');var box=$('service-request-history');box.textContent='';if(!rows.length)text('service-request-history','No requests sent yet.');rows.forEach(function(r){var row=document.createElement('p');row.style.whiteSpace='pre-wrap';row.style.overflowWrap='anywhere';var strong=document.createElement('strong');strong.textContent=r.service;var detail=document.createElement('span');detail.textContent=' — '+new Date(r.created_at).toLocaleString()+' · '+r.details;row.appendChild(strong);row.appendChild(detail);box.appendChild(row);});}
  bind('show-service-request','onclick',function(){var opening=$('service-request-form').hidden;hide('service-request-form',!opening);this.setAttribute('aria-expanded',String(opening));if(opening)$('requested-service').focus();});
  bind('cancel-service-request','onclick',clearServiceRequest);
- bind('service-request-form','onsubmit',function(e){e.preventDefault();run(async function(){if(!user || staff || !selected)throw new Error('Select your business.');var target=selected,actor=user.id,payload={business:target,service_name:$('requested-service').value.trim(),request_details:$('requested-service-details').value.trim()};if(!payload.service_name || payload.service_name.length>100 || payload.request_details.length<10 || payload.request_details.length>2000)throw new Error('Enter a service name and 10–2000 characters of details.');var signature=JSON.stringify(payload);if(!serviceRequest || serviceRequest.signature!==signature)serviceRequest={signature:signature,id:announcementId()};payload.request=serviceRequest.id;check(await client.rpc('request_business_service',payload));if(!user || user.id!==actor || selected!==target)return;clearServiceRequest();text('service-request-status','Request sent. A Quill & Ink administrator has been notified in the portal.');await loadServiceRequests(target,version);toast('Service request sent.');});});
+ bind('service-request-form','onsubmit',function(e){e.preventDefault();run(async function(){if(!user || staff)throw new Error('Sign in to your customer account.');var target=selected,actor=user.id,payload={business:target,service_name:$('requested-service').value.trim(),request_details:$('requested-service-details').value.trim()};if(!payload.service_name || payload.service_name.length>100 || payload.request_details.length<10 || payload.request_details.length>2000)throw new Error('Enter a service name and 10–2000 characters of details.');var signature=JSON.stringify(payload);if(!serviceRequest || serviceRequest.signature!==signature)serviceRequest={signature:signature,id:announcementId()};payload.request=serviceRequest.id;check(await client.rpc('request_account_service',payload));if(!user || user.id!==actor || selected!==target)return;clearServiceRequest();text('service-request-status','Request sent. Quill & Ink administrators and staff have been notified in the portal.');await loadServiceRequests(target,version);toast('Service request sent.');});});
  function businessTarget(){return page==='management'?managedBusiness:selected;}
  function renderBusinessTabs(){if(page!=='dashboard' || staff || !$('business-switcher'))return;var box=$('business-switcher');box.textContent='';hide('business-switcher',businesses.length<2);businesses.forEach(function(b){var button=document.createElement('button');button.type='button';button.textContent=b.name;button.setAttribute('aria-pressed',String(selected===b.id));button.onclick=function(){if(busy || selected===b.id)return;$('client-select').value=b.id;$('client-select').dispatchEvent(new Event('change'));};box.appendChild(button);});}
  async function loadManagedBusinesses(ticket){var person=selected,rows=check(await client.rpc('portal_business_accounts'));if(!user || selected!==person || ticket!==version)return;managedBusinesses=sortAccountOptions(rows.filter(function(b){return b.account_type==='business_owner' && b.owner_id===person;}),person);managedBusinesses.forEach(function(b){businessOwners[b.id]=b.owner_id;businessNames[b.id]=b.display_name;});if(!managedBusinesses.some(function(b){return b.id===managedBusiness;}))managedBusiness=managedBusinesses.length?managedBusinesses[0].id:null;var box=$('managed-business-switcher');box.textContent='';hide('owned-business-management',!managedBusinesses.length);hide('new-business-form',!administrator);managedBusinesses.forEach(function(b){var button=document.createElement('button');button.type='button';button.textContent=b.display_name;button.setAttribute('aria-pressed',String(b.id===managedBusiness));button.onclick=function(){if(busy)return;managedBusiness=b.id;run(refresh);};box.appendChild(button);});}
  bind('new-business-form','onsubmit',function(event){event.preventDefault();run(async function(){if(!administrator || !selected)throw new Error('Select a business owner account.');managedBusiness=check(await client.rpc('create_owned_business',{owner:selected,business_name:$('new-business-name').value.trim()}));value('new-business-name','');await refresh();status('Business added to this owner. Select its button to manage it.');});});
  async function refresh() {
   if(!user)return;
-  hide('service-request-card',page!=='dashboard' || staff || !selected);if(requestBusiness!==selected){clearServiceRequest();text('service-request-status','');text('service-request-history','');requestBusiness=selected;}
+  hide('service-request-card',page!=='dashboard' || staff);if(requestBusiness!==selected){clearServiceRequest();text('service-request-status','');text('service-request-history','');requestBusiness=selected;}
+  if(page==='dashboard' && !staff)await loadServiceRequests(selected,version);
   if(page==='management'){
    var person=selected,requestTicket=++version;await loadManagedBusinesses(requestTicket);if(!user || selected!==person || requestTicket!==version)return;var requested=businessTarget();
    var permitted=!!selected && selected!==user.id;
@@ -254,7 +255,7 @@
   await addRequestedMessage(messages,target);
   if(requestVersion!==version || selected!==target || !user)return;
   renderMessages(messages,target,true);
-  await loadServiceRequests(target,requestVersion);
+
   await acknowledgeMessages(messages);
  } 
  async function addRequestedMessage(messages,target) {
@@ -319,7 +320,7 @@
    else if(staff && !administrator && (page==='dashboard' || page==='management'))await syncStaffScope();
    if(cycle!==notificationRun || !user)return;
    if(page==='dashboard' && (administrator || ownAdminChat))await loadEmployeeChat(false);
-   var results=await Promise.all([client.rpc(staff?'staff_message_notifications':'customer_message_notifications'),client.rpc(staff?'staff_unread_message_count':'customer_unread_message_count'),administrator?client.rpc('admin_employee_notifications'):Promise.resolve({data:[],error:null}),administrator?client.rpc('admin_employee_unread_count'):Promise.resolve({data:0,error:null}),client.rpc('portal_announcement_notifications'),client.rpc('portal_announcement_unread_count'),administrator?client.rpc('admin_service_notifications'):Promise.resolve({data:[],error:null}),administrator?client.rpc('admin_service_unread_count'):Promise.resolve({data:0,error:null})]);
+   var results=await Promise.all([client.rpc(staff?'staff_message_notifications':'customer_message_notifications'),client.rpc(staff?'staff_unread_message_count':'customer_unread_message_count'),administrator?client.rpc('admin_employee_notifications'):Promise.resolve({data:[],error:null}),administrator?client.rpc('admin_employee_unread_count'):Promise.resolve({data:0,error:null}),client.rpc('portal_announcement_notifications'),client.rpc('portal_announcement_unread_count'),staff?client.rpc('admin_service_notifications'):Promise.resolve({data:[],error:null}),staff?client.rpc('admin_service_unread_count'):Promise.resolve({data:0,error:null})]);
    if(cycle!==notificationRun || !user)return;
    var notifications=check(results[0]).concat(check(results[2]).map(function(item){item.channel='employee';return item;})).concat(check(results[4])).concat(check(results[6])).sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);}).slice(0,20),count=Number(check(results[1]))+Number(check(results[3]))+Number(check(results[5]))+Number(check(results[7])),known={};
    notifications.forEach(function(item){known[(item.channel || 'business')+':'+item.notification_id]=true;});
@@ -354,7 +355,7 @@
     var openBusiness=document.createElement('a');openBusiness.className='button-link';openBusiness.textContent='Open business';openBusiness.href='portal.html?client='+encodeURIComponent(item.client_id);
     if(page==='dashboard')openBusiness.onclick=function(e){e.preventDefault();if(busy)return;run(async function(){value('message','');selected=item.client_id;$('client-select').value=selected;hide('notification-panel',true);$('notifications-button').setAttribute('aria-expanded','false');await refresh();});};
     var readRequest=document.createElement('button');readRequest.type='button';readRequest.textContent='Mark as read';readRequest.onclick=function(){run(async function(){check(await client.rpc('mark_service_request_read',{request:item.notification_id}));await pollNotifications(true);});};
-    requestRow.appendChild(requestTitle);requestRow.appendChild(requestDate);requestRow.appendChild(requestText);requestRow.appendChild(openBusiness);requestRow.appendChild(readRequest);container.appendChild(requestRow);return;
+    requestRow.appendChild(requestTitle);requestRow.appendChild(requestDate);requestRow.appendChild(requestText);if(item.client_id && (administrator || scopeClients.some(function(c){return c.id===item.client_id;})))requestRow.appendChild(openBusiness);requestRow.appendChild(readRequest);container.appendChild(requestRow);return;
    }
    if(item.channel==='announcement'){
     var announcement=document.createElement('div');announcement.className='notification-item portal-announcement';
@@ -770,6 +771,8 @@
   try {if(document.execCommand('copy')){toast('Recovery code copied.');return;}}catch(error){}
   status('Copy the selected recovery code manually.');toast('Copy the selected code manually.',true);
  });
+ function syncRegistrationService(){var enabled=mode==='register' && $('registration-request-service') && $('registration-request-service').checked;hide('registration-service-fields',!enabled);if($('registration-service-name'))$('registration-service-name').required=!!enabled;if($('registration-service-details'))$('registration-service-details').required=!!enabled;}
+ bind('registration-request-service','onchange',syncRegistrationService);
  document.querySelectorAll('[data-mode]').forEach(function(button){button.onclick=function(){setMode(button.dataset.mode);};});
  $('auth-form').onsubmit=function(event){event.preventDefault();run(async function(){
   status('');var username=$('username').value.trim().toLowerCase(),password=$('password').value;
@@ -779,9 +782,9 @@
    if(result.error)throw new Error('Could not sign in. Check your username and password.');
    $('password').value='';await loadDashboard(result.data.session);
   } else {
-   var result=await accountAction({action:mode,username:username,password:password,displayName:$('display-name').value,accountType:$('registration-type').value,recoveryCode:$('recovery-input').value});
+   var result=await accountAction({action:mode,username:username,password:password,displayName:$('display-name').value,accountType:$('registration-type').value,recoveryCode:$('recovery-input').value,requestService:mode==='register' && $('registration-request-service').checked,serviceName:$('registration-service-name').value,serviceDetails:$('registration-service-details').value});
    $('password').value='';$('recovery-input').value='';$('recovery-output').value=result.recoveryCode;
-   hide('account',true);hide('recovery-result',false);status('Save the code, then sign in with your password.');
+   hide('account',true);hide('recovery-result',false);status('Save the code, then sign in with your password.'+(mode==='register' && $('registration-request-service').checked?' Your service request has been sent to administrators and staff.':''));if(mode==='register'){$('registration-request-service').checked=false;value('registration-service-name','');value('registration-service-details','');syncRegistrationService();}
   }
  });};
  $('recovery-saved').onclick=function(){$('recovery-output').value='';hide('recovery-result',true);hide('account',false);setMode('login');};
